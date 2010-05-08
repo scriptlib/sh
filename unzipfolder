@@ -1,0 +1,34 @@
+#!/bin/bash
+APPNAME="unzipfolder"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-01-13"
+APPVER="0.1"
+APPDESC="unzip a zip file to a folder,\nwhich's name based on the zip filename,and under current directory"
+APPUSAGE="(zip filename)"
+APPEXAMPLE="unzipfolder foo.zip"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ;  fi
+
+
+
+for ZIPFILE in "$@" ; do
+    if [ ! -f "$ZIPFILE" ] ; then
+        echo -e $RED"File not exists,or permission denied.$NOR"
+        continue
+    fi
+    FDNAME=`basefname "$ZIPFILE"`
+    mkdir "$FDNAME"
+    if [ ! -d "$FDNAME" ] ; then
+        echo -e $RED"Permission denied while trying to write $FDNAME.$NOR"
+        continue
+    fi
+    echo -n "$ZIPFILE -> $FDNAME ..."
+    FULLZIP=`fullname "$ZIPFILE"`
+    FULLDIR=`fullname "$FDNAME"`
+    if unzip -q "$FULLZIP" -d "$FULLDIR" ; then 
+        echo -e "\r$ZIPFILE -> $FDNAME [Done]"
+    else
+        echo -e "\r$ZIPFILE -> $FDNAME [Failed]"
+    fi
+done

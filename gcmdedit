@@ -1,0 +1,11 @@
+#!/bin/sh
+###gcmdedit v0.1
+###     - gcmdedit
+###     - Written by xiaoranzzz, 2008-02-15
+###Usage:
+###     gcmdedit
+###Option:
+###     -h Display help text
+###Example:
+###     gcmdedit
+XR_EDITOR=gvim cmdedit "$@"

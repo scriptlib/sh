@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LIBDIR="$XR_SHELL_SOURCE_DIR/LIBS"
+
+if [ -d "$LIBDIR" ] ; then
+    echo "$LIBDIR"
+    exit 0
+else
+    exit 1
+fi
+

@@ -1,0 +1,9 @@
+#!/bin/awk -f
+BEGIN {min=256}
+/[Ii][Nn][Dd][Ee][Xx].[Hh][Tt][Mm][Ll]*$/ || /[Aa][Aa][Aa].[Hh][Tt][Mm][Ll]*$/ { 
+	if (length($0)<min) {
+		min=length($0); 
+		found=$0;
+		}
+	}
+END {print found}

@@ -1,0 +1,18 @@
+#!/bin/bash
+APPNAME="___APPNAME___"
+APPAUTHOR="___AUTHOR___"
+APPDATE="___DATE___"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE=""
+APPEXAMPLE=""
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "Standard"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+ 
+
+
+

@@ -1,0 +1,51 @@
+#!/bin/sh
+#TEMPLATE BEGIN
+APPNAME="xlock"
+APPAUTHOR="duel"
+APPDATE="2007-01-29"
+APPVER="0.1"
+APPDESC="lock the screen,and start a new login"
+APPUSAGE=""
+EXAMPLE="xlock"
+
+# NOCOLOR
+NOR=;BOLD=;RED=;YEL=;GRE=
+# COLOR
+NOR="\033[0m";BOLD="\033[1m";RED="\033[91m";YEL="\033[93m";GRE="\033[92m"
+# FUNCTIONS
+function APPMSG() { if [ -n "$*" ] ; then echo -e $GRE"$*"$NOR ; fi ; } 
+function APPMSG2() { if [ -n "$*" ] ; then APPMSG "\t$*" ; fi ; }
+function APPWARN() { if [ -n "$*" ] ; then echo -e $RED"$*"$NOR ; fi ; }
+function DisplayUsage() {
+    APPMSG "$APPNAME V$APPVER\n  Written by $APPAUTHOR AT $APPDATE"
+    APPMSG "$APPDESC"
+    APPMSG " -h\tDisplay this information.\n -E\tEdit me."
+    APPMSG "Usage: $0 $APPUSAGE"
+    if [ -n "$EXAMPLE" ] ; then APPMSG "Example: $EXAMPLE" ; fi
+    exit 1 
+}
+ARGS=$*
+#if [ -z "$ARGS" ] ; then DisplayUsage ; fi
+for i in $ARGS ; do
+    case $i in 
+        "-h" ) DisplayUsage ;;
+        "-E" ) vim $0 ; exit $? ;;
+    esac
+done
+#TEMPLATE END
+SAVER=`which xgcreensaver 2>/dev/null`
+if [ -z "$SAVER" ] ; then
+    SAVER=`which gnome-screensaver 2>/dev/null`
+    SCMD="gnome-screensaver-command --lock"
+else
+    SCMD="xscreensaver-command --lock"
+fi
+
+if [ -n "$SAVER" ] ; then
+    $SAVER &
+    sleep 2
+    $SCMD lock &
+#gdmflexiserver &
+else
+    echo "No screensaver found\n"
+fi

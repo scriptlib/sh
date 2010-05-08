@@ -1,0 +1,20 @@
+#!/bin/sh
+###sudo-unless-root v0.1
+###     - sudo-unless-root
+###     - Written by xiaoranzzz, 2008-08-26
+###Usage:
+###     sudo-unless-root
+###Option:
+###     -h Display help text
+###Example:
+###     sudo-unless-root
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+if [ "$UID" == "0" ] ; then
+    echo "$@"
+    exec "$@"
+else
+    echo sudo "$@"
+    exec sudo "$@"
+fi

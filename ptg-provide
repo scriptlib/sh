@@ -1,0 +1,10 @@
+#!/bin/sh
+pkg=$1
+if [ -z "$pkg" ] ; then
+    simple-config-ed "/etc/portage/profile/package.provided"
+    echo ""
+else
+    exec simple-config-ed "/etc/portage/profile/package.provided" "$@"  + " "
+fi
+
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+APPNAME="cache_rm"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-09-17"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE=""
+APPEXAMPLE=""
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+CACHE_FILE=`cache_file "$1"`
+[ -f "$CACHE_FILE" ] && rm  "$CACHE_FILE"
+
+
+

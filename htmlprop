@@ -1,0 +1,30 @@
+#!/bin/bash
+APPNAME="htmlprop"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-31"
+APPVER="0.1"
+APPDESC="Parsing properties value of html tag"
+APPUSAGE="(Property Names...)"
+APPEXAMPLE="cat index.html| htmltag \"a\" | htmlprop \"src\""
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+WS='[[:space:]]'
+UNQUOTED='[^ ><]*'
+QUOTED='"[^"]*"'
+
+PROPS=""
+
+for ELM in "$@" ; do
+    PROPS="$ELM|$PROPS"
+done
+
+PROPS=`expr + "$PROPS" : "\(.*\)|$"`
+
+sed -e "s/'/\"/g" | egrep -io "$WS*($PROPS)$WS*=$WS*($QUOTED|$UNQUOTED)" | sed -e "s/\"//g" -e "s/^[^=]*=$WS*//g"
+
+
+

@@ -1,0 +1,2 @@
+#!/bin/bash
+wine-loader "ie6"  'C:\Program Files\Internet Explorer\IEXPLORE.EXE' "$@"

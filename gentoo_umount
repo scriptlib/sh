@@ -1,0 +1,10 @@
+#!/bin/sh
+gt="/myplace/subsys"
+if [ "$USER" == "root" ] ; then
+    umount="umount -v"
+else
+    umount="sudo umount -v"
+fi
+$umount $gt/myplace/home $gt/myplace/boot $gt/myplace $gt/dev $gt/proc
+$umount $gt
+

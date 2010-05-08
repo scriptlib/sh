@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -z "$*" ] ; then
+    exec zenity --text-info --filename=/dev/stdin
+else
+    exec zenity --info --text="$*"
+fi

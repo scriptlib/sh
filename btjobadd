@@ -1,0 +1,48 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="btjobadd"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="Add jobs for lately \"btjobdoing\" "
+APPUSAGE="CMDS..."
+APPEXAMPLE="btjobadd wget \"http://google.com\""
+
+source `APPLIB "AppUsage"`
+
+ARGS=$*
+
+if [ -z "$ARGS" ] ; then APPHELP ; exit  ; fi
+
+JOBDIR=/share/appdata/btjob
+
+if [ ! -d "$JOBDIR" ]; then
+    mkdir "$JOBDIR"
+    if [ ! -d "$JOBDIR" ]; then
+        APPWRAN "Can't not create \"$JOBDIR\"\n"
+        exit -1
+    fi
+fi
+
+JOBNAME=`echo $@|sed -e "s/[]:^&#[ \/\\?!)(]//g"`
+
+echo "$JOBNAME"
+
+JOBFILE="$JOBDIR/$JOBNAME.delay"
+
+
+CMD=$1
+shift
+{
+    echo "#!/bin/bash" > "$JOBFILE"
+    echo -n "$CMD"
+    while [ -n "$1" ] ; do
+        echo -n " \"$1\""
+        shift
+    done
+    echo ""
+} > "$JOBFILE"
+
+APPMSG "Ok,Job saved as \"$JOBFILE\"\n"
+
+

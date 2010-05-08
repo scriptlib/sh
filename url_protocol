@@ -1,0 +1,17 @@
+#!/bin/bash
+ARGS="$*"
+function strip_protocol() {
+    URL=`expr + "$1" : "^\([^\/]*\):\/\/"`
+    [ -z "$URL" ] && URL="http"
+    echo "$URL"
+}
+if [ -z "$ARGS" ] ; then
+    while read URL ; do
+        strip_protocol "$URL"
+    done
+else
+    for URL in "$@" ; do
+        strip_protocol "$URL"
+    done
+fi
+

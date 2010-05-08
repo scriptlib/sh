@@ -1,0 +1,57 @@
+#!/bin/bash
+FILE_MODE=664
+DIR_MODE=775
+X_MODE=775
+
+#TEMPLATE BEGIN
+APPNAME="resetmod"
+APPAUTHOR="duel"
+APPDATE="2007-03-11"
+APPVER="0.1"
+APPDESC="reset files permissions as default"
+APPUSAGE="(file|directory)"
+EXAMPLE="resetmod foo"
+
+# NOCOLOR
+NOR=;BOLD=;RED=;YEL=;GRE=
+# COLOR
+NOR="\033[0m";BOLD="\033[1m";RED="\033[91m";YEL="\033[93m";GRE="\033[92m"
+# FUNCTIONS
+function APPMSG() { if [ -n "$*" ] ; then echo -e $GRE"$*"$NOR ; fi ; } 
+function APPMSG2() { if [ -n "$*" ] ; then APPMSG "\t$*" ; fi ; }
+function APPWARN() { if [ -n "$*" ] ; then echo -e $RED"$*"$NOR ; fi ; }
+function DisplayUsage() {
+    APPMSG "$APPNAME V$APPVER\n  Written by $APPAUTHOR AT $APPDATE"
+    APPMSG "$APPDESC"
+    APPMSG " -h\tDisplay this information.\n -E\tEdit me."
+    APPMSG "Usage: $0 $APPUSAGE"
+    if [ -n "$EXAMPLE" ] ; then APPMSG "Example: $EXAMPLE" ; fi
+    exit 1 
+}
+ARGS=$*
+if [ -z "$ARGS" ] ; then DisplayUsage ; fi
+for i in $ARGS ; do
+    case $i in 
+        "-h" ) DisplayUsage ;;
+        "-E" ) vim $0 ; exit $? ;;
+    esac
+done
+#TEMPLATE END
+
+SRC=$1
+while [ -n "$SRC" ] ; do
+    echo -n Processing "$SRC"...
+    if [ -f "$SRC" ] ; then 
+        chmod $FILE_MODE "$SRC" 
+        APPMSG "\tDone"
+    elif [ -d "$SRC" ] ; then 
+        chmod $DIR_MODE "$SRC" 
+        APPMSG "\tDone"
+    else
+        APPWARN "$SRC not exists or not a normal file"
+    fi
+    shift
+    SRC=$1
+done
+
+

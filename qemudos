@@ -1,0 +1,2 @@
+#!/bin/sh
+exec r-qemu -no-acpi -m 32 "$@"

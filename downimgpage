@@ -1,0 +1,36 @@
+#!/bin/bash
+APPNAME="downimgpage"
+APPAUTHOR="xiaoranzzz"
+APPDATE="Mon Jan  8 04:19:29 HKT 2007"
+APPVER="0.1"
+APPDESC="download img useing batchman and mywgetpage"
+APPUSAGE="(BASEURL) [from_page] [to_page] [FILTER]"
+EXAMPLE=""
+source "`dirname "$0"`/include/function.usage"
+if JustDisplayUsage "$*" ; then
+    DisplayUsage "$APPNAME" "$APPVER" "$APPDESC" "$APPUSAGE" "$EXAMPLE" "$APPAUTHOR" "$APPDATE"
+    exit 0
+fi
+
+
+BASEURL=$1
+IFROM=$2
+ITO=$3
+FLITER=$4
+
+if [ -z "$IFROM" ] ; then IFROM=1 ; fi
+if [ -z "$ITO" ] ; then ITO=$IFROM ; fi
+if [ -z "$FLITER" ] ; then FLITER=".*" ; fi
+
+echo "Building task list..."
+wgetpage "$BASEURL" "$IFROM" "$ITO" | imglink "$BASEURL" | egrep -i "$FLITER" | myflashget
+
+#for ((index=$IFROM;index<=$ITO;index++)) ; do
+#    echo "Downloading page $index ..."
+#    wgetpage "$BASEURL" "$index" "$index" | imglink "$BASEURL" | egrep -i "$FLITER" | myflashget
+#done
+
+echo "All task done."
+
+
+

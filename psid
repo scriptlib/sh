@@ -1,0 +1,21 @@
+#!/bin/bash
+APPNAME="psid"
+APPAUTHOR="xiaoranzzz"
+APPDATE="Tue Jan  9 04:27:52 HKT 2007"
+APPVER="0.1"
+APPDESC="Return pid of the process name\nTake the same options as ps"
+APPUSAGE="(process name) [option]"
+APPEXAMPLE="psid bash"
+source `APPLIB "AppUsage"`
+if [ -z "$*" ] ; then APPHEL ; exit 0 ; fi
+
+PROCNAME=$1
+OPTION=
+shift
+while [ -n "$1" ] ; do
+    shift
+    OPTION="$OPTION $1"
+done
+
+#echo "ps $OPTION | gawk /\y$PROCNAME\y/ {print \$1}"
+ps $OPTION | gawk "/\y$PROCNAME\y/ { print \$1 }"

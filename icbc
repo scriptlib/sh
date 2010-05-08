@@ -1,0 +1,12 @@
+#!/bin/sh
+###icbc v0.1
+###     - Navigate icbc.com.cn using ies4linux
+###     - Written by duel, 2009-02-26
+###Usage:
+###     icbc
+###Option:
+###     -h Display help text
+###Example:
+###     icbc
+
+exec wine-loader "icbc" 'C:\Program Files\Internet Explorer\IEXPLORE.EXE' 'http://www.icbc.com.cn/icbc/%E7%BD%91%E4%B8%8A%E9%93%B6%E8%A1%8C/'

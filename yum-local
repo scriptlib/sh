@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#Script Name:	yum-local
+#Date:		Tue Jan  2 10:43:48 CST 2007
+#AUTHOR:	root
+
+APPNAME="yum-local"
+APPVER="0.1"
+APPDESC="yum local mode"
+APPUSAGE="[option] package"
+EXAMPLE="yum-local install gnome-yum"
+
+USAGE_FUNCTION=`dirname "$0"`/include/function.usage
+source "$USAGE_FUNCTION"
+function Usage() {
+    DisplayUsage "$APPNAME" "$APPVER" "$APPDESC" "$APPUSAGE" "$EXAMPLE"
+}
+
+ARGS=$*
+if JustDisplayUsage "$ARGS" ; then
+    Usage
+    exit 0
+fi
+
+if [ -z "$ARGS" ] ; then
+    Usage
+    exit 0
+fi
+
+yum --disablerepo=* --enablerepo=local $ARGS

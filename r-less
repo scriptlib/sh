@@ -1,0 +1,24 @@
+#!/bin/sh
+###r-less v0.1
+###     - r-less,a enchanced less which detect charset
+###     - Written by duel, 2008-12-30
+###Usage:
+###     r-less
+###Option:
+###     -h Display help text
+###Example:
+###     r-less
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+fn="$1"
+tempfile=`mktemp -t`
+if iconv -s -f gb18030 -t utf8 -o "$tempfile" "$fn"  ; then
+    less "$tempfile"
+    rm -f "$tempfile"
+elif  iconv -s -f big5 -t utf8 -o "$tempfile" "$fn"  ; then
+    less "$tempfile"
+    rm -f "$tempfile"
+else
+    exec less "$fn"
+fi

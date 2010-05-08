@@ -1,0 +1,18 @@
+#!/bin/sh
+###wine-loader v0.1
+###     - wine-loader
+###     - Written by duel, 2009-02-26
+###Usage:
+###     wine-loader tailing_prefix [arguments...]
+###Option:
+###     -h Display help text
+###Example:
+###     wine-loader ie6 iexplore.exe
+
+if [ -n "$1" ] ; then
+    export WINEPREFIX="$HOME/.wine_$1"
+    shift
+fi
+
+echo "WINPREFIX=$WINEPREFIX"
+exec cn_wine "$@"

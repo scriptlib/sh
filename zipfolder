@@ -1,0 +1,76 @@
+#!/bin/bash
+###zipfolder v0.2
+###     - Pack directories to zip files, dirname excluded
+###     - Using unzipfolder to reverse
+###     - Written by xiaoranzzz, 2007/04/05
+###Usage:
+###     zipfolder [suffix] directories...
+if [ -z "$*" ] ; then
+    scripthelp "$0" -h
+    exit 0
+fi
+scripthelp "$0" "$@" && exit 0
+
+CURDIR=`pwd`
+EXTNAME=$1
+if [ -d "$EXTNAME" ] ; then
+    EXTNAME=".zip"
+else
+    shift
+fi
+
+declare -a msg_delay;
+declare -i msg_count=0;
+
+function message {
+    msg_delay[$msg_count]="$*"
+    ((msg_count++))
+}
+
+function finish {
+    local -i idx=0;
+    while (($idx<msg_count)) ; do
+        echo -en "${msg_delay[$idx]}"
+        ((idx++))
+    done
+}
+
+while [ -n "$1" ] ; do
+    SrcDir="$1"
+    shift
+    FULLSRC=`fullname "$SrcDir"`
+    if [ ! -d "$SrcDir" ]; then
+	message "\"$SrcDir\" not exist,or not a folder\n"
+	continue
+    fi
+
+    DstFile=`basename "$SrcDir"`$EXTNAME
+    FULLDST="`pwd`/$DstFile"
+
+    COMMENT="Filename : $DstFile\nCreator  : $USER\nHost     : $HOSTNAME\nMachine  : `uname -omsr`\nDate     : `date +%y/%m/%d\ %H:%M`\n."
+
+    cd -- "$SrcDir" || continue
+
+    message "\"$SrcDir\" -> \"$DstFile\"..." 
+
+    if echo -e "$COMMENT" | zip -9rz "${FULLDST}" . ; then
+        message "\r\"$SrcDir\" -> \"$DstFile\" [Done]\n" 
+    else
+        message "\r\"$SrcDir\" -> \"$DstFile\" [Failed]\n" 
+        continue
+    fi
+
+    cd -- "$CURDIR" || break
+
+    message "  Removing \"$SrcDir\"..." 
+
+    if rm -fdr -- "$FULLSRC" ; then
+        message "\r  Removing \"$SrcDir\" [Done]\n" 
+    else
+        message "\r  Removing \"$SrcDir\" [Failed]\n" 
+    fi
+
+done
+
+finish
+

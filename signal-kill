@@ -1,0 +1,28 @@
+#!/bin/sh
+###signal-int v0.1
+###     - send SIGKILL to processes
+###     - Written by duel, 2008-10-23
+###Usage:
+###     signal-kill ([id|name])
+###Option:
+###     -h Display help text
+###Example:
+###     signal-kill rtorrent
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+id_killer="kill -s"
+name_killer="killall -v -s"
+signal="KILL"
+
+while [ -n "$1" ] ; do
+#    echo "Sending $signal to $1..."
+    if expr match "$1" '^[1-9]\+' >/dev/null ; then
+        echo $id_killer $signal "$1"
+        $id_killer $signal "$1"
+    else
+        echo $name_killer $signal "$1" 
+        $name_killer $signal "$1" 
+    fi
+    shift
+done
+

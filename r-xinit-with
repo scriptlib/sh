@@ -1,0 +1,28 @@
+#!/bin/sh
+###r-xinit-with v0.1
+###     - r-xinit with specify xorg.conf.{driver}
+###     - Written by root, 2009-01-12
+###Usage:
+###     r-xinit-with [driver]
+###Option:
+###     -h Display help text
+###Example:
+###     r-xinit-with ati
+scripthelp "$0" "$@" && exit 0
+if [ -n $1 ] ; then
+    driver=$1
+    shift
+    xorg=/etc/X11/xorg.conf
+    if [ ! -f "$xorg.$driver" ] ; then
+        echo "File not exists: $xorg.$driver" 
+        exit 1
+    fi
+    if [ -w "$xorg" ] ; then
+        cp -fv $xorg{.$driver,}
+    else
+        sudo cp -fv $xorg{.$driver,}
+    fi
+    unset $dirver
+    unset $xorg
+fi
+exec r-xinit "$@"

@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ "$USER" == "duel" ] ; then
+    amuled 2>/dev/null 1>>~/.amule.log&
+else
+    su -c 'amuled 2>/dev/null 1>>~/.amule.log&' duel
+fi
+

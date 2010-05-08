@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source `APPLIB "ScriptDef"` || exit -1
+
+echo "$SCRIPTDIR"
+

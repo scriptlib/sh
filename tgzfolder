@@ -1,0 +1,52 @@
+#!/bin/bash
+APPNAME="tgzfolder"
+APPVER="0.1"
+APPDESC="Packup a folder as a tar.gz file."
+USAGE="(SrcFolder) [File.tar.gz]"
+
+
+ZIPHANDLE="tar -cvzf"
+SrcFolder=$1
+
+
+if [ -z "$SrcFolder" ]; then
+	echo $APPNAME v$APPVER - $APPDESC
+	echo USAGE:$0 $USAGE
+	exit 0
+fi
+
+if [ ! -d "$SrcFolder" ]; then
+	echo \"$SrcFolder\" not exist,or not a folder.
+	exit 0
+fi
+
+if [ -z "$2" ]; then
+    DstFile=`pwd`/`basename "$SrcFolder"`.tar.gz
+ else
+    DstFile=`fullname "$2"`
+fi
+
+echo "Enter $SrcFolder"
+pushd "$SrcFolder"
+
+if [ ! $?=0 ]; then
+    exit $?
+fi
+
+echo "Start packup $SrcFolder..." 
+
+$ZIPHANDLE "$DstFile" *
+
+if [ ! $? = 0 ]; then
+    exit $?
+fi
+
+echo "Ok,saved as $DstFile"
+
+echo "Leaving $SrcFolder..."
+echo "Done."
+
+exit 0
+
+
+

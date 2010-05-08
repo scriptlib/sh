@@ -1,0 +1,104 @@
+#!/bin/bash
+APPNAME="batchdo"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-04-02"
+APPVER="0.1"
+APPDESC="batch jobs monitor"
+APPUSAGE="(Command)"
+APPEXAMPLE="batchdo \"echo\""
+APPOPTION="T:Tasks list file|H:Tasks history file|C:Tasks command file"
+
+source `APPLIB "AppUsage"` || exit -1
+
+#TASKFILE=`APPOPT T "$@"`
+#TASKHISTORY=`APPOPT H "$@"`
+#TASKCMD=`APPOPT T "$@"`
+#TASKFILE=`APPOPT T "$@"`
+
+COMMAND="$1"
+#[ -z "$TASKFILE" ] &&
+TASKFILE="batchdo.task"
+#TASKINCOME="batchdo.income"
+#[ -z "$TASKFILE" ] &&
+TASKHISTORY="batchdo.history"
+TASKFILEBAK="$TASKFILE.bak"
+#[ -z "$TASKFILE" ] &&
+TASKCMD="batchdo.cmd"
+TEMPFILE=`mktemp`
+
+[ -z "$COMMAND" ] && [ -f "$TASKCMD" ] && COMMAND=`cat "$TASKCMD"`
+
+if [ -z "$COMMAND" ] || [ ! -f "$TASKFILE" ] ; then
+    APPHELP
+    APPMSG "---------------------------------------------\n"
+    APPMSG "Files:\n"
+    APPMSG "\tTasks file   - $TASKFILE\n"
+    APPMSG "\tCommand file - $TASKCMD\n"
+    APPMSG "\tHistory file - $TASKHISTORY\n"
+    APPMSG "---------------------------------------------\n"
+    exit
+fi
+
+echo "$COMMAND" > "$TASKCMD"
+
+CMD1="$COMMAND"
+CMD2=""
+if echo "$COMMAND" | grep -q "%s" ; then
+    CMD1=`expr + "$COMMAND" : "\(.*\)%s"`
+    CMD2=`expr + "$COMMAND" : ".*%s\(.*\)$"`
+fi
+
+declare -a TASKS
+declare -i COUNT=0
+declare -i INDEX=0
+
+function Quit()
+{
+    ((INDEX--))
+    APPMSG "\nSaving queued tasks.\n"
+    declare -i TASKLEFT=0
+    while ((INDEX<COUNT)) ; do
+        ((TASKLEFT++))
+        echo -en "                                 \r[NUM.$TASKLEFT:]${TASKS[$INDEX]}" >&2
+        echo "${TASKS[$INDEX]}" >> "$TASKFILE"
+        ((INDEX++))
+    done
+    APPMSG "\nOK,all tasks saved.\n"
+    exit
+
+}
+
+trap Quit SIGINT
+
+while read -s LINE ; do
+    TASKS[$COUNT]="$LINE"
+    ((COUNT++))
+done <"$TASKFILE"
+mv "$TASKFILE" "$TASKFILEBAK"
+APPMSG "Got $COUNT tasks to do.\n"
+while ((INDEX<COUNT)) ; do
+    CURTASK="${TASKS[$INDEX]}"
+    ((INDEX++))
+    APPMSG "[$INDEX/$COUNT]$CURTASK\n"
+    $CMD1 "$CURTASK" $CMD2
+#    if $CMD1 "$CURTASK" $CMD2; then 
+#        echo  "`date +%y/%m/%d`:$CURTASK" >> "$TASKHISTORY"
+#    else
+#        ((INDEX--))
+#        APPMSG "Saving queued tasks.\n"
+#        local -i INDEX="$1"
+#        while ((INDEX<COUNT)) ; do
+#            echo "${TASKS[$INDEX]}" >&2
+#            echo "${TASKS[$INDEX]}" >> "$TASKFILE"
+#        ((INDEX++))
+#        done
+#        APPMSG "OK,all tasks saved.\n"
+#        return
+#    fi
+done
+
+
+
+
+
+

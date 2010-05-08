@@ -1,0 +1,40 @@
+#!/bin/bash
+
+D="775"
+F="664"
+X="775"
+
+setmod () {
+    local item=$1
+    local opt=$2
+    local chmod="chmod" ;
+    if [ ! -o "$item" ] ; then chmod="sudo_if_need chmod" ; fi
+    if [ -d "$item" ] ; then
+        $chmod $opt -v "$D" "$item" #2>/dev/null
+        return $?
+    elif [ -x "$item" ] ; then
+        $chmod $opt -v "$X" "$item" #2>/dev/null
+        return $?
+    elif [ -f "$item" ] ; then
+        $chmod $opt -v "$F" "$item" #2>/dev/null
+        return $?
+    fi
+}
+
+if [ -n "$1" ] ; then
+    for item in "$@" ; do
+        if [ -e "$item" ] ; then
+            setmod "$item"
+        else
+            echo "\"$item\" Ingored."
+        fi
+    done
+else
+    while read item ; do
+        if [ -e "$item" ] ; then
+            setmod "$item" 
+        else
+            echo "\"$item\" Ingored."
+        fi
+    done
+fi

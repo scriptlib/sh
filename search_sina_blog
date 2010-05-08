@@ -1,0 +1,15 @@
+#!/bin/sh
+###search_sina_blog v0.1
+###     - search_sina_blog
+###     - Written by duel, 2008-05-10
+###Usage:
+###     search_sina_blog
+###Option:
+###     -h Display help text
+###Example:
+###     search_sina_blog
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+key=`echo $1 | utf2gb`
+exec urlrule_cat "http://uni.sina.com.cn/c.php?t=blog&k=$key&ft=1" 1 | tasks -n "blog" -read - -p urlrule_get -s 0 $2 $3 $4 $5 $6 $7 $8 $9
+

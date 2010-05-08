@@ -1,0 +1,18 @@
+#!/bin/bash
+ARGS="$*"
+function strip_domain() {
+    URL=${1/*:\/\//}
+    URL=${URL/\/*/}
+    URL="$URL/"
+    expr + "$URL" : "\(^[^\/:]*\)"
+}
+if [ -z "$ARGS" ] ; then
+    while read URL ; do
+        strip_domain "$URL"
+    done
+else
+    for URL in "$@" ; do
+        strip_domain "$URL"
+    done
+fi
+

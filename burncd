@@ -1,0 +1,30 @@
+#!/bin/sh
+if [ -z "$1" ] ; then
+    echo "Usage:burncd (cd images) [device] ..."
+    exit 0
+fi
+cdimg=$1
+dev=$2
+app="cdrecord"
+[ -z "$dev" ] && dev="/dev/cdrw"
+
+if [ ! -f "$cdimg" ] ; then
+    echo "\"$cdimg\" not exists"
+    exit 1
+fi
+if [ ! -b "$dev" ] ; then
+    echo "\"$dev\" not exists, or not a device"
+    exit 1
+fi
+
+if ! which "$app" ; then app="wodim" ; fi
+if ! which "$app" ; then app="" ; fi
+if [ -z "$app" ] ; then
+    echo "No cdrecord application found!"
+    exit 1
+fi
+
+
+echo "[burncd] start burning $cdimg on ($dev)"
+$app speed=24 "dev=$dev" -tao -v -eject "$cdimg"
+echo "[burncd] finished"

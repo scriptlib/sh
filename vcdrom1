@@ -1,0 +1,36 @@
+#!/bin/bash
+###APPNAME:	vcdrom1
+###APPAUTHOR:	xiaoranzzz
+###APPDATE:	Sat Jan  6 02:56:33 CST 2007
+###APPVER:	0.1
+###APPDESC:	mount iso file as virtual cdrom 1
+###APPUSAGE:	(isofile)
+###APPOPTION:	-u,-U:Unmount
+###APPEXAMPLE:	vcdrom1 fedoracd1.iso
+plhelp "$0" "$@" && exit 0
+if [ -z "$*" ] ; then
+    plhelp "$0" "--help"
+    exit 0
+fi
+
+SYMBOL_ISO="/tmp/vcd1.iso"
+MOUNT_POINT="/mnt/vcd1"
+
+if [ "$1" == "-U" -o "$1" == "-u" ] ; then
+    umount "$MOUNT_POINT"
+    exit $?
+fi
+
+ISOFILE=`fullname "$1"`
+if [ ! -f "$ISOFILE" ] ; then
+    echo "\"$ISOFILE\" not exists."
+    exit 1
+fi
+
+
+mountiso "$ISOFILE" "$SYMBOL_ISO" "$MOUNT_POINT"
+
+
+
+
+

@@ -1,0 +1,24 @@
+#!/bin/sh
+###r-vncserver v0.1
+###     - r-vncserver
+###     - Written by duel, 2010-05-05
+###Usage:
+###     r-vncserver
+###Option:
+###     -h Display help text
+###Example:
+###     r-vncserver
+#scripthelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+if [ "$USER" == "duel" ] ; then
+    display=:4
+else
+    display=:3
+fi
+[ -n "$1" ] && display=$1
+geometry=800x600
+#geometry=1024x600
+echo vncserver $display -clean -depth 16 -alwaysshared -geometry $geometry
+exec vncserver $display -clean -depth 16 -alwaysshared -geometry $geometry
+

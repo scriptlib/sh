@@ -1,0 +1,18 @@
+#!/bin/sh
+###APPNAME:     backupfile
+###APPAUTHOR:   sick
+###APPDATE:     2007-09-26
+###APPVER:      0.1
+###APPDESC:     rename file based on current date
+###APPUSAGE:    <Filename>
+###APPEXAMPLE:  backupfile vimrc(Will rename vimrc)
+###APPOPTION:
+plhelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then plhelp "$0" "--help" ; exit 0 ; fi
+
+suffix=`date +"%F-%H:%M:%S"`
+mv -v "$1" "$1.$suffix"
+ 
+
+
+

@@ -1,0 +1,49 @@
+#!/bin/bash
+APPNAME="scriptlink"
+APPAUTHOR="duel"
+APPDATE="2007-03-30"
+APPVER="0.1"
+APPDESC="make links between $SCRIPTDIR and $SCRIPTBINDIR"
+APPUSAGE="(SCRIPTNAME) [LINKSNAME]"
+APPEXAMPLE="scriptlink unzipfolder\n\tscritlink unzipfolder uzf"
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "ScriptDef"` || exit -1
+source `APPLIB "Standard"` || exit -1
+source `APPLIB "System"` || exit -1
+
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+
+FILENAME=`LOCATESCRIPT "$1"`
+
+LINKNAME=$2
+if [ -z "$LINKNAME" ]; then
+    LINKNAME=$1
+fi
+if ! echo "$LINKNAME" | grep -q "\/" ; then 
+    LINKNAME=`basename "$LINKNAME" .SCRIPTEXT`
+    LINKNAME="$SCRIPTBINDIR/$LINKNAME"
+fi
+
+if [ -f "$FILENAME" ]; then
+    chmod a+x "$FILENAME"
+fi
+
+if [ ! -x "$FILENAME" ]; then
+	echo $FILENAME not exists,or not executable.
+	exit 0
+fi
+
+APPMSG "Attemping to link $LINKNAME TO $FILENAME\n"
+TrySudo ln -fs $3 $4 $5 $6 $7 $8 $9 "$FILENAME" "$LINKNAME"
+
+if [ "$?" == "0" ] ; then
+    APPMSG "Successed.\n"
+    exit 0
+else
+    APPMSG "Failed\n"
+    exit -1
+fi
+

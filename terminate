@@ -1,0 +1,20 @@
+#!/bin/bash
+#APPNAME="terminate"
+#APPAUTHOR="xiaoranzzz"
+#APPDATE="Tue Jan  9 05:19:53 HKT 2007"
+#APPVER="0.1"
+#APPDESC="Send SIGTERM singal to process"
+#APPUSAGE="(processname) [ps option]"
+#APPEXAMPLE="terminate wget -a"
+
+#source `APPLIB AppUsage`
+#source `APPLIB AppOption`
+
+psid=`which pidof 2>/dev/null`
+[ -z "$psid" ] && psid="psid"
+
+for id in `$psid "$@"` ; do
+   echo "killing $id ..." >&2
+   kill -s SIGTERM $id
+done
+

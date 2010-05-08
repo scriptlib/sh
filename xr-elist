@@ -1,0 +1,4 @@
+#!/bin/sh
+echo equery list -p -o "$@"
+equery list -p -o "$@"
+

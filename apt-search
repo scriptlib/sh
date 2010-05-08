@@ -1,0 +1,31 @@
+#!/bin/bash
+###APPNAME="apt-search"
+###APPAUTHOR="root"
+###APPDATE="2007-09-21"
+###APPVER="0.1"
+###APPDESC="search apt cache using aptitude search"
+###APPUSAGE="(PATTERN)"
+###APPEXAMPLE="apt-search \"~napt\""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+searchd="/tmp/apt-search"
+[ -d "$searchd" ] ||  mkdir "$searchd";
+rfile="$*"
+rfile="$searchd/$rfile"
+echo "" >"$rfile"
+chmod a+rw "$rfile"
+
+function DupStdin() {
+    local LINE;
+    while read -s LINE;do
+        echo "$LINE" >>"$1"
+        echo "$LINE"
+    done
+}
+aptitude search "$@" | tee "$rfile"
+ 
+
+
+

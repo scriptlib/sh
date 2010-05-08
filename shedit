@@ -1,0 +1,27 @@
+#!/bin/bash
+source `APPLIB "Editor"` || exit -1
+
+SCRIPTDIR=/share/shellscript
+
+if [ -z "$*" ] ; then 
+    echo "Usage:$0 (FILENAME)"
+    exit 0 
+fi
+
+FILENAME=$1
+
+if ! echo "$FILENAME" | grep -q "\/" ; then
+    FILENAME="$SCRIPTDIR/$FILENAME"
+fi
+
+if [ ! -f "$FILENAME" ] ; then
+    if ! echo "$FILENAME" | grep -q "\.sh$" ; then
+        FILENAME="$FILENAME.sh"
+    fi
+fi
+ 
+DEFAULT_EDITOR "$FILENAME"
+
+
+
+

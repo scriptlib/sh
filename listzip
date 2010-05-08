@@ -1,0 +1,10 @@
+#!/bin/bash
+#using to list zip file
+
+zipfile=$1
+
+if [ -z "$zipfile" ];then
+	exit 0
+fi
+
+unzip -Z1 "$zipfile"

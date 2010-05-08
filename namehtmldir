@@ -1,0 +1,31 @@
+#!/bin/bash
+APPNAME="namehtmldir"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-04-02"
+APPVER="0.1"
+APPDESC="Auto name html directories"
+APPUSAGE="(Directories)"
+APPEXAMPLE="namehtmldir *"
+APPOPTION=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+for ELM in "$@" ; do
+    if [ -d "$ELM" ] ; then
+        INDEX="$ELM/index.htm"
+        [ ! -f "$INDEX" ] && INDEX="$ELM/index.html"
+        if [ -f "$INDEX" ] ; then
+            TITLE=`cat -- "$INDEX" | htmltitle`
+            TITLE=`echo "${TITLE}" | sed -e "s/^-//g" -e "s/-$//g"`
+            if [ -n "$TITLE" ] ; then
+                BASEDIR=`dirname --  "$ELM"`
+                APPMSG "\"$ELM\" -> \"$BASEDIR/$TITLE\"\n"
+                mv -- "$ELM" "$BASEDIR/$TITLE"
+            fi
+        fi
+    fi
+done
+
+
+

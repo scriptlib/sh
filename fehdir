@@ -1,0 +1,21 @@
+#!/bin/bash
+###APPNAME="fehdir"
+###APPAUTHOR="xiaoranzzz"
+###APPDATE="2007-01-16"
+###APPVER="0.1"
+###APPDESC="Navigate imgages in directory,using feh"
+###APPUSAGE="(directory)"
+###APPEXAMPLE="fehdir wallpaper"
+if [ -z "$1" ] ; then
+    plhelp "$0" "--help"
+    exit 0
+fi
+plhelp "$0" "$@" && exit 0
+if ! which feh > /dev/null ; then
+    echo "Can't find feh,maybe not installed?" >&2
+    exit 1
+fi
+exec feh -g 1024x768 --scale-down  --sort name -r "$@"
+
+
+

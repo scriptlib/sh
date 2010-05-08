@@ -1,0 +1,57 @@
+#!/bin/sh
+###zim-autocreate v0.1
+###     - zim-autocreate
+###     - Written by geek, 2008-03-01
+###Usage:
+###     zim-autocreate name directory
+###Option:
+###     -h Display help text
+###Example:
+###     zim-autocreate
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+
+name=$1
+sdir=$2
+
+[ -z "$sdir" ] && exit 1
+[ -d "$sdir" ] || exit 1
+
+function processSub() {
+    local sdir="$1"
+    local name="$2"
+    local output="$2"
+    [ -z "$name" ] && name="$sdir"
+    [ -z "$output" ] && output="../$sdir"
+    cd "$sdir"
+    {
+    echo "===== $name ===="
+    date
+    echo ""
+    echo "Directory List:"
+    for dd in * ; do
+        if [ -d "$dd" ] ; then
+            echo "[[.$dd|$dd]]"
+        fi
+    done
+    echo ""
+    echo "File List:"
+    for dd in *.txt ; do
+        [ "$dd" == "$output.txt" ] && continue
+        if [ -f "$dd" ] ; then
+            dd=`basename "$dd" .txt`
+            [ -d "$dd" ] || echo "[[.$dd|$dd]]"
+        fi
+    done
+    }>"$output.txt"
+    for dd in * ; do
+        if [ -d "$dd" ] ; then
+            processSub "$dd"
+        fi
+    done
+    cd ..
+}
+
+processSub "$sdir" "$name"
+

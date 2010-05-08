@@ -1,0 +1,15 @@
+#!/bin/sh
+###interminal v0.1
+###     - start terminal in specified directory
+###     - Written by duel, 2008-04-14
+###Usage:
+###     [directory]
+###Option:
+###     -h Display help text
+###Example:
+###     interminal
+scripthelp "$0" "$@" && exit 0
+myd=$1
+[ -d "$myd" ] && cd "$myd"
+xterm
+

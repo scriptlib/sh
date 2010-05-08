@@ -1,0 +1,32 @@
+#!/bin/sh
+###yuanyuan_download v0.1
+###     - yuanyuan_download
+###     - Written by duel, 2009-11-28 14:43:54
+###Usage:
+###     yuanyuan_download
+###Option:
+###     -h Display help text
+###Example:
+###     yuanyuan_download
+
+function _need_help {
+    while [ -n "$1" ] ; do
+        for h in "-h" "-H" "--help" "--HELP" ; do [ "$1" == "$h" ] && return 0 ; done
+        shift
+    done
+    return 1
+}
+function _format_help {
+    while read -s line ; do
+        if [ "${line:0:1}" == "#" ] ; then [ "${line:0:3}" == "###" ] && echo "${line:3}" ; else break ; fi
+    done
+}
+function _help_me {
+    _format_help <"$1" ; exit 0
+}
+_need_help "$@" && _help_me "$0"
+[ -z "$1" ] && _help_me "$0"
+
+urlrule_action "$1" domain:yuanyuan 1 
+
+

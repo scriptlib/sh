@@ -1,0 +1,98 @@
+#!/bin/bash
+
+#Script Name:	mountiso
+#Date:		Tue Dec 26 23:18:31 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+APPNAME="mountiso"
+APPVER="0.1"
+APPDESC="mount iso file on $MOUNT_POINT"
+APPUSAGE="(iso file) (symbol iso file) (mount point)"
+EXAMPLE="mount abc.iso"
+
+
+ARGS=$*
+
+if [ -z "$ARGS" ] && mount | grep "$MOUNT_POINT" > /dev/null ; then
+    nautilus "$MOUNT_POINT" &
+    exit 0
+fi
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t$APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+
+ISO_FILE=$1
+SYMBOL_ISO=$2
+MOUNT_POINT=$3
+
+for FILES in "$ISO_FILE" ; do
+    if [ ! -f "$FILES" ] ; then
+	echo "\"$FILES\" not exists."
+        exit 0
+    fi
+done
+
+if [ ! -d "$MOUNT_POINT" ] ; then
+    echo "\"$MOUNT_POINT\" not exists."
+    exit 0
+fi
+
+if mount | grep "$MOUNT_POINT" >/dev/null ; then
+    echo "Already mounted: $MOUNT_POINT"
+    echo "Try to umount it first."
+    umount "$MOUNT_POINT"
+    if mount | grep "$MOUNT_POINT" >/dev/null ; then
+	echo "Unable to umount $MOUNT_POINT."
+        exit 0
+    fi
+fi
+
+echo "Make symbol link: $ISO_FILE againtst $SYMBOL_ISO ..."
+
+ln -fs "$ISO_FILE" "$SYMBOL_ISO"
+
+if [ ! $? -eq 0 ]; then
+    echo "Unable to link: \"$SYMBOL_ISO\" -> \"$ISO_FILE\""
+    exit 0
+fi
+
+echo "Going to mount: $MOUNT_POINT" ...
+mount "$MOUNT_POINT"
+
+if [ ! $?=0 ] ; then
+    echo "Failed."
+    exit $?
+fi
+
+if mount | grep "$MOUNT_POINT" > /dev/null ; then
+    echo "Succeeded."
+    echo "Mount "$ISO_FILE" on "$MOUNT_POINT""
+    if ps -A | grep -q nautilus ; then
+        nautilus "$MOUNT_POINT" &
+    fi
+fi
+
+

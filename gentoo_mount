@@ -1,0 +1,14 @@
+#!/bin/sh
+gt="/myplace/subsys"
+if [ "$USER" == "root" ] ; then
+    mount="mount -v"
+else
+    mount="sudo mount -v"
+fi
+$mount LABEL=ASUBSYS
+$mount -t proc none  $gt/proc || exit 1
+$mount -o bind /dev  $gt/dev || exit 1
+$mount -o bind /myplace     $gt/myplace || exit 1
+$mount -o bind /myplace/boot  $gt/myplace/boot || exit 1
+$mount -o bind /myplace/home  $gt/myplace/home || exit 1
+

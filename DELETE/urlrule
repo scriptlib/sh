@@ -1,0 +1,50 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="urlrule"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="Apply URL rule on input"
+APPUSAGE="[OPTIONS] (URL) [AppendContent]"
+APPEXAMPLE="urlrule www.google.com"
+
+source `APPLIB "URLRule"` || exit -1
+
+ARGS=$*
+if [ -z "$ARGS" ] ; then 
+    cat /dev/stdin
+    exit 0
+fi
+
+URL="$URLRULE_URL"
+if [ -z "$URL" ] ; then  APPHELP ; exit -1 ; fi
+
+DOMAIN=`urldomain "$URL" | sed -e "s/^www\.//g"`
+UDIR="$URLRULE_PATH"
+RULE="$UDIR/$DOMAIN"
+
+[ ! -f "$RULE" ] &&  RULE="$UDIR/www.$DOMAIN"
+[ ! -f "$RULE" ] &&  RULE=`echo "$RULE" | sed -e "s/^www\.//"`
+[ ! -f "$RULE" ] &&  RULE=$UDIR/`echo "$DOMAIN" | sed -e "s/.*\.\(.*\)\.\(.*\)/\1.\2/"`
+[ ! -f "$RULE" ] && exit -1
+echo -e "\n[$URLRULE_LEVEL/$URLRULE_TYPE]Appling Rule for $URL..." >&2
+source "$RULE" "$URL" "${!#}"
+
+
+exit 0
+
+#OPT=""
+#case "$URLRULE_TYPE" in
+#    "IMG"  ) OPT="-I" ;;
+#    "HTML" ) OPT="-H" ;;
+#    "TEXT" ) OPT="-T" ;;
+#esac    
+
+#case "$URLRULE_LEVEL" in
+#    "LINK" ) [ -f "$RULE" ] && source "$RULE" "$URL"  ;;
+#    "PAGE" ) source "$RULE" "$URL" | linepipe "urlrule $OPT -L"  ;;
+#    "SITE" ) source "$RULE" "$URL" | linepipe "urlrule $OPT -P"  ;;
+#esac
+
+
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+APPNAME="extname"
+APPVER="0.1"
+APPDESC="return the ext name of filename"
+APPUSAGE="[filename]"
+
+ARGS=$*
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+echo "$*" | grep -o "\.[^\/.]*$"

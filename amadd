@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#Script Name:	amadd
+#Date:		Mon Dec 18 21:29:04 CST 2006
+#AUTHOR:	duel
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="amadd"
+APPVER="0.1"
+APPDESC="add ed2kurl to download for amuled"
+APPUSAGE="(ed2kurl)"
+EXAMPLE="amadd \"ed2k://...\""
+
+
+ARGS=$*
+
+UsageAS() {
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+}
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ] ;then
+	UsageAS
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+ED2K=$*
+VALIDURL=`echo "$ED2K" | grep -i "^ed2k:"`
+if [ -n "$VALIDURL" ]; then
+	amulecmd -c "add \"$ED2K\"";
+	exit 0
+else
+	UsageAS
+	exit 0
+fi
+

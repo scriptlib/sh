@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ -z "$1" ] ; then 
+exec curl
+else
+    URL="$1"
+    exec curl -L -A "Mozilla/5.0" --progress-bar -m 180 --connect-timeout 15 -O --referer "$URL" "$URL"
+fi

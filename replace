@@ -1,0 +1,29 @@
+#!/bin/bash
+APPNAME="replace"
+APPAUTHOR="duel"
+APPDATE="2007-07-25"
+APPVER="0.1"
+APPDESC="Strings replacing function"
+APPUSAGE="String <Pattern> [Replacement]"
+APPEXAMPLE="replace abcdef a A"
+
+source `APPLIB "AppUsage"` || exit -1
+STRING="$1"
+PATTERN="$2"
+REPLACEMENT="$3"
+
+if [ -z "$STRING" ] ; then APPHELP ; exit 0 ; fi
+if [ -z "$PATTERN" ] ; then echo "$STRING" ; exit 0 ; fi
+
+while  expr + "$STRING" : ".*$PATTERN" >/dev/null ; do
+    PART1=`expr + "$STRING" : "\(.*\)$PATTERN"`
+    PART2=`expr + "$STRING" : ".*$PATTERN\(.*\)"`
+    STRING="$PART1$REPLACEMENT$PART2"
+done
+
+echo "$STRING"
+
+
+
+
+

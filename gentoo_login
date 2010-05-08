@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ "$USER" == "root" ] ; then
+    chroot="/usr/sbin/chroot"
+else
+    chroot="sudo /usr/sbin/chroot"
+fi
+$chroot /myplace/subsys env -i /bin/bash --init-file /etc/chroot.rc
+

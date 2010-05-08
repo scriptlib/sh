@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in * ; do 
+    if [ -d "$i" ] ; then
+        find "$i" -type f -exec autoname "{}" \;
+    fi
+done

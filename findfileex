@@ -1,0 +1,24 @@
+#!/bin/bash
+APPNAME="findfileex"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-08-10"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE="(Pattern) [Folder]"
+APPEXAMPLE="findfileex \"*.txt\""
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+PATTERN=$1
+DIR=$2
+
+[ -z "$DIR" ] && DIR="."
+
+find "$DIR" -name "$PATTERN"
+ 
+
+
+

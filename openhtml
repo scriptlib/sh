@@ -1,0 +1,39 @@
+#!/bin/bash
+
+APPNAME=openhtml
+APPVER=0.1
+APPDESC="Guess the first html file in directory,and open it through Firefox"
+APPUSAGE="Usage:openhtml [pathName]"
+
+ARGS=$*
+
+if [ -z "$ARGS" ];then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "\t $APPUSAGE"
+	exit 0
+fi
+
+FILE=$1
+FILE=`fullname "$FILE"`
+if [ ! -d "$FILE" ];then
+	echo "$FILE" not exist.
+	exit 0
+fi
+
+INDEX=`ls "$FILE" | indexhtml`
+
+if [ -z "$INDEX" ];then
+	INDEX=`ls "$FILE" | firsthtml`
+fi
+
+#INDEX=`unzip -qq -l "$FILE"|indexzip`
+
+if [ -z "$INDEX" ];then
+	echo "Can't find first page."
+	exit 0
+fi
+
+URL="file://$FILE/$INDEX"
+echo $URL
+firefox "$URL" &

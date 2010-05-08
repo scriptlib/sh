@@ -1,0 +1,41 @@
+#!/bin/bash
+APPNAME="simdo"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-04-03"
+APPVER="0.1"
+APPDESC="Execute cmds in background,for simultanously doing next job."
+APPUSAGE="(NUMBER) (cmds) [arguments...]"
+APPEXAMPLE="simdo 3 download www.google.com"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+SNUM=$1
+CMD=$2
+
+if [ -z "$CMD" ] ; then APPHELP ; exit -1 ; fi
+
+((SNUM<1)) && SNUM=1
+
+SCOUNT=`ps T c | grep -c "\<$CMD\>"`
+[ -z "$SCOUNT" ] && SCOUNT=0
+
+while ((SNUM<=SCOUNT)) ; do
+    sleep 3
+    SCOUNT=`ps T c | grep -c "\<$CMD\>"`
+    [ -z "$SCOUNT" ] && SCOUNT=0
+done
+[ -n "$3" ] && ARGS="$3"
+shift
+while [ -n "$3" ] ; do
+    ARGS="$ARGS~$3"
+    shift
+done
+IFS=$'~'
+if((SNUM<=1)) ; then 
+    $CMD $ARGS
+else
+    $CMD $ARGS &
+fi
+
+#"$3" "$4" "$5" "$6" "$7" "$8" "$9" "${10}" "${11}" "${12}" "${13}" &

@@ -1,0 +1,14 @@
+#!/bin/sh
+file=$1
+[ -z "$file" ] && [ -f ~/playlist ] && file=~/playlist
+if [ -z "$file" ] ; then
+    echo "Usage $0 (playlist file)"
+    exit 0
+elif [ ! -r "$file" ] ; then
+    echo "File not readable,$file"
+    exit 1
+else
+    shift
+exec    mpg123 --list "$file" --control --shuffle "$@"
+fi
+

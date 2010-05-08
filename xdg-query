@@ -1,0 +1,5 @@
+#!/bin/sh
+ft=`xdg-mime query filetype "$@"`
+echo $ft
+xdg-mime query default "$ft"
+

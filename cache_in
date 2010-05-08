@@ -1,0 +1,45 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="cache_in"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="cache standard input for keyword"
+APPUSAGE="(KEYWORD)"
+APPEXAMPLE="cache_in \"www.google.com\""
+
+source `APPLIB "AppUsage"` || exit -1
+ARGS=$*
+if [ -z "$ARGS" ] ; then APPHELP ; exit 0 ; fi
+
+KEYWORD=${!#}
+EKEYWORD=${KEYWORD//\//\\\/}
+EKEYWORD=${EKEYWORD//./\\.}
+CACHE_DIR="/tmp/shell_cache"
+if [ ! -d "$CACHE_DIR" ] ; then
+    mkdir "$CACHE_DIR"
+    chmod 775 "$CACHE_DIR"
+fi
+CACHE_LIST="$CACHE_DIR/keywords.list"
+[ -f "$CACHE_LIST" ] || touch "$CACHE_LIST"
+CACHE_FILE=`grep -i "$EKEYWORD" "$CACHE_LIST" | head -n 1`
+#echo "$CACHE_FILE"
+if [ -n "$CACHE_FILE" ] ; then
+    CACHE_FILE=`expr + "$CACHE_FILE" : ".*->\(.*\)$"`
+fi
+#echo "$CACHE_DIR"
+#echo "$CACHE_LIST"
+#echo "$CACHE_FILE"
+#exit 0
+if [ -n "$CACHE_FILE" -a -f "$CACHE_FILE" ] ; then
+    cat "$CACHE_FILE"
+    exit 0
+fi
+
+CACHE_FILE="$CACHE_DIR/"`stringdate`
+echo "$KEYWORD->$CACHE_FILE" >> "$CACHE_LIST" 
+echo "[Cache System:]New \"$KEYWORD\" => \"$CACHE_FILE\"" >&2 
+
+cat - >"$CACHE_FILE"
+
+

@@ -1,0 +1,25 @@
+#!/bin/sh
+###sort_ebook v0.1
+###     - sort_ebook
+###     - Written by xiaoranzzz, 2008-09-10
+###Usage:
+###     sort_ebook
+###Option:
+###     -h Display help text
+###Example:
+###     sort_ebook
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+rename="renameext"
+
+pre='s/^(?:\w{3} - )?(.*)\.'
+suf=' - $1\.$2/i'
+
+
+$rename "$pre(zip|zbook|zhtm)$/ZIP$suf" "$@"
+$rename "$pre(chm)$/CHM$suf" "$@"
+$rename "$pre(pdf)$/PDF$suf" "$@"
+$rename "$pre(txt)$/TXT$suf" "$@"
+$rename "$pre(bz|gz|bz2)$/BGZ$suf" "$@"
+

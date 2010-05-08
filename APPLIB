@@ -1,0 +1,8 @@
+#!/bin/bash
+LIBNAME=$1
+APPLIBDIR=`APPLIBDIR`
+if [ -n "$LIBNAME" ] ; then
+    echo "$APPLIBDIR/$LIBNAME.sh"
+else
+    ls -l "$APPLIBDIR"
+fi

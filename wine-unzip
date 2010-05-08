@@ -1,0 +1,11 @@
+#!/bin/sh
+###wine-unzip v0.1
+###     - wine-unzip
+###     - Written by duel, 2008-11-26
+###Usage:
+###     wine-unzip
+###Option:
+###     -h Display help text
+###Example:
+###     wine-unzip
+cn_wine '/myplace/wine/public/apps/command/unzip.exe' "$@"

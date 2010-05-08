@@ -1,0 +1,54 @@
+#!/bin/bash
+APPNAME="downimg"
+APPAUTHOR="xiaoranzzz"
+APPDATE="Mon Jan  8 04:19:29 HKT 2007"
+APPVER="0.1"
+APPDESC="download img useing batchman and imgsearch"
+APPUSAGE="(keyword) [from_page] [to_page]"
+EXAMPLE=""
+
+
+DOWNLOADER="mywget --tries=2 --timeout=40 -nc -nv"
+function loadbatchman() {
+    if ps | grep "\bbatchman\b" >> /dev/null ; then
+	echo "Batchman is already runing"
+    else
+	echo Start Batchman
+        batchman "$DOWNLOADER" &
+    fi
+}
+
+if [ -z "$*" ] ; then
+    loadbatchman
+    exit 0
+fi
+echo Start Search...
+
+KEYWORD=$1
+FROM=$2
+TO=$3
+
+if [ -z "$FROM" ]; then
+    FROM=1
+fi
+
+if [ -z "$TO" ]; then
+    TO=$FROM
+fi
+
+if [ "$TO" -lt "$FROM" ] ; then
+    TEMP=$TO
+    TO=$FROM
+    $FROM=$TEMP
+fi
+
+LOGFILE=downimg.log
+echo [`date`] $0 $KEYWORD $FROM $TO >> $LOGFILE
+
+loadbatchman
+
+for ((index=$FROM;index<=$TO;index++)) ; do
+    echo "[$(($index-$FROM+1))/$(($TO-$FROM+1))]" For $KEYWORD Page.$index
+    imgsearch "$KEYWORD" "$index" | imglink | batchmanaddtask 
+done
+

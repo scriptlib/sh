@@ -1,0 +1,30 @@
+#!/bin/bash
+#APPNAME="testurl"
+#APPAUTHOR="duel"
+#APPDATE="2007-08-13"
+#APPVER="0.1"
+#APPDESC="Test whether the url is valid for downloading"
+#APPUSAGE="<url>"
+#APPEXAMPLE="testurl www.google.com"
+#APPOPTION=""
+#APPOPTSTR=""
+
+#source `APPLIB "AppUsage"` || exit -1
+#if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+if [ -z "$1" ] ; then 
+    echo "Error" >&2
+    exit 1
+fi 
+echo "testcurl with $@ ..." >&2
+if curl -I "$@" 2>/dev/null | grep -iq "HTTP/1.1 200 OK" ; then
+        echo "OK" >&2
+        exit 0
+else
+    echo "Error!" >&2
+    exit 1
+fi
+ 
+
+
+

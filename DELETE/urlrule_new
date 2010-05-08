@@ -1,0 +1,50 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="urlrule_new"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="Create new URLRule"
+APPUSAGE="(NAME)"
+APPEXAMPLE="urlrule_new \"http://www.babepleasers.com/2007_02_kimberly_franklin_busty_brun.php\""
+
+source `APPLIB URLRule` || exit -1
+#source `APPLIB AppUsage`
+
+ARGS=$*
+if [ -z "$ARGS" ] ; then APPHELP ; exit ; fi
+
+URL="$URLRULE_URL"
+
+if [ -z "$URL" ] ; then APPHELP ; exit -1 ; fi
+
+DRULE="$URLRULE_PATH"
+NRULE=`urldomain "$URL"`
+FRULE="$DRULE/$NRULE"
+
+[ ! -f "$FRULE" ] &&  FRULE="$DRULE/www.$NRULE"
+[ ! -f "$FRULE" ] &&  FRULE="$DRULE"/`echo "$NRULE" | sed -e "s/^www\.//i"`
+
+if [ -f "$FRULE" ] ; then
+    vim "$FRULE"
+else
+    {
+    echo "#!/bin/bash"
+    echo "#Rules for $NRULE"
+    echo "#$@"
+    echo "#Created by $USER"
+    echo "#Date: `date`"
+    echo ""
+    echo 'filter() {'
+    echo '    htmllink "$1"'
+    echo '    return $?'
+    echo '}'
+    echo 'URL=$1'
+    echo 'if [ -z "$URL" ] ; then'
+    echo '    filter'
+    echo 'else'
+    echo '    netcat -u "$URL" | filter "$URL"'
+    echo 'fi'
+    } | vim -c "file $FRULE" - 
+fi
+

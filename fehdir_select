@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd "$1"
+[ -d "select" ] || mkdir "select"
+fehdir . -A "mv %f select/"
+rm *
+mv select/* .
+rmdir "select"
+cd ..
+ls -l "$1"
+

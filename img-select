@@ -1,0 +1,20 @@
+#!/bin/sh
+###select-images v0.1
+###     - select images using feh action
+###     - Written by duel, 2008-09-11
+###Usage:
+###     select-images
+###Option:
+###     -h Display help text
+###Example:
+###     select-images
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+if ! which feh >/dev/null ; then
+    echo "Can't find feh,maybe not installed?" >&2
+    exit 1
+fi
+exec feh --scale-down -r --action "echo %f" "$@"
+
+
+

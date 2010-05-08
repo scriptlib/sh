@@ -1,0 +1,6 @@
+#!/bin/bash
+wine-ndo 'e:\apps\emule\emule.exe' "$@"
+ 
+
+
+

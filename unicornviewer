@@ -1,0 +1,14 @@
+#!/bin/sh
+###unicornviewer v0.1
+###     - unicornviewer
+###     - Written by xiaoranzzz, 2010-05-07
+###Usage:
+###     unicornviewer
+###Option:
+###     -h Display help text
+###Example:
+###     unicornviewer
+#scripthelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+cn_wine 'e:\apps\unicornviewer\unicornviewer.exe' "$@"
+

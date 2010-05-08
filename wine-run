@@ -1,0 +1,63 @@
+#!/bin/sh
+###wine-run v0.1
+###     - wine-run
+###     - Written by xiaoranzzz, 2008-04-14
+###Usage:
+###     wine-run
+###Option:
+###     -h Display help text
+###Example:
+###     wine-run
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+fn=$1
+shift
+
+get_first() {
+    read -s LINE
+    [ -f "$LINE" ] && dirname "$LINE"
+    while read -s LINE ; do
+        continue
+    done
+}
+
+wined=~/.wine
+based="$wined/dosdevices"
+
+case "$fn" in 
+    "winecfg"|"regedit"|"regsvr32") 
+        exec cn_wine "$fn" "$@";
+        exit $?;
+        ;;
+esac
+
+if [ -f "$fn" ] || [ -f "$fn.exe" ] ; then
+    echo "Here"
+    exec cn_wine "$fn" "$@"
+fi
+
+for fd in "c:/windows" "c:/windows/system32" ; do
+   fd="$based/$fd/"
+   appd=`find "$fd" -maxdepth 1 -type f -iname "$fn.exe" | get_first`
+   if [ -d "$appd" ] ; then
+        echo "$appd"
+        cd "$appd"
+        exec cn_wine "$fn" "$@"
+        exit $?
+   fi
+done
+for fd in "c:/Program Files" "e:/Apps"; do
+   fd="$based/$fd/"
+   appd=`find "$fd" -type f -iname "$fn.exe" | get_first`
+   if [ -d "$appd" ] ; then
+        echo "$appd"
+        cd "$appd"
+        exec cn_wine "$fn" "$@"
+        exit $?
+   fi
+done
+echo "No application found for $fn";
+exit 1
+
+

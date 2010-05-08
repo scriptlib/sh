@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#Script Name:	htmllink
+#Date:		Sat Dec 23 17:05:28 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="htmllink"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE="[BaseURL]"
+EXAMPLE="htmllink http://www.google.com"
+
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+#egrep -io "http\:\/\/[^\"\'=><]+\/+[^\"\"=><]+\.(jpg|jpeg)" < /dev/stdin
+BASEURL=$1
+
+
+egrep -io "(href|src)[[:space:]]*=[[:space:]]*(\"|\')[^\"\']+(\"|\')" | 
+sed -e "s/^[^\"\']*\(\"\|\'\)//g" -e "s/\(\"\|\'\).*$//g"  -e "s/\ *$//g" -e "s/\ /\%20/g" | fullurl "$BASEURL"
+
+
+exit $?
+
+{
+while read -s CURLINE ; do
+    if echo "$CURLINE" | egrep "(href|src)[[:space:]]*=" > /dev/null ; then
+        #echo "$CURLINE" ; continue
+        CURLINE=`echo "$CURLINE" | sed -e "s/.*\(href\|src\)\ *\=\ *//g"`
+        #echo "$CURLINE" ; continue
+        if echo "$CURLINE" | egrep "^(\"|\')" > /dev/null ; then
+            CURLINE=`echo "$CURLINE" | sed -e "s/^\(\"\|\'\)//g" -e "s/\(\"\|\'\).*$//g"`
+        #echo "$CURLINE" ; continue
+        else
+            CURLINE=`echo "$CURLINE" | sed -e "s/[\ ><].*$//g"`
+        #echo "$CURLINE" ; continue
+        fi
+        if ! echo "$CURLINE" | egrep "[\"\'><]" > /dev/null ; then
+            echo "$CURLINE" | sed -e "s/\ *$//g" -e "s/\ /%20/g" | fullurl "$BASEURL"
+        fi
+    fi
+done
+} < /dev/stdin
+
+
+
+

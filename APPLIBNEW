@@ -1,0 +1,40 @@
+#!/bin/bash
+APPNAME="APPLIBNEW"
+APPAUTHOR="duel"
+APPDATE="2007-03-29"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE=""
+APPEXAMPLE=""
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "Standard"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+LIBNAME="$1"
+LIBPATH=`APPLIBDIR`
+LIBFILE="$LIBPATH/$LIBNAME.sh"
+
+if [ -e "$LIBFILE" ] ; then
+    "$DEFAULT_EDITOR" "$LIBFILE"
+else
+    {
+        echo '#!/bin/bash'
+        echo "#File       : $LIBFILE"
+        echo "#Description: APPLIB for $LIBNAME"
+        echo "#Author     : $USER"
+        echo "#Date       : `date`"
+        echo ""
+        echo "if [ -z \"\$APPLIB_SOURCE_$LIBNAME\" ] ; then"
+        echo "    APPLIB_SOURCE_$LIBNAME=1"
+        echo "fi"
+    } | vim -c "file $LIBFILE" - 
+fi
+[ -f "$LIBFILE" -a ! -x "$LIBFILE" ] && chmod a+x "$LIBFILE"
+
+
+ 
+
+
+

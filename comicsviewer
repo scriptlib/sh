@@ -1,0 +1,2 @@
+#!/bin/sh
+cn_wine 'd:\apps\images\ComicsViewer\ComicsViewer.exe' "$@"

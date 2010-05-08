@@ -1,0 +1,33 @@
+#!/bin/bash
+
+APPNAME="startcompiz"
+APPVER="0.1"
+APPDESC="sh script for starting gnome-window-decorator and compiz in background"
+APPUSAGE=""
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+
+#killall previous gnome-window-decorator
+killallwmg
+
+echo "Restart compiz"
+#start a new gnome-window-decorator session
+if ! ps -A | grep -q "gtk-window-decorator" ; then
+    gtk-window-decorator --replace &
+fi
+
+#start compiz
+if ! ps -A | grep -q "\<compiz\>" ; then
+    compiz --replace gconf &
+fi
+
+#message
+

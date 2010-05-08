@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#Script Name:	imgmount
+#Date:		Thu Jan  4 05:40:48 HKT 2007
+#AUTHOR:	xiaoranzzz
+
+APPNAME="imgmount"
+APPVER="0.1"
+APPDESC="mount diskimg"
+APPUSAGE="(disk image) (partition num) (filesystem type) (mount point) "
+EXAMPLE="imgmount msdos.img 1 vfat /mnt/test"
+
+USAGE_FUNCTION=`dirname "$0"`/include/function.usage
+source "$USAGE_FUNCTION"
+function Usage() {
+    DisplayUsage "$APPNAME" "$APPVER" "$APPDESC" "$APPUSAGE" "$EXAMPLE"
+}
+
+ARGS=$*
+if JustDisplayUsage "$ARGS" ; then
+    Usage
+    exit 0
+fi
+
+if [ -z "$ARGS" ] ; then
+    Usage
+    exit 0
+fi
+
+IMAGE=$1
+PNUM=$2
+FS=$3
+MPOINT=$4
+
+if [ -z "$MPOINT" ] ; then
+    Usage
+    exit 0
+fi
+
+echo lomount -diskimage "$IMAGE" -partition "$PNUM" -t "$FS" "$MPOINT"
+sudo lomount -diskimage "$IMAGE" -partition "$PNUM" -t "$FS" "$MPOINT"
+

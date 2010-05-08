@@ -1,0 +1,11 @@
+#!/bin/sh
+app=vino-server
+
+for app_path in /usr/bin /usr/lib/vino /usr/local/bin /usr/local/lib/vino ; do
+    if [ -f "$app_path/$app" ] ; then
+        app=$app_path/$app
+        break
+    fi
+done
+echo $app
+exec $app

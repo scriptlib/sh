@@ -1,0 +1,16 @@
+#!/bin/sh
+###last_exec v0.1
+###     - last_exec
+###     - Written by xiaoranzzz, 2008-05-16
+###Usage:
+###     last_exec
+###Option:
+###     -h Display help text
+###Example:
+###     last_exec
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+"$@"
+poweroff
+

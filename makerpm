@@ -1,0 +1,75 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="makerpm"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-25"
+APPVER="0.1"
+APPDESC="Create rpm from source.tar.gz"
+APPUSAGE="[-s] [-b] source.tar.gz"
+EXAMPLE="makerpm lget.0.1.tar.gz"
+
+# NOCOLOR
+NOR=;BOLD=;RED=;YEL=;GRE=
+# COLOR
+NOR="\033[0m";BOLD="\033[1m";RED="\033[91m";YEL="\033[93m";GRE="\033[92m"
+# FUNCTIONS
+function APPMSG() { if [ -n "$*" ] ; then echo -e $GRE"$*"$NOR ; fi ; } 
+function APPMSG2() { if [ -n "$*" ] ; then APPMSG "\t$*" ; fi ; }
+function APPWARN() { if [ -n "$*" ] ; then echo -e $RED"$*"$NOR ; fi ; }
+function DisplayUsage() {
+    APPMSG "$APPNAME V$APPVER\n  Written by $APPAUTHOR AT $APPDATE"
+    APPMSG "$APPDESC"
+    APPMSG " -h\tDisplay this information.\n -E\tEdit me."
+    APPMSG " -s\tBuild source rpm only.\n -b\tBuild binary rpm only."
+    APPMSG "Usage: $0 $APPUSAGE"
+    if [ -n "$EXAMPLE" ] ; then APPMSG "Example: $EXAMPLE" ; fi
+    exit 1 
+}
+ARGS=$*
+if [ -z "$ARGS" ] ; then DisplayUsage ; fi
+for i in $ARGS ; do
+    case $i in 
+        "-h" ) DisplayUsage ;;
+        "-E" ) vim $0 ; exit $? ;;
+    esac
+done
+#TEMPLATE END
+
+RPMBUILD="rpmbuild -v --clean --rmsource --rmspec"
+RPMBUILDFLAG="-ta"
+RPMGREP='egrep -o ^Wrote:[[:print:]]*\.rpm'
+RPMSED='sed -e s/^Wrote:\s\+\([[:print:]]*\.rpm\)/\1/g -e "s/\\n/\ /g" -e s/\\n//g'
+
+#echo `echo -e "fdslafjdsklafds\nWrote:   fasfsafds.rpm\nWrote: aaaaaaaaaaaaaa.rpm" | $RPMGREP | sed -e "s/^Wrote:\s\+\([[:print:]]*\.rpm\)/\1/g" -e "s/\n/ /g" -e "s/\n/ /g"`
+#exit 0
+BUILDSOURCE="no"
+BUILDBINARY="no"
+DISTSOURCE=""
+for i in $ARGS ; do
+    case $i in
+        "-s" ) BUILDSOURCE="yes" ;;
+        "-b" ) BUILDBINARY="yes" ;;
+        * ) DISTSOURCE=$i
+    esac
+done
+
+if [ -z $DISTSOURCE ] ; then
+    APPWARN Source file $DISTSOURCE not exists
+    exit -1
+fi
+#DISTSOURCE=`fullname "$DISTSOURCE"`
+if [ $BUILDSOURCE = "yes" -a $BUILDBINARY = "yes" ] ; then
+    BUILDSOURCE="no"
+    BUILDBINARY="no"
+fi
+
+if [ $BUILDSOURCE = "yes" ] ; then
+    RPMBUILDFLAG=-ts
+elif [ $BUILDBINARY = "yes" ] ; then
+    RPMBUILDFLAG=-tb
+fi
+
+RPM_DST=`$RPMBUILD $RPMBUILDFLAG "$DISTSOURCE" | $RPMGREP | sed -e "s/^Wrote:\s\+\([[:print:]]*\.rpm\)/\1/g" -e "s/\\n/ /g" -e "s/\\n/ /g"`
+echo mv $RPM_DST -t .
+mv $RPM_DST -t .
+

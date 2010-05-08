@@ -1,0 +1,66 @@
+#!/bin/bash
+APPNAME="searchimg"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-04-02"
+APPVER="0.1"
+APPDESC="Search images from google.com and baidu.com"
+APPUSAGE="(keyword) [page]"
+APPEXAMPLE="searchimg 天文 12"
+APPOPTION=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+
+KEYWORD=`echo $1|sed "s/ /+/g"`
+PAGE=$2
+
+if [ -z "$PAGE" ]; then
+    PAGE=1
+fi
+
+if [ $PAGE -le 0 ]; then
+    PAGE=1
+fi
+
+function Download() {
+    URL="$1"
+    curl -L -A Mozilla/5.0 --progress-bar -m 180 --connect-timeout 60 --retry 10 --referer "$URL" "$URL"
+}
+
+#Google image
+function  google() {
+    local GBASEURL="http://images.google.com/images?q=###KEYWORD###&start=###START###&imgsz=xxlarge&ndsp=20&svnum=10&hl=en&lr=&safe=off&filter=0"
+    local GKEYWORD=$1
+    local GSTART=$((($2-1)*21))
+    local GOOGLEURL=`echo "$GBASEURL" | sed "s/###KEYWORD###/$GKEYWORD/g"|sed "s/###START###/$GSTART/g"`
+    Download "$GOOGLEURL"
+}
+
+#BAIDU image
+function baidu() {
+    local BBASEURL="http://image.baidu.com/i?z=3&cl=2&ct=201326592&sn=&lm=-1&cm=1&sc=0&bu=&rn=21&tn=baiduimage&word=###KEYWORD###&pn=###START###"
+    local BKEYWORD=`echo $1 | iconv -f UTF8 -t GB2312`
+    local BSTART=$((($2-1)*2020))
+    local BAIDUURL=`echo "$BBASEURL" | sed "s/###KEYWORD###/$BKEYWORD/g"|sed "s/###START###/$BSTART/g"`
+    Download "$BAIDUURL" | grep -i "image.baidu.com[^ ]*"
+}
+#Yahoo image
+#http://images.search.yahoo.com/search/images?p=jenna+jameson&ei=UTF-8&imgsz=large&fr=sfp&b=21
+
+function  yahoo() {
+    local YBASEURL="http://images.search.yahoo.com/search/images?p=###KEYWORD###&ei=UTF-8&imgsz=large&fr=sfp&b=###START###"
+    local YKEYWORD=$1
+    local YSTART=$((($2-1)*21))
+    local YAHOOURL=`echo "$YBASEURL" | sed "s/###KEYWORD###/$YKEYWORD/g"|sed "s/###START###/$YSTART/g"`
+    Download "$YAHOOURL"
+}
+function doSearch(){
+    google "$KEYWORD" "$PAGE" | grep -io "http:\/\/[^\?\=\*\&]*\.\(jpg\|jpeg\)"
+    baidu "$KEYWORD" "$PAGE" | grep -io "http:\/\/[^\?\=\*\&]*\.\(jpg\|jpeg\)"
+#    yahoo "$KEYWORD" "$PAGE" | filter unescape | grep -io "imgurl=[^\&]*" | sed -e "s/imgurl=//"
+}
+
+APPMSG "Search \"$KEYWORD\" page NUM.$PAGE\n"
+doSearch
+

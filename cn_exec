@@ -1,0 +1,6 @@
+#!/bin/sh
+#echo "LANG=\"zh_CN.UTF-8\" $@">&2
+#env LANG="zh_CN.UTF-8" "$@"
+#env LANG="zh_CN.UTF-8" "$@"
+#LANG="zh_CN.GB2312" "$@"
+LANG="zh_CN.UTF-8" "$@"

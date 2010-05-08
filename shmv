@@ -1,0 +1,41 @@
+#!/bin/bash
+###APPNAME="scriptrename"
+###APPAUTHOR="duel"
+###APPDATE="2007-03-30"
+###APPVER="0.2"
+###APPDESC="rename script and it's local link"
+###APPUSAGE="(oldname) (newname)"
+###APPEXAMPLE="scriptrename scriptrename mvscript"
+###APPOPTION=""
+
+source `APPLIB "Standard"` || exit -1
+source `APPLIB "System"` || exit -1
+source `APPLIB "ScriptDef"` || exit -1
+
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+OLDNAME=`basename "$1" .$SCRIPTEXT`
+NEWNAME=`basename "$2" .$SCRIPTEXT`
+
+if [ -z "$NEWNAME" ] ; then APPHELP ; exit 0 ; fi
+if [ "$OLDNAME" = "$NEWNAME" ] ; then APPHELP ; exit 0 ; fi
+
+OLDSCRIPT="$SCRIPTDIR/$OLDNAME.$SCRIPTEXT"
+OLDLINK="$SCRIPTBINDIR/$OLDNAME"
+
+NEWSCRIPT="$SCRIPTDIR/$NEWNAME.$SCRIPTEXT"
+NEWLINK="$SCRIPTBINDIR/$NEWNAME"
+
+if [ -f "$OLDSCRIPT" ] ; then 
+    APPMSG "Rename \"$OLDSCRIPT\" to \"$NEWSCRIPT\"\n"
+    TrySudo mv "$OLDSCRIPT" "$NEWSCRIPT"
+fi
+if [ -L "$OLDLINK" ] ; then
+    APPMSG "Link \"$OLDLINK\" to \"$NEWSCRIPT\"\n"
+    TrySudo ln -sf "$NEWSCRIPT" "$OLDLINK"
+    APPMSG "Rename \"$OLDLINK\" to \"$NEWLINK\"\n"
+    TrySudo mv "$OLDLINK" "$NEWLINK"
+fi
+
+
+

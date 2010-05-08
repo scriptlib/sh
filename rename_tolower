@@ -1,0 +1,13 @@
+#!/bin/sh
+###rename_tolower v0.1
+###     - rename_tolower
+###     - Written by xiaoranzzz, 2008-02-18
+###Usage:
+###     rename_tolower filenames
+###Option:
+###     -h Display help text
+###Example:
+###     rename_tolower *
+scripthelp "$0" "$@" && exit 0
+
+renameext 's/(.*)/\L$1/' "$@"

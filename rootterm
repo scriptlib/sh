@@ -1,0 +1,24 @@
+#!/bin/sh
+###rootterm v0.1
+###     - Open super x-terminal-emulator 
+###     - Written by xiaoranzzz, 2008-02-17
+###Usage:
+###     rootterm
+###Option:
+###     -h Display help text
+###Example:
+###     rootterm
+scripthelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+ROOTTERM_SUDO="gksudo"
+
+which "$ROOTTERM_SUDO" 2>/dev/null 1>/dev/null || ROOTTERM_SUDO="sudo"
+
+ROOTTERM_TERM="x-terminal-emulator"
+
+which "$ROOTTERM_TERM" 2>/dev/null 1>/dev/null || ROOTTERM_TERM="xterm"
+
+"$ROOTTERM_SUDO" "$ROOTTERM_TERM"
+
+

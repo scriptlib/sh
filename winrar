@@ -1,0 +1,11 @@
+#!/bin/sh
+###winrar v0.1
+###     - winrar
+###     - Written by duel, 2008-12-31
+###Usage:
+###     winrar
+###Option:
+###     -h Display help text
+###Example:
+###     winrar
+exec cn_wine 'd:\apps\archiver\winrar\winrar.exe'

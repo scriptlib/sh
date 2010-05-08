@@ -1,0 +1,55 @@
+#!/bin/bash
+APPNAME="unchmfolder"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-01-13"
+APPVER="0.1"
+APPDESC="unchm a chm file to a folder,\nwhich's name based on the chm filename,and under current directory"
+APPUSAGE="(chm filename)"
+APPEXAMPLE="unchmfolder foo.chm"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ;  fi
+    if [ -f "/myplace/shellscript/cs2w" ] ; then
+        CHMPROGRAM="/myplace/shellscript/cs2w"
+    elif which cs2w >/dev/null ; then
+        CHMPROGRAM="cs2w"
+    elif which unchm >/dev/null ; then
+        CHMPROGRAM="unchm"
+    fi
+    if [ -z "$CHMPROGRAM" ] ; then
+        echo "Error: neither \"cs2w\" nor \"unchm\" found!";
+        exit 1;
+    fi
+
+
+for CHMFILE in "$@" ; do
+    if [ ! -f "$CHMFILE" ] ; then
+        echo -e $RED"File not exists,or permission denied.$NOR"
+        continue
+    fi
+    FDNAME=`basefname "$CHMFILE"`
+#    mkdir "$FDNAME"
+#    if [ ! -d "$FDNAME" ] ; then
+#        echo -e $RED"Permission denied while trying to write $FDNAME.$NOR"
+#        continue
+#    fi
+    echo -n "$CHMFILE -> $FDNAME ..."
+    #FULLCHM=`fullname "$CHMFILE"`
+    #FULLDIR=`fullname "$FDNAME"`
+    if [ "$CHMPROGRAM" == "cs2w" ] || [ "$CHMPROGRAM" == "/myplace/shellscript/cs2w" ] ; then
+        $CHMPROGRAM -C "$FDNAME" -T '/myplace/workspace/html/chm_cs2w' "$CHMFILE"
+        pushd "$FDNAME">/dev/null
+        for f in cs2w_*.html ; do
+            [ -f "$f" ] && sed -i -e "s/BOOKNAME/$FDNAME/g;" "$f"
+        done
+        popd>/dev/null
+
+    elif [ "$CHMPROGRAM" == "unchm" ] ; then
+        $CHMPROGRAM -x "$CHMFILE" "$FDNAME"
+    fi
+    if [ $? -eq 0 ] ; then 
+        echo -e "\r$CHMFILE -> $FDNAME [Done]"
+    else
+        echo -e "\r$CHMFILE -> $FDNAME [Failed]"
+    fi
+done

@@ -1,0 +1,16 @@
+#!/bin/bash
+ARGS="$*"
+function strip_basename() {
+    URL="/$1"
+    expr + "$URL" : ".*\/\([^\/]*\)$"
+}
+if [ -z "$ARGS" ] ; then
+    while read URL ; do
+        strip_basename "$URL"
+    done
+else
+    for URL in "$@" ; do
+        strip_basename "$URL"
+    done
+fi
+

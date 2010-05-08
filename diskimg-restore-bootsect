@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ -z "$2" ] ; then
+	echo "Usage:$0 diskimage bootsect"
+	exit 0
+fi
+dd if=$2 of=$1 conv=notrunc
+
+

@@ -1,0 +1,62 @@
+#!/bin/sh
+
+function usage {
+cat << _USAGE
+autolabel_xstory v1.0
+    - label x stories by keywords
+Usage:
+    autolobel_xstory [directory]
+_USAGE
+}
+
+function keywords {
+cat << _KEYWORDS
+-key 白洁 阿宾 -dest 经典
+-key 妈妈 母亲 母子 媽媽 母親 兒子 儿子 繼母 继母 熟母 淫母 人母 息子 義母 义母 荡母 淫儿 后母 後母 小妈 小媽 -dest  妈妈
+-key 岳母 -dest  岳母
+-key 师母 師母 師娘 师娘 -dest  师母
+-key 嫂 嫂 小叔 -dest  嫂子
+-key 婶 嬸 -dest  婶辈
+-key 姑姑 姑妈 姑母 -dest 姑辈
+-key 舅妈 -dest 舅妈
+-key 姐姐 姊姊 姐弟 姊弟 淫姐 淫姊 姉姉 姉弟 淫姉 淫弟 弟弟 家姐 家姊 家姉 -dest  姐姐
+-key 父亲 爸爸 父女 女儿 -dest 女儿
+-key 妹妹 兄妹 家妹 -dest 妹妹
+-key 表姐 表妹 表姊 -dest  表姐妹
+-key 媳 公公 -dest  媳妇
+-key 伯母 -dest  伯母
+-key 太太 夫人 母女 -dest  太太
+-key 熟女 少妇 少婦 -dest  妇人 
+-key 妇 婦 -dest  妇人
+-key 妻 老婆 老公 丈夫 新婚 新娘 -dest  人妻 
+-key 姨 甥 -dest  姨辈
+-key 家庭 乱伦 亂倫 近親 近亲 一家 -dest  乱伦
+-key 皇后 皇宫 妃 -dest 皇宫
+-key 老师 老師 教師 教师 家教 教授 教官 -dest 教师
+-key 校長 校长 -dest 校长
+-key 校花 學妹 学妹 學姐 学姐 學長 学长 學弟 学弟 同桌 宿舍 班長 班长 女生 -dest 同学
+-key 校 高中 高一 高二 高三 初中 高校 校園 學生 暑假 学园 教室 学院 补习班 -dest 校园
+-key 老板娘 老闆娘 -dest 老板娘
+-key 上司 领导 主任 上司 -dest 上司
+-key 同事 经理 辦公室 白领 蓝领 丽人 面试 -dest 办公室
+-key 警察 警花 女警 派出所 公安 -dest 警察
+-key 空姐 机舱  -dest 空姐
+-key 医生 护士 醫院 病人 看病 生病 白衣天使 -dest 医院
+-key 公车 公車 电车 電車 車上 车上 -dest 公车
+-key 电梯 -dest 电梯
+-key 火車 旅途 旅行 旅馆 列车 电梯 小巴 大巴 车站 计程车 -dest 族行
+-key 邻居 隔壁 邻家 鄰居 鄰家 -dest 邻居
+-key 服务员 推销 业务员 -dest 业务员
+-key 主播 -dest 主播
+-key 律师 -dest 律师
+-key 导演 演員 明星 -dest 演员
+_KEYWORDS
+}
+
+function process {
+    exec r-test -from-file - -if find "$@" -type f -move
+}
+
+if [ "$1" == "-h" ] ; then usage;exit 0; fi
+keywords | process "$@"
+

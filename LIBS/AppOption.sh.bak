@@ -1,0 +1,43 @@
+##!/bin/bash
+#
+#if [ -z "$APPLIB_SOURCE_AppOption" ] ; then
+#    APPLIB_SOURCE_AppOption=1
+#    DEFAULT_EDITOR="vim"
+#    function APPOPT()  {
+#        OPT="-$1"
+#        shift
+#        
+#        while [ -n "$1" ] ; do
+#            if [ "$OPT" == "$1" ] ; then
+#                shift
+#                OPTSTR="$1"
+#                if [ -n "$OPTSTR" ] ; then
+#                    if  expr + "$OPTSTR" : '-' >/dev/null ; then
+#                        echo "true"
+#                    else
+#                        echo "$OPTSTR"
+#                    fi
+#                else
+#                    echo "true"
+#                fi
+#                return 0
+#            else
+#                shift
+#            fi
+#        done
+#        return -1
+#    }
+#
+#    DEFAULTOPT="h:Display this text|e:Edit me"
+#    if [ -z "$APPOPTION" ] ; then
+#        APPOPTION="$DEFAULTOPT"
+#    else
+#        APPOPTION="$DEFAULTOPT|$APPOPTION"
+#    fi
+#
+#    if APPOPT "h" "$@" > /dev/null ; then APPHELP ; exit 0; fi
+#    if APPOPT "e" "$@" > /dev/null ; then "$DEFAULT_EDITOR" "$0" ; exit 0 ; fi
+#fi
+#    
+#    
+#    

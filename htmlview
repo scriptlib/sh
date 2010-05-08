@@ -1,0 +1,11 @@
+#!/bin/bash
+for bb in epiphany iceweasel firefox ; do
+    cmd=`ps -U "$USER" -o command | grep -v "grep" | grep -s "\/$bb\|^$bb"`
+    if [ -n "$cmd" ]; then
+        echo "$cmd" "$@"
+        "$cmd" "$@"&
+        exit 0
+    fi
+done
+
+firefox "$@"&

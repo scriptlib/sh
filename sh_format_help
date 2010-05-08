@@ -1,0 +1,23 @@
+#!/bin/bash
+###sh_format_help - V0.1
+###     bash script help system	
+###     Written by root, Fri Sep 21 12:11:45 2007
+###Usage:
+###     sh_format_help (Filename) [Args...]
+###Exapmle:
+###     sh_format_help "/share/bin/plhelp" "-h"
+fn=$1
+shift
+if [ ! -f "$fn" ] ; then  $0 $0 ; exit 1  ; fi
+function FormatHelp {
+    while read -s line ; do
+        if [ "${line:0:1}" == "#" ] ; then
+            [ "${line:0:3}" == "###" ] && echo "${line:3}"
+        else
+            break
+        fi
+    done
+}
+FormatHelp <"$fn"
+exit 0
+

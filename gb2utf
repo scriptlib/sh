@@ -1,0 +1,2 @@
+#!/bin/bash
+myiconv GB2312 UTF-8 "$@"

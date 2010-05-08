@@ -1,0 +1,17 @@
+#!/bin/sh
+###dotlink v0.1
+###     - create symbol link of files, while prefix a dot(.)
+###     - Written by xiaoranzzz, 2009-06-16
+###Usage:
+###     dotlink
+###Option:
+###     -h Display help text
+###Example:
+###     dotlink /myplace/appdata/bash/bashrc
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+for src in "$@" ; do
+    dst=`basename "$src"`
+    ln -svf "$src" ".$dst"
+done

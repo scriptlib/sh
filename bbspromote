@@ -1,0 +1,7 @@
+#!/bin/sh
+while((1)); do
+    sudo /etc/init.d/net.eth0 restart
+    firefox
+done
+
+

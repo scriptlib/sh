@@ -1,0 +1,78 @@
+#!/bin/bash
+###APPNAME:     myplayer
+###APPAUTHOR:   duel
+###APPDATE:     2007-09-23
+###APPVER:      0.1
+###APPDESC:     a player, with playlist history
+###APPUSAGE:    (filenames ...)
+###APPEXAMPLE:  
+###APPOPTION:   
+plhelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then plhelp "$0" "--help" ; exit 0 ; fi
+
+rcdir="$HOME/.myplayer"
+player="mplayer"
+list="$rcdir/playlist"
+
+[ -d "$rcdir" ] || mkdir "$rcdir"
+[ -f "$list" ] || touch "$list"
+
+function newList() {
+    local filename;
+    :>"$list"
+    for filename in "$@" ; do
+        [ -f "$filename" -o -d "$filename" ] && filename=`fullname "$filename"`
+        echo "$filename" >>"$list"
+    done
+}
+
+function deleteFirst() {
+    local -a allFile
+    local -i count=0
+    { 
+    while read -s LINE ; do
+        if [ -n "$LINE" ] ; then
+            allFile[$count]="$LINE"
+            ((count++))
+        fi
+    done
+    } <"$list"
+    if [ $count -gt 0 ]; then
+        local -i index=1
+        :>"$list"
+        while((index<$count)); do
+            echo "${allFile[$index]}" >>"$list";
+            ((index++))
+        done
+    fi
+}
+
+function firstFile() {
+    {
+    if read -s LINE ; then
+        echo "$LINE"
+    else
+        echo ""
+    fi
+    }<"$list"
+}
+
+[ -n "$1" ] && newList "$@"
+
+playentry=`firstFile`
+if [ -z "$playentry" ] ; then 
+    echo "Playlist is empty!" 
+    exit 0 
+fi
+while [ -n "$playentry" ] ; do
+    echo "Play \"$playentry\""
+    $player "$playentry" || exit
+    deleteFirst
+    playentry=`firstFile`
+done
+echo "Playlist finished"
+
+ 
+
+
+

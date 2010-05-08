@@ -1,0 +1,26 @@
+#!/bin/bash
+APPNAME="scriptwhere"
+APPAUTHOR="duel"
+APPDATE="2007-03-30"
+APPVER="0.1"
+APPDESC="locate script,and search its symbol link in \$PATH"
+APPUSAGE="(scriptname)"
+APPEXAMPLE="scriptwhere scriptwhere"
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "AppUsage"`
+source `APPLIB "ScriptDef"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+
+
+
+if ! LOCATESCRIPT "$1" ; then exit -1 ; fi
+if ! LOCATELINK "$1" ; then exit -1 ; fi
+
+
+
+
+
+

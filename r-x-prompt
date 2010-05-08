@@ -1,0 +1,19 @@
+#!/bin/sh
+###r-x-prompt v0.1
+###     - command box with zenity interface
+###     - Written by duel, 2009-01-14
+###Usage:
+###     r-x-prompt [title] [text] [default]
+###Option:
+###     -h Display help text
+###Example:
+###     r-x-prompt
+scripthelp "$0" "$@" && exit 0
+
+title="${1:-Command Box}"
+text="${2:-Type in commands}"
+default="$3"
+
+cmd=`zenity --entry --text="$text" --entry-text="$default" --title="$title" --width="300"` 
+
+[ -n "$cmd" ] && exec $cmd

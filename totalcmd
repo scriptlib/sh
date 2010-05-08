@@ -1,0 +1,19 @@
+#!/bin/sh
+###totalcmd v0.1
+###     - totalcmd
+###     - Written by duel, 2008-12-24
+###Usage:
+###     totalcmd
+###Option:
+###     -h Display help text
+###Example:
+###     totalcmd
+
+#resume=`/myplace/wine/bin/get-appdefault.pl "TotalCmd.exe"`
+#/myplace/wine/bin/del-appdefault.pl "TotalCmd.exe"
+#/myplace/wine/bin/set-appdefault.pl "TotalCmd.exe" browseui,ole32,oleaut32,rpcrt4,shlwapi,msvcrt=b | regedit -
+
+#sleep 1
+DLLOVERRIDES='rpcrt4=b' cn_wine 'R:\Program\Fileman\TotalCmd\TotalCmd.exe'
+#sleep 1
+#echo -E "$resume" | regedit -

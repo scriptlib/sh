@@ -1,0 +1,7 @@
+echo umounting fedora cd image on /iso...
+umount /iso/cd1
+umount /iso/cd2
+umount /iso/cd3
+umount /iso/cd4
+umount /iso/cd5
+echo umount done!

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#Script Name:	amdownload
+#Date:		Mon Dec 18 21:27:30 CST 2006
+#AUTHOR:	duel
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="amdownload"
+APPVER="0.1"
+APPDESC="add search result to download for amuled"
+APPUSAGE="(resultid)"
+EXAMPLE="amdownload 1"
+
+
+ARGS=$*
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+amulecmd -c "download $1"

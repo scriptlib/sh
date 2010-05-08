@@ -1,0 +1,25 @@
+#!/bin/sh
+###untarfolder v0.1
+###     - untarfolder
+###     - Written by xiaoranzzz, 2010-05-05
+###Usage:
+###     untarfolder
+###Option:
+###     -h Display help text
+###Example:
+###     untarfolder
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+
+cdir=`pwd`
+for i in "$@" ; do
+    basename=`basename "$i" .gz`
+    basename=`basename "$basename" .bz2`
+    basename=`basename "$basename" .7z`
+    basename=`basename "$basename" .lzma`
+    basename=`basename "$basename" .html.tar`
+    basename=`basename "$basename" .tar`
+    [ -d "$basename" ] || mkdir -v -- "$basename"
+    tar -xvf "$i" -C "$basename"
+done

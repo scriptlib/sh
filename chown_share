@@ -1,0 +1,23 @@
+#!/bin/sh
+
+OWNER="xiaoranzzz:myplace"
+
+setmod () {
+    if [ -o "$1" ] ; then
+        chown -v "$OWNER" "$1"
+    else
+        sudo_if_need chown -v "$OWNER" "$1"
+    fi
+    return $?
+}
+
+if [ -n "$1" ] ; then
+    while [ -n "$1" ] ; do 
+        setmod "$1"
+        shift
+    done
+else
+    while read item ; do
+        setmod "$item"
+    done
+fi

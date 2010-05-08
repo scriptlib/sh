@@ -1,0 +1,79 @@
+#!/bin/bash
+APPNAME="initscript"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-08-19"
+APPVER="0.1"
+APPDESC="Initialize all standard variables,run once after system reinstalled"
+
+RESULT="scriptvar.sh"
+
+
+CDIR=`pwd`
+PDIR=`dirname "$CDIR"`
+
+function debugPrint() {
+   echo $1=\"${!1}\"
+   echo $1=\"${!1}\" >&2
+}
+
+function convertDotDot() {
+    result=$1
+    curdir=$CDIR
+    declare -i upper=0
+    if [ ${#result} -lt 2 ] ; then
+        echo "$result"
+        exit 0
+    fi
+    if [ ! ${result:0:2} == ".." ] ; then
+        echo "$result"
+        exit 0
+    fi
+    while [ ${result:0:2} == ".." ] ; do
+        result=${result:2}
+        ((upper++))
+        if [ ${#result} -lt 2 ] ; then
+            break
+        fi
+    done
+    while((upper>0)) ; do 
+        curdir=`dirname $curdir`
+        ((upper--))
+    done
+    echo "$curdir$result"
+}
+
+function convertDot() {
+    result=$1
+    if [ -z "$result" ] ; then exit 0 ; fi
+    if [ ${result:0:1} == "." ] ; then
+        result="$CDIR${result:1}"
+    fi
+    echo "$result"
+}
+
+function fullPath() {
+    convertDot `convertDotDot "$1"`
+}
+
+SCRIPTDIR=`dirname $0`
+SCRIPTDIR=`fullPath "$SCRIPTDIR"`
+
+SHAREDIR=`dirname "$SCRIPTDIR"`
+SHAREBIN="$SHAREDIR/bin"
+PERLDIR="$SHAREDIR/perl"
+APPLIBDIR="$SCRIPTDIR/LIBS"
+URLRULEDIR="$SCRIPTDIR/UrlRules"
+
+
+{
+    echo '#!/bin/bash'
+    debugPrint "SCRIPTDIR"
+    debugPrint "SHAREDIR"
+    debugPrint "SHAREBIN"
+    debugPrint "PERLDIR"
+    debugPrint "APPLIBDIR"
+    debugPrint "URLRULEDIR"
+} > "$RESULT"
+
+
+

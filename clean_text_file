@@ -1,0 +1,25 @@
+#!/bin/sh
+###clean_text_file v0.1
+###     - clean_text_file
+###     - Written by duel, 2008-08-23
+###Usage:
+###     clean_text_file
+###Option:
+###     -h Display help text
+###Example:
+###     clean_text_file
+scripthelp "$0" "$@" && exit 0
+
+PATTERN="s/[a-z0-9[:space:]~!@#$%\^&\*\(\)_+\-=:\;\"'\,\.<>\/\?{}]//gi" 
+
+
+if [ -z "$1" ] ; then
+    sed -e "$PATTERN"
+fi
+while [ -n "$1" ] ; do
+    echo "Conveting $1..." >&2
+    sed -i -e "$PATTERN" "$1"
+    shift
+done
+
+

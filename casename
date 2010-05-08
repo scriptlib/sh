@@ -1,0 +1,24 @@
+#!/bin/bash
+#APPNAME="casename"
+#APPAUTHOR="xiaoranzzz"
+#APPDATE="2007-04-04"
+#APPVER="0.1"
+#APPDESC="Return proper case string"
+#APPUSAGE="[Input string]"
+#APPEXAMPLE="casename \"mArk_twAin\""
+#APPOPTION=""
+
+#source `APPLIB "AppUsage"` || exit -1
+
+DIRTYWORD='[_\.-]'
+#if [ -z "$*" ] ; then
+#    sed -e "s/\(.*\)/\L\1/;s/^\(.\)/\l\1/;s/$DIRTYWORD\(.\)/ \u\1/g"
+#else
+#    for STR in "$@" ; do
+        echo "$@" | sed -e "s/\(.*\)/\L\1/;s/^\(.\)/\u\1/;s/$DIRTYWORD\(.\)/ \U\1/g"
+#    done
+#fi
+ 
+
+
+

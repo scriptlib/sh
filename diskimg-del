@@ -1,0 +1,4 @@
+#!/bin/sh
+echo mdel -i "$@"
+exec mdel -i "$@"
+

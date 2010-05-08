@@ -1,0 +1,66 @@
+#!/bin/bash
+###     diskimg-create V0.1
+###     - Create new disk image (raw)
+###     - by xiaoranzzz,2007-10-07
+###Usage:
+###     diskimg-create [options] (Name) (Size)
+###Options:
+###     --no-hole   Write zero to disk image
+###Example:
+###     diskimg-new disk.img 1440
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+blocksize=512
+factor=`expr 1024 / $blocksize`
+name=""
+nohole="false"
+
+while [ -n "$1" ] ; do
+    echo -en "$1\t"
+    if [ "$1" = "--no-hole" ] ; then
+        nohole="true"
+    elif [ -n "$name" ] ; then
+        size=$1
+    else
+        name=$1
+    fi
+    shift
+done
+echo
+
+
+[ -n "$size" ] || size=1440
+value=${size:0:`expr "${#size}" - 1`}
+base=${size: -1:1}
+
+echo "nohole=$nohole" 
+echo "name=$name"
+echo "size=$size"
+
+#echo "$value"
+#echo "$base"
+#echo "$factor"
+#exit 0
+
+function getSize() {
+    local value=$1
+    local base=$2
+    case $base in
+        M|m) expr "$value" "*" 1024 "*" $factor;;
+        G|g) expr "$value" "*" 1024 "*" 1024 "*" $factor;;
+        K|k) expr "$value" "*" $factor ;;
+        *) expr "$size" "*" $factor ;;
+    esac
+}
+count=`getSize "$value" "$base"`
+#count=`expr $count - 1`
+
+#echo $count
+
+if [ "$nohole" = "true" ] ; then
+    dd if=/dev/zero of=$name bs=$blocksize count=$count
+else
+    dd if=/dev/zero of=$name bs=$blocksize count=1 seek=$(($count - 1))
+fi
+

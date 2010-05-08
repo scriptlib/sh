@@ -1,0 +1,38 @@
+#!/bin/bash
+
+APPNAME="autoname"
+APPVER="0.1"
+APPDESC="use stringdate rename the file"
+APPUSAGE="[filename]"
+
+ARGS=$*
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ];then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+NOR="\033[0m"
+#BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+for i in "$@" ; do
+	FILE=$i
+	EXT=`extname "$FILE"`
+	DSTFILE=`date +%N`$EXT
+        while [ -f "$DSTFILE" ] ; do
+            DSTFILE=`date +%N`$EXT
+        done
+	echo -ne rename $YEL$FILE$NOR as $YEL$DSTFILE$NOR...
+	if mv -- "$FILE" "$DSTFILE" ; then
+		echo -e "\t${GRE}Done$NOR"
+	else
+		echo -e "\t${RED}Failed$NOR"
+	fi		
+done
+
+exit 0

@@ -1,0 +1,14 @@
+#!/bin/sh
+###htmldir-view v0.1
+###     - htmldir-view
+###     - Written by xiaoranzzz, 2008-02-16
+###Usage:
+###     htmldir-view
+###Option:
+###     -h Display help text
+###Example:
+###     htmldir-view
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+firefox3 `find "$@" -type f -name "*.html" | firsthtml`

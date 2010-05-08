@@ -1,0 +1,5 @@
+#!/bin/sh
+echo -- pdftotext -eol dos -layout "$@"
+pdftotext -eol dos -layout "$@"
+
+

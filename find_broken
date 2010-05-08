@@ -1,0 +1,6 @@
+#!/bin/sh
+if test -n "$1" ; then
+    find -L "$1" -type l
+else
+    find -L -type l
+fi

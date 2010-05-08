@@ -1,0 +1,68 @@
+#!/bin/bash
+
+#Script Name:	rmsmallfile
+#Date:		Thu Dec 14 02:24:02 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="rmsmallfile"
+APPVER="0.1"
+APPDESC="rm files which size is less than then specified size."
+APPUSAGE="(filename pattern) (size)"
+EXAMPLE=""
+
+
+NAMEEXP=$1
+SIZE=$2
+
+if [ -z "$SIZE" ] ; then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+function ListFile() {
+    local -i Count=0
+    while read -s LINE ; do
+        ((Count++))
+        echo "$LINE"
+    done
+    [ $Count == 0 ] && return 1  
+    echo -en "Warning: Remove $Count files listed above!(y/n)"
+}
+
+function DeleteFile() {
+    while read -s LINE ; do
+        rm -v "$LINE" >&2
+    done
+}
+
+TEMPLIST=`mktemp`
+
+find . -name "$NAMEEXP" -type f -size -"$SIZE" >"$TEMPLIST"
+
+if cat "$TEMPLIST" | ListFile ; then
+
+    read -s -n 1 Answer;
+    echo "$Answer"
+    if [ "$Answer" == "y" -o "$Answer" == "Y" ] ; then
+        cat "$TEMPLIST" | DeleteFile
+    fi
+else
+    echo "Nothing to do."
+fi
+
+rm "$TEMPLIST"

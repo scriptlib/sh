@@ -1,0 +1,33 @@
+#!/bin/bash
+APPNAME="scriptcopy"
+APPAUTHOR="duel"
+APPDATE="2007-03-30"
+APPVER="0.1"
+APPDESC="Copy shellscript"
+APPUSAGE="(src) (dst)"
+APPEXAMPLE="scriptcopy scriptcopy scriptdup"
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "AppUsage"`
+source `APPLIB "ScriptDef"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+
+SRC=`LOCATESCRIPT "$1"`
+if [ ! -f "$SRC" ] ; then
+    APPWARN "$1 not found."
+    exit -1
+fi
+
+DST=`basename "$2" .$SCRIPTEXT`
+DST="$SCRIPTDIR/$DST"
+
+if cp "$SRC" "$DST" ; then
+    echo "$SRC" to "$DST" copied.
+fi
+
+
+
+
+

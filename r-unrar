@@ -1,0 +1,8 @@
+#!/bin/sh
+opt=$1
+shift
+for i in "$@" ; do
+   echo -- unrar "$opt" "$i"
+   unrar "$opt" "$i"
+done
+

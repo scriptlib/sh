@@ -1,0 +1,18 @@
+#!/bin/sh
+###r-deluge v0.1
+###     - r-deluge
+###     - Written by duel, 2008-08-30
+###Usage:
+###     r-deluge
+###Option:
+###     -h Display help text
+###Example:
+###     r-deluge
+### scripthelp "$0" "$@" && exit 0
+### if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+configdir=~/public/bt/deluge
+echo -- deluge -c "$configdir"
+exec deluge -c "$configdir"
+
+

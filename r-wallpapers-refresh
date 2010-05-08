@@ -1,0 +1,4 @@
+#!/bin/sh
+exec killall -s USR1 r-wallpapers-daemon
+
+

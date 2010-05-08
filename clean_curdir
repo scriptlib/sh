@@ -1,0 +1,4 @@
+echo "!!!Ready to remove anything under"
+pwd
+read -p "Press [Enter] to execute."
+rm -fR * 

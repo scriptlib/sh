@@ -1,0 +1,13 @@
+#!/bin/sh
+###route-local-off v0.1
+###     - tune local route off
+###     - Written by root, 2008-08-26
+###Usage:
+###     route-local-off [gateway]
+###Option:
+###     -h Display help text
+###Example:
+###     route-local-off
+scripthelp "$0" "$@" && exit 0
+
+exec sudo-unless-root route del default

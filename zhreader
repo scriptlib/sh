@@ -1,0 +1,91 @@
+#!/bin/bash
+###openzbook - V0.1
+###     - Guess the first html file in a zip file, and open it
+###Usage:
+###     openzbook (zipfilename) [viewer...]
+scripthelp $0 "$@" && exit 0
+if [ -z "$*" ] ; then  scripthelp $0 -h ; exit 0  ; fi
+
+FILE=$1
+FILE=`fullname "$FILE"`
+if [ ! -f "$FILE" ];then
+	echo "$FILE" not exist.
+	exit 0
+fi
+
+#History="$HOME/.zhtm-history"
+
+#ReadHistory() {
+#    [ ! -f "$History" ] && return -1;
+#    local FILENAME="$1"
+#    local LastFile=`grep -io "$FILENAME:.*$" -- "$History"`
+#    LastFile=`expr + "$LastFile" : "$FILENAME:\(.*\)"`
+#    echo "$LastFile"
+#}
+
+#SaveHistory() {
+#    local FILENAME="$1"
+#    local LastFile="$2"
+#    [ -z "$FILENAME" ] && return -1;
+#    [ -z "$LastFile" ] && return -1;
+#    [ ! -f "$History" ] && touch "$History"
+#    if grep -q "$FILENAME:" -- "$History" ; then
+#        sed -i -e "s#$FILENAME:.*#$FILENAME:$LastFile#g" "$History"
+#    else
+#        echo "$FILENAME:$LastFile" >> "$History"
+#    fi
+#}
+
+#CaptureLast() {
+#    local LastFile;
+#    while read -s LINE ; do
+#        echo "$LINE" >&2
+#        if unescape "$LINE" | grep -q "$FILENAME" ; then
+#            LastFile=`expr + "$LINE" : ".*$FILENAME.\/\(.*\)"`
+#            [ -n "$LastFile" ] && echo "LastFile:$LastFile" >&2
+#        fi
+#    done
+#    echo "$LastFile"
+#}
+
+#INDEX=`ReadHistory "$FILE"`
+INDEX=
+#[ -z "$INDEX" ] && INDEX=`listzip "$FILE" | indexhtml`
+[ -z "$INDEX" ] && INDEX=`listzip "$FILE" | firsthtml`
+if [ -z "$INDEX" ] ; then
+	echo "Can't find first page."
+	exit 0
+fi
+
+READER=$2
+if [ -z "$READER" ] ; then
+    READER=htmlview
+    if ps aux | grep '\/firefox' >/dev/null ; then
+        READER='r-firefox -new-window'
+    elif ps aux | grep 'epiphany' >/dev/null ; then
+        READER=epiphany
+    elif which epiphany >> /dev/null ; then
+        READER=epiphany
+    elif which firefox >> /dev/null ; then 
+        READER='r-firefox -new-window'
+    elif which konqueror >> /dev/null ; then
+        READER=konqueror
+    else 
+        READER=htmlview
+    fi  
+fi
+
+if [ "$READER" == "konqueror" ] ; then
+    URL="zip:$FILE/$INDEX"
+    echo $URL >&2
+    echo "Using kfmclient" >&2
+    exec kfmclient openProfile "zhtm" "$URL" &
+else
+    URL="jar:file://$FILE!/$INDEX"
+    echo $URL >&2
+    echo "Using $READER" >&2
+    exec $READER "$URL" &
+fi
+
+#[ -n "$LASTFILE" ] && SaveHistory "$FILE" "$LASTFILE"
+

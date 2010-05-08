@@ -1,0 +1,41 @@
+#!/bin/sh
+###APPNAME:     ch_share
+###APPAUTHOR:   geek
+###APPDATE:     2007-10-04
+###APPVER:      0.1
+###APPDESC:     Set Owner and Mode for sharing
+###APPUSAGE:    (filenames...)
+###APPEXAMPLE:  ch_share *
+###APPOPTION:
+
+ [ "$UID" == "0" ] || exec sudo "$0" "$@"
+
+own="xiaoranzzz:myplace"
+mod_f="u+rw,g+rw,o-w"
+mod_d="u+rwx,g+rwx,o-w"
+
+
+declare -a fs
+declare -a ds
+fc=0
+dc=0
+for n in "$@" ; do
+    if [ -d "$n" ] ; then
+        ds[$dc]="$n"
+        dc=$dc+1
+    else
+        fs[$fc]="$n"
+        fc=$fc+1
+    fi
+done
+
+
+$sudo  chown -Rv "$own" "$@"
+#$sudo chmod -Rv "$mod_f" "$@"
+
+
+[ -n "${fs[*]}" ] && chmod -v "$mod_f" "${fs[@]}"
+for d in "${ds[@]}" ; do
+ 	find "$d" -type d | xargs -d '\n' chmod -v -- "$mod_d"
+	find "$d" ! -type d | xargs  -d '\n' chmod -v -- "$mod_f"
+done

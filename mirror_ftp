@@ -1,0 +1,2 @@
+#!/bin/sh
+wget --no-remove-listing -nH -v -N --progress=bar --mirror "$@"

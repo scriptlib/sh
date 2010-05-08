@@ -1,0 +1,41 @@
+#!/bin/bash
+SAVEIN=/share/appdata/btjob
+PICDIR=/share/picture
+NAME=$1
+CMDLINE=$2
+
+if [ -z "$NAME" ] || [ -z "$CMDLINE" ]; then
+	echo Usage: %0 [jobname] [\"cmdline\"]
+	exit 0
+fi
+
+
+SHNAME=`echo $NAME|replace "\/" "-"`
+SHFILE="$SAVEIN/img$SHNAME.sh"
+if [ ! -f "$SHFILE" ]; then
+	touch "$SHFILE"
+	echo "#!/bin/bash" > "$SHFILE"
+fi
+
+echo "DOWNDIR=\"$PICDIR/$NAME\"" >> "$SHFILE"
+echo "if [ ! -d \"\$DOWNDIR\" ]; then" >> "$SHFILE"
+echo "	mkdir \"\$DOWNDIR\"" >> "$SHFILE"
+echo "fi" >> "$SHFILE"
+
+echo "if [ ! -d \"\$DOWNDIR\" ]; then " >> "$SHFILE"
+echo "	echo \$DOWNDIR not exist." >> "$SHFILE"
+echo "	exit 0" >> "$SHFILE"
+echo "fi" >> "$SHFILE"
+
+
+echo "echo Start doing job fo $NAME" >> "$SHFILE"
+
+echo "pushd \"\$DOWNDIR\"" >> "$SHFILE"
+echo "$2 \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8\" \"$9\"" >> "$SHFILE"
+echo "popd" >> "$SHFILE"
+
+echo "echo Job done for $NAME" >> "$SHFILE"
+
+echo "Ok!Job saved in \"$SHFILE\"."
+echo "You may now run btjobdo or btjoblist"
+

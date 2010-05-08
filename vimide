@@ -1,0 +1,28 @@
+#!/bin/bash
+APPNAME="vimide"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-01-09"
+APPVER="0.1"
+APPDESC="Start vim with Project"
+APPUSAGE=""
+EXAMPLE="vimide"
+
+# NOCOLOR
+NOR=;BOLD=;RED=;YEL=;GRE=
+# COLOR
+NOR="\033[0m";BOLD="\033[1m";RED="\033[91m";YEL="\033[93m";GRE="\033[92m"
+
+function DisplayUsage() {
+    echo -e $YEL"$APPNAME V$APPVER"$NOR
+    echo -e "\tWritten by $APPAUTHOR AT $APPDATE"
+    echo -e "\t$APPDESC"
+    echo -e $GRE" -h\tDisplay this information."$NOR
+    echo -e $GRE"Usage: $0 $APPUSAGE"$NOR
+    if [ ! -z "$EXAMPLE" ];then  echo -e $GRE"Example: $EXAMPLE"$NOR ;fi
+    exit 0
+}
+
+ARGS=$*
+for i in $ARGS ; do if [ " $i" == " -h" ] ; then DisplayUsage ; fi ; done
+
+vim $* -c Project

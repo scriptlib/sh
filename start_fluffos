@@ -1,0 +1,16 @@
+#!/bin/sh
+###start_fluffos v0.1
+###     - start_fluffos
+###     - Written by xiaoranzzz, 2009-07-01
+###Usage:
+###     start_fluffos
+###Option:
+###     -h Display help text
+###Example:
+###     start_fluffos
+
+CFG=mudos.cfg
+[ -n "$1" ] && CFG=$1
+[ ! -f "$CFG" ] && CFG=/myplace/games/mud/xyj/mudos.cfg
+
+exec /myplace/games/mud/driver/fluffos/driver "$CFG"

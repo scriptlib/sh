@@ -1,0 +1,2 @@
+#!/bin/sh
+myqemu -hda /share/emuos/Linux/boot.nix.raw "$@"

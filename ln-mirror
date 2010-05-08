@@ -1,0 +1,27 @@
+#!/bin/sh
+###ln-mirror v0.1
+###     - ln-mirror
+###     - Written by duel, 2009-06-17
+###Usage:
+###     ln-mirror src_dir dst_dir
+###Option:
+###     -h Display help text
+###Example:
+###     ln-mirror
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+src_dir=$1
+dst_dir=$2
+[ -z "$2" ] && dst_dir=.
+
+for f in $src_dir/* $src_dir/.* ; do
+    d=`basename "$f"`
+    [ "$d" == "." ] && continue
+    [ "$d" == ".." ] && continue
+    if [ -L "$f" ] ; then
+        cp -t "$dst_dir" -va "$f"
+    else
+        ln -t "$dst_dir" -sfv "$f"
+    fi
+done

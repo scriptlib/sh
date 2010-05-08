@@ -1,0 +1,19 @@
+#!/bin/bash
+APPNAME="htmlcharset"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-31"
+APPVER="0.1"
+APPDESC="Parsing Charset of Html text"
+APPUSAGE=""
+APPEXAMPLE=""
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+WS='[[:space:]]'
+htmltag "meta" | grep -io "$WS*charset$WS*=$WS*[^ \"\'<>]*" | sed -e "s/^.*charset.*=$WS*//"
+
+ 
+
+
+

@@ -1,0 +1,24 @@
+#!/bin/sh
+###rootterm v0.1
+###     - su then open a x-terminal-emulator 
+###     - Written by xiaoranzzz, 2008-02-17
+###Usage:
+###     su-term [su options]
+###Option:
+###     -h Display help text
+###Example:
+###     su-term -l root
+scripthelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+ROOTTERM_SUDO="gksu"
+
+which "$ROOTTERM_SUDO" 2>/dev/null 1>/dev/null || ROOTTERM_SUDO="sudo"
+
+ROOTTERM_TERM="x-terminal-emulator"
+
+which "$ROOTTERM_TERM" 2>/dev/null 1>/dev/null || ROOTTERM_TERM="xterm"
+
+echo Using \"$ROOTTERM_SUDO\", \"$ROOTTERM_TERM\" >&2
+
+"$ROOTTERM_SUDO" "$@" "$ROOTTERM_TERM"

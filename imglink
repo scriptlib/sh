@@ -1,0 +1,60 @@
+#!/bin/bash
+
+#Script Name:	imglink
+#Date:		Sat Dec 23 17:05:28 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="imglink"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE="[BaseURL]"
+EXAMPLE="imglink http://www.google.com"
+
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+htmllink "$1" | egrep -i "\.(jpg|jpeg|jpe)$"
+
+#egrep -io "http\:\/\/[^\"\'=><]+\/+[^\"\"=><]+\.(jpg|jpeg)" < /dev/stdin
+
+#BASEURL=$1
+#BASEDOMAIN=`echo $1 | egrep -io ".*\:\/\/[^\/]*" | sed -e "s/\//\\\//g"`
+#BASEPATH=`echo $1 | egrep -io ".*\:\/\/.*\/" | sed -e "s/\//\\//g"`
+#if [ -z "$BASEPATH" ] ; then BASEPATH=$BASEDOMAIN ; fi
+
+#echo -e $BASEURL
+#echo -e $BASEDOMAIN
+#echo -e $BASEPATH
+
+#egrep -io "[^\"\'=><]+\/+[^\"\"=><]+\.(jpg|jpeg)" < /dev/stdin | sed -e "s!^\/!$BASEDOMAIN\/!g" -e "s/\ /\%20/g"
+
+
+
+

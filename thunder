@@ -1,0 +1,11 @@
+#!/bin/sh
+###thunder v0.1
+###     - thunder
+###     - Written by duel, 2008-12-24
+###Usage:
+###     thunder
+###Option:
+###     -h Display help text
+###Example:
+###     thunder
+cn_wine 'D:\APPS\INTERNET\thunder\Thunder.exe'

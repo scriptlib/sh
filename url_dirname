@@ -1,0 +1,16 @@
+#!/bin/bash
+ARGS="$*"
+function strip_dirname() {
+    URL=${1/*:\/\//}
+    expr + "$URL" : "[^\/]*\/\(.*\)\/[^\/]*$"
+}
+if [ -z "$ARGS" ] ; then
+    while read URL ; do
+        strip_dirname "$URL"
+    done
+else
+    for URL in "$@" ; do
+        strip_dirname "$URL"
+    done
+fi
+

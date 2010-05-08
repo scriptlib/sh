@@ -1,0 +1,16 @@
+#!/bin/bash
+#Rules for club.book.sina.com.cn
+#-P -H http://club.book.sina.com.cn/booksearch/booksearch.php?area=author&kw=%CD%F5%B0%B2%D2%E4
+#Created by xiaoranzzz
+#Date: Wed Mar 12 16:02:30 CST 2008
+
+filter() {
+    htmllink "$1" | grep "\/book.sina.com.cn\/.*\/index.shtml" | sort -u
+    return $?
+}
+URL=$1
+if [ -z "$URL" ] ; then
+    filter
+else
+    netcat -u "$URL" | filter "$URL"
+fi

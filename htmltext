@@ -1,0 +1,48 @@
+#!/bin/bash
+APPNAME="htmltext"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-31"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE=""
+APPEXAMPLE=""
+APPOPTION="T:Tag Name|M:Max number of matching"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+WS='[[:space:]]'
+NMT="[^><]*"
+
+MAX=`APPOPT "M" "$*"`
+[ -z "$MAX" ] && MAX=32768
+
+TAGNAME=`APPOPT "T" "$*"`
+[ -z "$TAGNAME" ] && TAGNAME=${!#}
+
+declare -i COUNT=0
+while read -s LINESTART ; do
+    [ $COUNT -ge $MAX ] && exit 0
+    if echo "$LINESTART" | grep -qi "<$WS*$TAGNAME$WS*$NMT>" ; then #| sed -e "s/^.*$TAGNAME$WS*>//"`
+        ((COUNT++))
+        if echo "$LINESTART" | grep -qi "<$WS*\/$WS*$TAGNAME$WS*>" ; then
+        #    echo "LINEEND FOUND"
+            echo "$LINESTART" |  sed -e "s/^.*<$WS*$TAGNAME$WS*$NMT>//" -e "s/<$WS*\/$TAGNAME.*$//"
+        else
+            echo "$LINESTART" |  sed -e "s/^.*<$WS*$TAGNAME$WS*$NMT>//"
+            while read -s LINEEND ; do
+                if echo "$LINEEND" | grep -qi "<$WS*\/$WS*$TAGNAME$WS*>" ; then
+         #           echo "LINEEND FOUND"
+                    echo "$LINESTART" |  sed -e "s/<$WS*\/$TAGNAME.*$//"
+                    break
+                else
+                    echo "$LINEEND"
+                fi
+            done
+        fi
+        
+    fi
+done
+
+
+

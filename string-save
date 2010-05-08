@@ -1,0 +1,12 @@
+#!/bin/sh
+###string-save v0.1
+###     - string-save save string somewhere,using string-load to get it back
+###     - Written by sickmind, 2008-03-05
+###Usage:
+###     string-save string
+###Option:
+###     -h Display help text
+###Example:
+###     string-save
+echo -n "$*" >"/tmp/string-save-$USER.var"
+

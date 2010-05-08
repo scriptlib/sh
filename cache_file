@@ -1,0 +1,38 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="cache_file"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="return the cached file for keyword"
+APPUSAGE="(KEYWORD)"
+APPEXAMPLE="cache_file \"www.google.com\""
+
+source `APPLIB "AppUsage"` || exit -1
+ARGS=$*
+if [ -z "$ARGS" ] ; then APPHELP ; exit 0 ; fi
+
+KEYWORD=${!#}
+CACHE_DIR="/tmp/shell_cache"
+[ -d "$CACHE_DIR" ] || exit 1
+[ -r "$CACHE_DIR" ] || exit 1
+
+CACHE_LIST="$CACHE_DIR/keywords.list"
+[ -f "$CACHE_LIST" ] || exit 1
+
+EKEYWORD=${KEYWORD//\//\\\/}
+EKEYWORD=${EKEYWORD//./\\.}
+CACHE_FILE=`grep -i "$EKEYWORD" "$CACHE_LIST" | head -n 1`
+if [ -n "$CACHE_FILE" ] ; then
+    CACHE_FILE=`expr + "$CACHE_FILE" : ".*->\(.*\)$"`
+else
+    exit 1
+fi
+
+[ -f "$CACHE_FILE" ] || exit 1
+[ -r "$CACHE_FILE" ] || exit 1
+echo "[Cache System:]Get \"$KEYWORD\" => \"$CACHE_FILE\"" >&2
+echo "$CACHE_FILE"
+
+
+

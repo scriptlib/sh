@@ -1,0 +1,25 @@
+#!/bin/bash
+APPNAME="strcat"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-08-13"
+APPVER="0.1"
+APPDESC="Contenate strings\nUsing stdin for repeatlty contenating"
+APPUSAGE="[strings...]"
+APPEXAMPLE="echo ijk | strcat abcd efgh"
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+
+STRLEFT=""
+while [ -n "$1" ] ; do
+    STRLEFT="$STRLEFT$1"
+    shift
+done
+while read LINE ; do
+    echo "$STRLEFT$LINE"
+done
+ 
+
+
+

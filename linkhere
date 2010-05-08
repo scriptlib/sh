@@ -1,0 +1,34 @@
+#!/bin/sh
+###linkhere v0.1
+###     - Create symbol links for directories and files from source
+###     - Written by root, 2008-04-07
+###Usage:
+###     linkhere (diretory)
+###Option:
+###     -h Display help text
+###Example:
+###     linkhere /share/profile/
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+src=$1
+len=${#src}
+
+while [ "$len" -gt 1 -a ${src:$len -1} == "/" ] ; do
+    src=${src:0:$len -1}
+    len=${#src}
+done
+
+if [ -d "$src" -a -r "$src" ] ; then
+    [ "$src" == "/" ] && src="" 
+    for fn in "$src"/.* "$src"/* ; do
+        [ -z "$fn" ] && continue
+        [ "$src/." == "$fn" ] && continue
+        [ "$src/.." == "$fn" ] && continue
+        ln -svf "$fn" .
+    done
+    exit 0
+else
+    echo "Error: $src not accessable." >&2
+    exit 1
+fi

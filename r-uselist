@@ -1,0 +1,34 @@
+#!/bin/sh
+###r-uselist v0.1
+###     - print Gentoo Portage Use Flags
+###     - Written by xiaoranzzz, 2008-04-11
+###Usage:
+###     [Use Flags...]
+###Option:
+###     -h Display help text
+###Example:
+###     r-uselist gtk perl
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+GF="/usr/portage/profiles/use.desc"
+LF="/usr/portage/profiles/use.local.desc"
+
+GREPOP=""
+
+for flag in "$@" ; do
+    GREPOP="$GREPOP\|$flag"
+done
+
+[ ${GREPOP:0:2} == "\|" ] && GREPOP="${GREPOP:2}"
+[ -z "${GREPOP}" ] && GREPOP=".*"
+
+GREPOP="^\(\|[-a-z\/]\+:\)\($GREPOP\)\>"
+#echo $GREPOP
+#exit 0
+echo "Searching Global Database..." >&2
+grep -i --color=always -- "$GREPOP" "$GF"
+echo "Searching Local Database..." >&2
+grep -i --color=always -- "$GREPOP" "$LF"
+
+
+

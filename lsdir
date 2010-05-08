@@ -1,0 +1,17 @@
+#!/bin/sh
+###lsdir v0.1
+###     - List directories
+###     - Written by xiaoranzzz, 2007-11-12
+###Usage:
+###     lsdir (namepattern)
+###Option:
+###     -h Display help text
+###Example:
+###     lsdir /tmp/*
+###     lsdir /
+scripthelp "$0" "$@" && exit 0
+while [ -n "$1" ] ; do
+    [ -d "$1" ] && echo "$1"
+    shift
+done
+

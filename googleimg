@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#Script Name:	googleimg
+#Date:		Sat Dec 23 17:12:51 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="googleimg"
+APPVER="0.1"
+APPDESC="google images search"
+APPUSAGE="(keywork) [frompage] [topage]"
+EXAMPLE=""
+
+
+ARGS=$*
+
+if [ -z "$ARGS" ] || [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+KEYWORD=$1
+FROM_PAGE=$2
+TO_PAGE=$3
+
+if [ -z "$FROM_PAGE" ]; then
+    FROM_PAGE=1
+fi
+
+if [ $FROM_PAGE -le 0 ]; then
+    FROM_PAGE=1
+fi
+
+if [ -z "$TO_PAGE" ]; then
+    TO_PAGE=$FROM_PAGE
+fi
+
+#Google image
+function  google() {
+    local GBASEURL="http://images.google.com/images?q=KEYWORD&start=START&ndsp=20&svnum=10&hl=en&lr=&safe=off&filter=0"
+    #local GBASEURL="http://images.google.com/images?q=KEYWORD&start=START&imgsz=xxlarge&ndsp=20&svnum=10&hl=en&lr=&safe=off&filter=0"
+    local GKEYWORD=$1
+    local GSTART=$((($2-1)*21))
+    GBASEURL=${GBASEURL/KEYWORD/$GKEYWORD}
+    GBASEURL=${GBASEURL/START/$GSTART}
+    echo "$GBASEURL"
+}
+
+total=$(($TO_PAGE-$FROM_PAGE+1))
+
+declare -i searchGoogle=1;
+
+for ((i=$FROM_PAGE;i<=$TO_PAGE;i++)); do
+    cur=$(($i-$FROM_PAGE+1))
+    if [ $searchGoogle -eq 1 ]; then
+        URL=`google "$KEYWORD" "$i"`
+	gResult=$(mywget -q -O- "$URL" | imglink "$URL" | grep -v "\.google\." )
+	gCount=0
+	for sr in $gResult ; do
+	    echo "$sr" ;
+	    gCount=$((gCount+1))
+	done
+        echo -e "\n[$cur/$total]Seaching for $KEYWORD page $i,received $gCount results." >> /dev/stderr
+	if [ $gCount -lt 10 ]; then searchGoogle=0 ; fi
+    fi
+done
+
+
+
+

@@ -1,0 +1,17 @@
+#!/bin/sh
+###r-xinit-nvidia v0.1
+###     - r-xinit with nvidia xorg.conf
+###     - Written by root, 2009-01-12
+###Usage:
+###     r-xinit-nvidia
+###Option:
+###     -h Display help text
+###Example:
+###     r-xinit-nvidia
+scripthelp "$0" "$@" && exit 0
+if [ -w "/etc/X11/xorg.conf" ] ; then
+    cp -fv /etc/X11/xorg.conf{.nvidia,}
+else
+    sudo cp -fv /etc/X11/xorg.conf{.nvidia,}
+fi
+exec r-xinit "$@"

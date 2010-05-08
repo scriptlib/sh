@@ -1,0 +1,4 @@
+#!/bin/sh
+pskill 'qvod[a-zA-Z]+.*'
+pskill '.?explore.*'
+

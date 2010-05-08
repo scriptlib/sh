@@ -1,0 +1,7 @@
+#!/bin/bash
+file=$1
+vo=$2
+
+mplayer "$1" -vo "$2" &
+mplayer "$1" -vo "$2" 
+mplayer -vo help

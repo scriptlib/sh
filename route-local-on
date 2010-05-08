@@ -1,0 +1,14 @@
+#!/bin/sh
+###route-local-on v0.1
+###     - route-local-on
+###     - Written by root, 2008-08-26
+###Usage:
+###     route-local-on [gateway]
+###Option:
+###     -h Display help text
+###Example:
+###     route-local-on
+scripthelp "$0" "$@" && exit 0
+
+gateway=${1:-"192.168.1.2"}
+exec sudo-unless-root route add default gw "$gateway"

@@ -1,0 +1,16 @@
+#!/bin/bash
+SPEC=$1
+CMDLINE=$2
+if [ -z "$SPEC" ] ;then
+echo "recurbat v0.1"
+echo "Use to recursively execute something with files"
+echo "  found in current path as it's argument."
+echo "Example: recurbat \"*.txt\" echo"
+echo "Usage: $0 (spec) [cmdline]"
+echo "      cmdline default is set to \"echo\""
+fi
+if [ -z $CMDLINE ]; then
+	CMDLINE="echo"
+fi
+#echo find . -name "$SPEC" -exec $CMDLINE {} \;
+find . -name "$SPEC" -exec $CMDLINE {} \;

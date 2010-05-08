@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#Script Name:	amresult
+#Date:		Mon Dec 18 21:25:26 CST 2006
+#AUTHOR:	duel
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="amresult"
+APPVER="0.1"
+APPDESC=""
+APPUSAGE=""
+EXAMPLE=""
+
+
+amulecmd -c "results"

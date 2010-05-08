@@ -1,0 +1,3 @@
+#!/bin/sh
+rm /tmp/shell_cache/* 2>/dev/null >/dev/null
+

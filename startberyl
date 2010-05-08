@@ -1,0 +1,22 @@
+#!/bin/bash
+
+APPNAME="startberyl"
+APPVER="0.1"
+APPDESC="start beryl"
+APPUSAGE=""
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+killallwmg
+
+emerald --replace &
+beryl --replace &
+
+

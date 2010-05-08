@@ -1,0 +1,2 @@
+#!/bin/sh
+cn_wine 'x:\program\reading\readbook\readbook.exe' "$@"

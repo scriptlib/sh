@@ -1,0 +1,21 @@
+#!/bin/sh
+###xiaoranzzz-editor v0.1
+###     - xiaoranzzz-editor
+###     - Written by xiaoranzzz, 2008-02-15
+###Usage:
+###     xiaoranzzz-editor
+###Option:
+###     -h Display help text
+###Example:
+###     xiaoranzzz-editor
+scripthelp "$0" "$@" && exit 0
+
+DEF_EDITOR="vim"
+
+if [ -n "$XR_EDITOR" ] ; then
+    EDITOR="$XR_EDITOR"
+else
+    EDITOR="$DEF_EDITOR"
+fi
+
+exec $EDITOR "$@"

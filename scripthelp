@@ -1,0 +1,33 @@
+#!/bin/bash
+###scripthelp - V0.1
+###     bash script help system	
+###     Written by root, Fri Sep 21 12:11:45 2007
+###Usage:
+###     scripthelp (Filename) [Args...]
+###Exapmle:
+###     scripthelp "/share/bin/plhelp" "-h"
+fn=$1
+shift
+if [ ! -f "$fn" ] ; then  $0 $0 -h ; exit 1  ; fi
+dohelp=""
+while [ -n "$1" ] ; do
+    case "$1" in 
+        "-h"|"-H"|"--help"|"-HELP") dohelp=1;break;;
+    esac
+    shift
+done
+[ -n "$dohelp" ] || exit 1
+
+function FormatHelp {
+    while read -s line ; do
+        if [ "${line:0:1}" == "#" ] ; then
+            [ "${line:0:3}" == "###" ] && echo "${line:3}"
+        else
+            break
+        fi
+    done
+}
+
+FormatHelp <"$fn"
+exit 0
+

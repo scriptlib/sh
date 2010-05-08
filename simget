@@ -1,0 +1,15 @@
+#!/bin/bash
+APPNAME="simget"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="Downloading in background,for simultanously doing next job\n\tAll arguments will be passed to \"download\""
+APPEXAMPLE="simget -U www.google.com -F google.html"
+
+source `APPLIB "AppUsage"` || exit -1 
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+MAXSIMDOWN=4
+
+#echo simdo "$MAXSIMDOWN" download "$@"
+simdo "$MAXSIMDOWN" download "$@"

@@ -1,0 +1,28 @@
+#!/bin/bash
+APPNAME="makebak"
+APPVER="0.1"
+APPDESC="Make backup copy of a file,Save it in the same folder"
+USAGE="[filename]"
+
+
+FILE=$1
+if [ -z "$FILE" ]; then
+	echo $APPNAME v$APPVER - $APPDESC
+	echo USAGE:$0 $USAGE
+	exit 0
+fi
+
+if [ ! -f "$FILE" ]; then
+	echo \"$FILE\" not exist,or not a regular file.
+	exit 0
+fi
+
+CURTIME=`date +"%F-%H-%M-%S)"`
+BAKFILE="$FILE[$CURTIME].bak"
+
+echo "start backup $FILE..." 
+if cp "$FILE" "$BAKFILE" -f ;then
+echo "Ok,saved as $BAKFILE"
+fi
+
+

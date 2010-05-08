@@ -1,0 +1,49 @@
+#!/bin/bash
+
+APPNAME="mvfiles"
+APPVER="0.1"
+APPDESC="move files in sub folders to their parent"
+APPUSAGE="[FILESPEC] (foldername)"
+
+ARGS=$*
+
+if [ -z "$ARGS" ];then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+SPEC=$1
+FOLDER=$2
+
+if [ -z "$FOLDER" ];then
+	FOLDER=$SPEC
+	SPEC=*
+fi
+
+#echo $SPEC
+#echo $FOLDER
+if [ ! -d "$FOLDER" ];then
+	echo -e $RED"$FOLDER"$NOR not exists.
+	exit 0
+fi
+
+if [ -z "$SPEC" ];then
+	SPEC="*"
+fi
+
+pushd "$FOLDER"
+#echo `echo -e $SPEC`
+#echo $FOLDER
+
+#find -name "$SPEC" 
+find . -name "$SPEC" -exec mv "{}" .. \;
+
+popd

@@ -1,0 +1,28 @@
+#!/bin/sh
+###7zfolder v0.1
+###     - 7zfolder
+###     - Written by duel, 2009-02-04
+###Usage:
+###     7zfolder
+###Option:
+###     -h Display help text
+###Example:
+###     7zfolder
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+cdir=`pwd`
+while [ -n "$1" ] ; do
+    folder=$1
+    if [ -d "$folder" ] ; then
+        echo "$folder [PROCESSING]"
+        fn=`basename "$folder"`
+        fn="$cdir/$fn.7z"
+        pushd "$folder" >/dev/null
+        7z a -mx=2 "$fn" .
+        popd >/dev/null
+    else
+        echo "$folder [SKIPPED]"
+    fi
+    shift
+done

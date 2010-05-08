@@ -1,0 +1,17 @@
+#!/bin/sh
+###mkcookie v0.1
+###     - mkcookie
+###     - Written by duel, 2008-03-24
+###Usage:
+###     mkcookie url
+###Option:
+###     -h Display help text
+###Example:
+###     mkcookie http://www.google.com
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+URL=$1
+TMPFILE=`mktemp`;
+curl -L -A "Mozilla/5.0" --progress-bar -m 180 --connect-timeout 60 --retry 10 --referer "$URL" --url "$URL" -o /dev/null -c "$TMPFILE"
+cat "$TMPFILE"
+unlink "$TMPFILE"

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+APPNAME="fullname"
+APPVER="0.1"
+APPDESC="return fullname of a file"
+APPUSAGE="%0 [filename]"
+
+ARGS=$*
+
+if [ -z "$ARGS" ];then
+	echo "$APPNAME V$APPVER"
+	echo -e "/t $APPDESC"
+	echo -e "Usage: $APPUSAGE"
+	exit 0
+fi
+
+FILE=$1
+PDIR=`dirname -- "$FILE"`
+FULL=`echo "$PDIR"|grep "^/"`
+#echo $FULL
+if [ "$FULL" ] ; then
+	echo "$FILE"
+	exit 0
+fi
+
+echo "$PWD/$FILE"

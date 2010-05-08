@@ -1,0 +1,71 @@
+#!/bin/bash
+APPNAME="xrmdir"
+APPAUTHOR="duel"
+APPDATE="2007-08-28"
+APPVER="0.1"
+APPDESC="rmdir event when target is not empty"
+APPUSAGE="(directories...)"
+APPEXAMPLE="xrmdir ~/tmp"
+APPOPTION="s:Silent mode|g:Gui mode"
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+OPT_Silent=`APPOPT s "$@"`
+OPT_GUI=`APPOPT g "$@"`
+function DeleteFolder() {
+    TARGET="$1"
+    rm -fdr "$TARGET"
+}
+function Message() {
+    if [ -n "$OPT_Silent" ] ; then return ; fi
+    if [ -n "$OPT_GUI" ] ; then
+        zenity --info --text="$*" 2>/dev/null
+    else
+        echo "$*"
+    fi
+}
+function Confirm() {
+    if [ -n "$OPT_Silent" ] ; then return 0 ; fi
+    if [ -n "$OPT_GUI" ] ; then
+        zenity --question --text="$*" 2>/dev/null
+    else
+        echo -en "$*(y/n)"
+        read -s -n 1 ANSWER
+        echo "$ANSWER"
+        if [ "$ANSWER" == "y" -o "$ANSWER" == "Y" ] ; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+}
+
+
+    if [ -z "$OPT_Silent" ] ; then
+        DeleteFolder "$D" 2>/dev/null 1>/dev/null 
+    else
+        if [ ! -d "$D" ] ; then
+            Message "\"$D\" not exists."
+        else
+            if Confirm "Delete \"$D\"?" ; then
+                DeleteFolder "$D"
+            fi
+        fi
+    fi
+
+if Confirm "Delete " "$@" "\nContinue?" ; then
+    for D in "$@" ; do
+        [ "$D" == "-s" -o "$D" == "-g" ] && continue
+        if [ ! -d "$D" ] ; then
+            Message "\"$D\" not exists."
+        else
+            DeleteFolder "$D"
+        fi
+    done
+fi
+ 
+
+
+

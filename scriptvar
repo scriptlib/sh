@@ -1,0 +1,7 @@
+#!/bin/bash
+SCRIPTDIR="/share/shellscript"
+SHAREDIR="/share"
+SHAREBIN="/share/bin"
+PERLDIR="/share/perl"
+APPLIBDIR="/share/shellscript/LIBS"
+URLRULEDIR="/share/shellscript/UrlRules"

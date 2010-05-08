@@ -1,0 +1,40 @@
+#!/bin/bash
+APPNAME="chdir_exec"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-09-14"
+APPVER="0.1"
+APPDESC="Execute cmd by changing the working directory first"
+APPUSAGE="chdir_exec (working directory) (cmd) [args...]"
+APPEXAMPLE="chdir_exec / ls"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+WDIR="$1"
+CMD="$2"
+shift
+shift
+
+if [ -z "$CMD" ] ; then APPHELP ; exit 0 ; fi
+
+ARGS=""
+[ -n "$1" ] && ARGS="$1"
+shift
+
+while [ -n "$1" ] ; do
+    ARGS="$ARGS^$1"
+    shift
+done
+WDIR=${WDIR//\'/}
+cd "$WDIR"
+#zenity --info --text="$WDIR"
+#zenity --info --text="`pwd`"
+#zenity --info --text="$CMD"
+IFS=$'^'
+#zenity --info --text="$ARGS"
+echo "$CMD" $ARGS  >&2
+"$CMD" $ARGS
+ 
+
+
+

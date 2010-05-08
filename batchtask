@@ -1,0 +1,10 @@
+#! /bin/sh
+
+TASKCMD="$@"
+[ -z "$TASKCMD" ] || echo "$TASKCMD" > batchdo.cmd
+
+TASKFILE=batchdo.task
+
+cat /dev/stdin >> "$TASKFILE"
+
+

@@ -1,0 +1,57 @@
+#!/bin/bash
+APPNAME="myiconv"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-31"
+APPVER="0.1"
+APPDESC="Convert charset of a file from to"
+APPUSAGE="(Source Charset) (Destination charset) (File List)"
+APPEXAMPLE="myiconv gb2312 utf8 index.html 1.html"
+APPOPTION=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+OLDCHARSET=$1
+NEWCHARSET=$2
+
+[ -z "$NEWCHARSET" ] && NEWCHARSET="UTF8"
+[ -z "$OLDCHARSET" ] && OLDCHARSET="UTF8"
+
+shift
+shift
+
+FILE=$1
+if [ -z "$FILE" ]; then
+    iconv -c --from=$OLDCHARSET --to=$NEWCHARSET
+    exit 
+fi
+
+    TMPFILE=`mktemp`
+    LOG="/tmp/myiconv-`date +%y%m%d`-$USER.log"
+while [ -n "$FILE" ] ; do
+	[ -f "$TMPFILE" ] && rm -f "$TMPFILE"
+    if [ ! -f "$FILE" ] ; then
+        APPWARN "$FILE not exists,or unreadable.\n"
+        shift
+        FILE=$1
+        continue
+    fi
+    
+    APPMSG "$FILE: $OLDCHARSET->$NEWCHARSET..."
+    echo "$FILE:$OLDCHARSET->$NEWCHARSET" >> "$LOG"
+    
+    if iconv -c --from=$OLDCHARSET --to=$NEWCHARSET "$FILE" -o "$TMPFILE" 2>>"$LOG"; then
+        APPMSG "\t\t[Done]\n"
+        cat "$TMPFILE">"$FILE"
+    else
+        APPWARN "\t\t[Something not work]\nOld file backup as \"$FILE.bak\"\n"
+		cp -a "$FILE" "$FILE.bak"
+        cat "$TMPFILE">"$FILE"
+    fi
+    
+    shift
+    FILE=$1
+
+done
+
+exit 0

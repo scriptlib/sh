@@ -1,0 +1,33 @@
+#!/bin/sh
+###cptodirs v0.1
+###     - Copy a single file to directories
+###     - Written by xiaoranzzz, 2007-11-12
+###Usage:
+###     cptodirs (file) (directories...)
+###Option:
+###     -h Display help text
+###Example:
+###     cptodirs style.css *
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+fn=$1
+shift
+if [ ! -f "$fn" ] ; then
+    echo "\"$fn\" not exist" >/dev/stderr
+    exit 1
+fi
+
+if [ -z "$1" ] ; then
+    echo "Nothing to do" >/dev/stderr
+    exit 0
+fi
+
+while [ -n "$1" ] ; do
+    if [ -d "$1" ] ; then
+        cp -v "$fn" "$1/"
+    else
+        echo "\"$1\" not a directory, Ingored.">/dev/stderr
+    fi
+    shift
+done

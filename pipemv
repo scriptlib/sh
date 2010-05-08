@@ -1,0 +1,28 @@
+#!/bin/bash
+APPNAME="pipemv"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-08-11"
+APPVER="0.1"
+APPDESC="Pipe oriented version of mv,reading sources from stdin"
+APPUSAGE="(dest folder)"
+APPEXAMPLE="findfile \"*.txt\" | pipemv txt/"
+APPOPTION=""
+APPOPTSTR=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+DST=$1
+if [ ! -d "$DST" ] ; then
+    APPERROR "Invaild destination: $DST\n" 
+    exit 1
+fi
+
+while read -s LINE  ; do
+    echo mv "$LINE" "$DST"
+    mv "$LINE" "$DST"
+done
+ 
+
+
+

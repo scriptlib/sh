@@ -1,0 +1,19 @@
+#!/bin/bash
+APPNAME="textedit"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-08-07"
+APPVER="0.1"
+APPDESC="Text Editor Selector"
+APPUSAGE="[filename]"
+APPEXAMPLE="textedit foo.bar"
+APPOPTION=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+EDITOR="gvim"
+
+$EDITOR "$@"
+
+
+

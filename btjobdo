@@ -1,0 +1,30 @@
+#!/bin/bash
+APPNAME="btjobdo"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="List all delayed btjob"
+APPUSAGE="[JOBNAME]"
+APPEXAMPLE="btjobdo \"*.done\""
+
+source `APPLIB "AppUsage"`
+
+ARGS=$1
+BTJOBS=/share/appdata/btjob
+echo "BTJobs[$BTJOBS]:"
+
+if [ -z "$ARGS" ]; then
+    find "$BTJOBS" -type f -name "*.done" | sed -e "s!$BTJOBS/!!g" 
+    find "$BTJOBS" -type f -name "*.delay" | sed -e "s!$BTJOBS/!!g"
+else
+    for btj in `find "$BTJOBS" -name "$1" -type f 2>/dev/null` ; do
+        echo "Execute $btj"
+        if source "$btj" ; then
+            cat "$btj" >> "$btj.done"
+            rm "$btj"
+        fi
+    done
+fi
+
+
+

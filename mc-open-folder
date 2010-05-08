@@ -1,0 +1,13 @@
+#!/bin/sh
+###mc-open-folder v0.1
+###     - mc-open-folder
+###     - Written by duel, 2008-05-11
+###Usage:
+###     mc-open-folder
+###Option:
+###     -h Display help text
+###Example:
+###     mc-open-folder
+fd=$1
+exec xterm -e "mc '$fd'" &
+

@@ -1,0 +1,50 @@
+#!/bin/bash
+#mviconv 1.1
+#copyright 2002 Manuel Amador (Rudd-O).  This software is under the GPL
+#http://www.usm.edu.ec/~amadorm/
+
+if [ "$3" == "" ] ; then
+ echo "mviconv 1.0 by Rudd-O."
+ echo "sorts a folder full of MP3s into artist and album folders"
+ echo "This software is under the GPL.  ABSOLUTELY NO WARRANTY."
+ echo
+ echo "usage: $0 [-r] --from=encoding1 --to=encoding2 <files>"
+ exit 1
+fi
+
+if [ "$1" == "-r" -o "$1" == "-R" ] ; then
+ recursive=$1
+ shift
+fi
+
+from="$1"
+shift
+to="$1"
+shift
+
+while [ "$1" != "" ]; do
+
+ filename="$1"
+ newfilename=`echo $filename | iconv $from $to `
+
+ if [ "$filename" != "$newfilename" ]; then
+   echo \($SHLVL\) Processing $PWD/$newfilename
+   mv "$filename" "$newfilename" > /dev/null
+   [ $? -ne 0 ] && exit 1
+ fi
+
+ #debugging purposes
+ #newfilename="$filename"
+ if [ -d "$newfilename" -a "$recursive" != "" ] ; then
+   directorioviejo="$PWD"
+   cd "$newfilename"
+   if [ "$PWD" !=  "$directorioviejo" ]; then
+      $0 $recursive $from $to *
+   fi
+   cd "$directorioviejo"
+ fi
+
+
+ shift
+
+done 

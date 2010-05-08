@@ -1,0 +1,108 @@
+#!/bin/sh
+###zim-insert-screenshot v0.1
+###     - zim-insert-screenshot
+###     - Written by geek, 2008-02-29
+###Usage:
+###     zim-insert-screenshot movieFile entryName
+###Option:
+###     -h Display help text
+###Example:
+###     zim-insert-screenshot [--hand] movie entry_name
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+
+function findPng() {
+    local png;
+    [ -d "$1" ] || return 0
+    pushd "$1" >>/dev/null
+    for png in *.png *.jpg *.jpeg ; do
+        [ -f "$png" ] && echo "$png"
+    done
+    popd >>/dev/null
+}
+
+function printText() {
+    while read -s Line ; do
+#        echo "$Line" >&2
+        echo "{{$1/$Line}}"
+        echo ""
+    done
+}
+
+
+
+hand=$1;
+if [ "$hand" == "--hand" ] ; then
+    shift;
+else
+    hand=""
+fi
+
+if [ ! -f "$1" ] ; then
+    echo "File not exist:$1" >&2
+    exit 1
+fi
+
+mv=`fullname "$1"`
+if [ -z "$2" ] ; then
+    linkName=`basefname "$1"`
+else
+    linkName="$2"
+fi
+
+#parent=`pwd`
+#parent=`basename "$parent"`
+#parent="../$parent.txt"
+
+
+link="${linkName// /_}"
+link="${link//,/_}"
+link="${link//+/_}"
+link="${link//　/_}"
+link="${link//～/_}"
+link="${link//×/_}"
+link="${link//@/_}"
+link="${link//]/_}"
+link="${link//[/_}"
+
+
+secs="$3"
+[ -z "$secs" ] && secs=100
+
+
+[ -f "$link.txt" ] && rm -v "$link.txt"
+if ! touch "$link.txt" ; then
+    echo "Invalid filename:$link.txt" >&2
+    exit 1
+fi
+
+[ -d "$link" ] && rm -vfdr "$link"
+
+
+#echo "===== $linkName ===== " >>"$link.txt"
+#date    >>"$link.txt"
+#echo "" >>"$link.txt"
+
+if [ ! -f "$link.txt" ] ; then exit 1 ; fi
+[ ! -d "$link" ] && mkdir "$link"
+cd "$link"
+if [ -n "$hand" ] ; then
+    mplayer-make-screenshot --hand "$mv" "$secs"
+else
+    mplayer-make-screenshot "$mv" "$secs"
+fi
+cd ..
+
+findPng "$link" | printText "./$link" | zim-add-entry --read "$linkName" ".$link" "$mv" 
+#>>"$link.txt"
+
+#echo "" >>"$parent"
+#echo "* [[.$link|$linkName]]" >>"$parent"
+#echo "    $mv" >>"$parent"
+#echo "" >>"$parent"
+#echo "Link:$link"
+#echo "Name:$linkName"
+
+
+

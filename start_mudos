@@ -1,0 +1,71 @@
+#!/bin/sh
+###start_mudos v0.1
+###     - start_mudos
+###     - Written by xiaoranzzz, 2009-07-01
+###Usage:
+###     start_mudos
+###Option:
+###     -h Display help text
+###Example:
+###     start_mudos
+
+#CFG=mudos.cfg
+#DRV=/myplace/games/mud/driver/mudos/driver
+if [ -n "$2" ] ; then
+	DRV=$1
+	CFG=$2
+elif [ -n "$1" ] ; then
+	CFG=$1
+fi
+
+PWD=`pwd`
+if [ -z "$CFG" ] ; then
+	CFG="$PWD"
+	DRV="$CFG"
+fi
+
+if [ -z "$DRV" ] ;then
+	if [ -d "$CFG" ] ; then
+		DRV="$CFG"
+	else
+		DRV="$PWD"
+	fi
+fi
+
+
+if [ ${CFG:0:1} != "/" ] ; then
+	CFG="$PWD/$CFG"
+fi
+if [ ${DRV:0:1} != "/" ] ; then
+	DRV="$PWD/$DRV"
+fi
+
+if [ -d "$CFG" ] ; then
+	if [ -f "$CFG/mudos.cfg" ] ; then
+		CFG="$CFG/mudos.cfg"
+	elif [ -f "$CFG/bin/mudos.cfg" ] ; then
+		CFG="$CFG/bin/mudos.cfg"
+	elif [ -f "$CFG/lib/mudos.cfg" ] ; then
+		CFG="$CFG/lib/mudos.cfg"
+	else
+		CFG="$CFG/mudos.cfg"
+	fi
+fi
+
+if [ -d "$DRV" ] ; then
+	if [ -f "$DRV/driver" ] ; then
+		DRV="$DRV/driver"
+	elif [ -f "$DRV/bin/driver" ] ; then
+		DRV="$DRV/bin/driver"
+	elif [ -f "$DRV/lib/driver" ] ; then
+		DRV="$DRV/lib/driver"
+	else
+		DRV="$DRV/driver"
+	fi
+fi
+
+CFG_D=`dirname "$CFG"`
+cd "$CFG_D"
+echo "$DRV" "$CFG"
+exec "$DRV" "$CFG"
+

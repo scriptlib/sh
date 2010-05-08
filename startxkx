@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /share/mud
+mudos/driver xkx100hy/config.xkx100

@@ -1,0 +1,37 @@
+#!/bin/bash
+APPNAME="htmltag"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-03-31"
+APPVER="0.1"
+APPDESC="parsing html tag"
+APPUSAGE="[OPTION] (Tag names)"
+APPEXAMPLE="cat index.html | htmltag \"a img\""
+APPOPTION="T:Tag names|M:Max match to stop scaning"
+
+source `APPLIB "AppUsage"` || exit -1
+source `APPLIB "AppOption"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+WS='[[:space:]]'
+TAGS=`APPOPT "T" "$*"`
+declare -i DEFMAX=32768
+declare -i MCOUNT=0
+declare -i MAX=`APPOPT "M" "$*"`
+
+[ $MAX -lt 1 ] && declare -i MAX=$DEFMAX
+[ -z "$TAG" ] && TAGS=${!#}
+
+for ELM in $TAGS ; do
+    TAG="$ELM|$TAG"
+done
+
+TAG=`expr + "$TAG" : "\(.*\)|$"`
+echo "$TAG"
+while read -s LINE ; do
+    [ $MCOUNT -ge $MAX ] && exit 0
+    CONTENT=`echo "$LINE" | egrep -io "<$WS*($TAG)$WS*[^<>]*>"`
+    [ -n "$CONTENT" ] && echo "$CONTENT" && ((MCOUNT++))
+done
+
+
+

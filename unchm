@@ -1,0 +1,7 @@
+#!/bin/bash
+HANDLER=`which archmage`
+if [ -z "$HANDLER" ] ; then
+    echo "No chm handler found" >/dev/stderr
+else
+    "$HANDLER" "$@"
+fi

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec qemudos -hda /myplace/emuos/DOS/dosV4.raw  $@

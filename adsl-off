@@ -1,0 +1,17 @@
+#!/bin/sh
+###adsl-off v0.1
+###     - unactive adsl connection
+###     - Written by root, 2008-08-26
+###Usage:
+###     adsl-off [interface name]
+###Option:
+###     -h Display help text
+###Example:
+###     adsl-on
+scripthelp "$0" "$@" && exit 0
+
+ifn=dsl-provider
+[ -n "$1" ] && ifn="$1"
+
+exec sudo-unless-root poff "$ifn"
+

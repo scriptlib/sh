@@ -1,0 +1,11 @@
+#!/bin/sh
+app=$1;
+[ -n "$app" ] || exit 0
+app=`which "$app" 2>/dev/null`;
+if [ -n "$app" ] ; then
+    shift
+    sudo "$app" "$@"
+else
+    echo "$1 not found in PATH"
+    exit 1
+fi

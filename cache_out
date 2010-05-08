@@ -1,0 +1,27 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="cache_in"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="cache standard input for keyword"
+APPUSAGE="(KEYWORD)"
+APPEXAMPLE="cache_in \"www.google.com\""
+
+source `APPLIB "AppUsage"` || exit -1
+ARGS=$*
+if [ -z "$ARGS" ] ; then APPHELP ; exit 0 ; fi
+
+KEYWORD=${!#}
+CACHE_FILE=`cache_file "$KEYWORD"`
+if [ -n "$CACHE_FILE" ] ; then 
+    echo "[Cache System:]PrintOut \"$KEYWORD\" Begin" >&2
+    cat "$CACHE_FILE"
+    echo "[Cache System:]PrintOut \"$KEYWORD\" End" >&2
+    exit 0
+else
+    exit 1
+fi
+
+
+

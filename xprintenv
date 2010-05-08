@@ -1,0 +1,22 @@
+#!/bin/sh
+###xprintenv v0.1
+###     - xprintenv
+###     - Written by xiaoranzzz, 2008-04-08
+###Usage:
+###     xprintenv
+###Option:
+###     -h Display help text
+###Example:
+###     xprintenv
+xprint () {
+    [ -z "$1" ] && return 0
+    "$@" 2>&1 | xmessage -center -file -
+}
+
+if [ -z "$1" ] ; then
+    xprint export
+else
+    xprint printenv "$@"
+fi
+
+

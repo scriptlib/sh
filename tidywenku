@@ -1,0 +1,92 @@
+#!/bin/bash
+APPNAME="tidywenku"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-04-01"
+APPVER="0.1"
+APPDESC="将文心阁小说转为UTF8,并整理页面"
+APPUSAGE="[目录名]"
+APPEXAMPLE="tidywenku \"在人间\""
+APPOPTION=""
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+#WDIR="$1"
+
+#if [ ! -d "$1" ] ; then
+#    APPWARN "$1 not exists.\n"
+#    exit -1
+#fi
+
+
+SIGN="<div align=right id=sign>Reproduced by <b>Xiaoranzzz<\/b><br>`date`<\/div>"
+RULE0="s// /g"
+RULE1="s/--.*<\/title>/<\/title>/"
+RULE2="s/<script src=.*<\/script>//g"
+RULE3="s/gb2312/utf-8/"
+RULE4="s/<body .*  marginwidth='20'>/<body class='mainBody'>/"
+RULE5="s/<a.*bookroom.php.*>\(.*\)<\/a>》/<b id='title'>\1<\/b>/"
+RULE6="s/class='middle'/class='mtext'/g"
+RULE7="s/.*<a href='\(http\:\/\/www\.wenku\.com\|\/\)'>.*$/$SIGN/"
+RULE8="/<script/ s/<script language='JavaScript'>/<!--/"
+RULE9="/<\/script>/ s/<\/script>/-->\n<script language='JavaScript' src='wenku.js'><\/script>/"
+RULE10="/<link/ s/<link[^<>]*new.css[^<>]*>/<link rel='stylesheet' href='wenku.css' type='text\/css'>/"
+RULE11="/<table[^<>]*width=[\'\"]*100%/ s/<table[^<>]*width=[\'\"]*100%[^><]*>/<table id='headTable'>/"
+RULE12="/<table[^<>]*width=[\'\"]*93%/ s/<table[^<>]*width=[\'\"]*93%[^<>]*>/<table id='contentTable'>/"
+RULE13="/<td[^<>]*width=[\"\']*80%[^<>]*>/ s/<td[^<>]*width=[\"\']*80%[^<>]*>/<td id='contentText'>/"
+RULE14="/class=\"title\"/ s/class=\"title\"/id='bookTitle'/"
+RULE15="/<center><\/center>/ s/<center><\/center>//"
+RULE16="s/<hr[^<>]*>//"
+TEMPFILE=`mktemp`
+
+function GB2UTF() {
+    #local ERRNUM=-1
+    if ! iconv -c -f gb18030 -t utf8 -o "$TEMPFILE" -- "$1" 2>/dev/null ; then
+        echo -e "\tMaybe error somewhere."
+    fi
+    mv -- "$TEMPFILE" "$1"
+#        ERRNUM=0
+#    else
+#        mv "$TEMPFILE" "$1"
+#        APPWARN "[GB2UTF]Failed:$1\n"
+#    fi
+#    return "$ERRNUM"
+}
+function TidyFile() {
+    ELM="$1"
+    GB2UTF "$ELM"  
+    sed -i -e "${RULE0};${RULE1};${RULE2};${RULE3};${RULE4};${RULE5};${RULE6};${RULE7};${RULE8};${RULE9};${RULE10};${RULE11};${RULE12}; ${RULE13};${RULE14};${RULE15};${RULE16}" -- "$ELM"
+
+}
+#WPATH=`dirname "$WDIR"`
+#WNAME=`basename "$WDIR"`
+#WDIR="$WPATH/$WNAME"
+#HAVEERR=0
+CURDIR=`pwd`
+for WDIR in "$@" ; do
+PDIR=`dirname -- "$WDIR"`
+WDIR="$PDIR/$WDIR"
+    if [ -f "$WDIR" ] ; then
+        APPMSG "$WDIR ...\n"
+        TidyFile "$WDIR"
+        continue
+    fi
+    if [ ! -d "$WDIR" ] ; then
+        APPWARN "\"$WDIR\" not a readable directory.\n"
+        continue
+    fi
+    cd -- "$WDIR"
+    for ELM in *.htm ; do        #find "$WDIR" -name "*" -type f` ; do
+        [ ! -f "$ELM" ] && continue
+        APPMSG "[$WDIR] $ELM ..."
+        TidyFile "$ELM"
+        echo -en "                                                          \r"
+    done   
+    cd -- "$CURDIR"
+    echo -en "                                                        \r"
+    APPMSG "[$WDIR] Done\n"
+done
+
+
+
+

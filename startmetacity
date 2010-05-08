@@ -1,0 +1,22 @@
+#!/bin/bash
+
+APPNAME="startmetacity"
+APPVER="0.1"
+APPDESC="sh script for starting metacity"
+APPUSAGE=""
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e "Usage: $0 $APPUSAGE"
+	exit 0
+fi
+
+#killall gnome-window-decorator
+killallwmg
+
+#start metacity
+metacity --replace &
+

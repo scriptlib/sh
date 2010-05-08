@@ -1,0 +1,15 @@
+#!/bin/sh
+###APPNAME:     bochs-load
+###APPAUTHOR:   xiaoranzzz
+###APPDATE:     2007-10-20
+###APPVER:      0.1
+###APPDESC:     bochs loader
+###APPUSAGE:    
+###APPEXAMPLE:
+###APPOPTION:   -*:Refer to bochs-conf
+if [ -z "$1" ] ; then bochs-conf --help ; exit 0 ; fi
+
+config=`mktemp`
+bochs-conf "$@" >$config
+bochs -f "$config" -q
+

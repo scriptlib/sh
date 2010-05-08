@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+is_gnome=`ps -e -u $EUID -o command|grep gnome-panel`
+
+function xterm_open() {
+    cd "$1"
+    exec xterm 
+}
+
+function mc_open() {
+    cd "$1"
+    exec xterm  -e mc
+}
+
+function nautilus_open() {
+    exec nautilus "$1"
+}
+
+#opener="xterm";
+opener="mc"
+[ -n "$is_gnome" ] && opener="nautilus"
+
+${opener}_open "$1"
+
+

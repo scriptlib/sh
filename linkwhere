@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#Script Name:	linkwhere
+#Date:		Fri Dec 15 22:35:02 CST 2006
+#AUTHOR:	xiaoranzzz
+
+
+# COLOR
+NOR="\033[0m"
+BOLD="\033[1m"
+RED="\033[91m"
+YEL="\033[93m"
+GRE="\033[92m"
+
+
+
+APPNAME="linkwhere"
+APPVER="0.1"
+APPDESC="Display the symbol link of the specified file"
+APPUSAGE="(filename)"
+EXAMPLE="linkwhere \"/usr/bin/[\" \n echo \"/usr/bin/[\" | linkwhere"
+
+
+ARGS=$*
+
+if [ "$ARGS" = "-h" ] ;then
+	echo "$APPNAME V$APPVER"
+	echo -e "\t $APPDESC"
+	echo -e " -h\tDisplay this."
+	echo -e " -e\tWhere am I." 
+	echo -e "Usage: $0 $APPUSAGE"
+	if [ ! -z "$EXAMPLE" ];then 
+	    echo -e "Example: $EXAMPLE"
+	fi
+	exit 0
+fi
+
+if [ "$1" = "-e" ] ; then
+    echo $0
+    exit 0
+fi
+
+if [ -z "$ARGS" ] ; then
+	read ARGS
+fi
+
+if [ -h "$ARGS" ] ; then
+	slink=`ls -l "$ARGS" | sed "s/.*-> //g"`
+        if [ -z "$slink" ] ; then exit -3 ; fi
+        if echo "$slink" | grep "^\." >> /dev/null ; then
+            pfolder=`dirname "$ARGS"`
+            slink=$pfolder/$slink
+        fi
+        echo "$slink"
+	exit 0
+else
+	echo \"$ARGS\" not existed, or links nowhere. >> /dev/stderr
+	exit -1
+fi
+
+

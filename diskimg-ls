@@ -1,0 +1,4 @@
+#!/bin/sh
+echo mdir -i "$@"
+exec mdir -i "$@"
+

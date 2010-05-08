@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#Script Name:	zhreader-konq
+#Date:		Wed Dec 27 03:24:52 CST 2006
+#AUTHOR:	xiaoranzzz
+
+APPNAME="zhreader-konq"
+APPVER="0.1"
+APPDESC="open zip file,read it in konqueror"
+APPUSAGE="(zip filename)"
+EXAMPLE=""
+
+USAGE_FUNCTION=`dirname "$0"`/include/function.usage
+source "$USAGE_FUNCTION"
+function Usage() {
+    DisplayUsage "$APPNAME" "$APPVER" "$APPDESC" "$APPUSAGE" "$EXAMPLE"
+}
+
+ARGS=$*
+if JustDisplayUsage "$ARGS" ; then
+    Usage
+    exit 0
+fi
+
+if [ -z "$ARGS" ] ; then
+    Usage
+    exit 0
+fi
+
+zhtm "$*" konqueror

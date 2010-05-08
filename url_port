@@ -1,0 +1,18 @@
+#!/bin/bash
+ARGS="$*"
+function strip_port() {
+    URL=${1/*:\/\//}
+    PORT=`expr + "$URL" : "^[^\/:]*:\([0-9]*\)"`
+    [ -z "$PORT" ] && PORT=80
+    echo "$PORT"
+}
+if [ -z "$ARGS" ] ; then
+    while read URL ; do
+        strip_port "$URL"
+    done
+else
+    for URL in "$@" ; do
+        strip_port "$URL"
+    done
+fi
+

@@ -1,0 +1,25 @@
+#!/bin/bash
+###APPNAME="shutdownuntil"
+###APPVER="0.1"
+###APPDESC="shutdown until the specified process end"
+###APPUSAGE="(processName)"
+###APPEXAMPLE="shutdownuntil yum"
+
+if [ -z "$*" ] ; then
+    plhelp "$0" "--help"
+    exit 0
+fi
+
+plhelp "$0" "$@" && exit 0
+
+PROCESS=$1
+
+while ps -A | grep "$PROCESS" > /dev/null ; do
+    echo "$PROCESS is still runing ... "
+    sleep 60
+done
+
+shutdown -h -P now || poweroff 
+
+
+

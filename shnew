@@ -1,0 +1,65 @@
+#!/bin/bash
+###scriptnew - V0.1
+###     - Create new bash script
+###     - Written by xiaoranzzz@myplace.hell
+###     - 2007-03-30
+###Usage:
+###     scriptnew [options...] scriptName
+###Options:
+###     -s Simple mode
+###     -r Read from standard input
+###     -o Write to stdout
+###     -h Display this text
+
+scripthelp "$0" "$@" && exit 0
+if [ -z "$*" ] ; then scripthelp "$0" "-h" ; exit 0 ; fi
+
+source `APPLIB AppUsage` || exit 1
+source `APPLIB ScriptDef` || exit 1
+
+MODE_SIMPLE=`APPOPT "s" "$@"`
+MODE_READIN=`APPOPT "r" "$@"`
+MODE_STDOUT=`APPOPT "o" "$@"`
+
+for ARG in "$@" ; do
+    [ "${ARG:0:1}" = "-" ] && continue
+    BASENAME=`basename "$ARG" .sh`
+    break
+done
+if [ -z "$BASENAME" ] ; then APPHELP ; exit 0 ; fi
+
+NAME=$BASENAME
+FULLNAME=$SCRIPTDIR/$NAME
+
+if [ -f "$FULLNAME" ];then
+	echo "$FULLNAME already existed." >&2
+	echo "Open it for edit instead." >&2
+        r-edit "$FULLNAME"
+	exit 0
+fi
+
+buildScript() {
+    if [ -n "$MODE_SIMPLE" ] ; then
+        echo -e "#!/bin/sh\n"
+    else
+        {
+            local DATE=`date +%F`
+            while read -s LINE ; do
+                LINE=${LINE//___APPNAME___/$BASENAME}
+                LINE=${LINE//___DATE___/$DATE}
+                LINE=${LINE//___AUTHOR___/$USER}
+                echo "$LINE"
+            done
+        } <"$SCRIPTTEMPLATE"
+        [ -n "$MODE_READIN" ] && cat
+    fi
+}
+if [ -n "$MODE_STDOUT" ] ; then
+    buildScript
+else
+    buildScript | r-edit -c "file "$FULLNAME"" -
+    if [ -w "$FULLNAME" -a ! -x "$FULLNAME" ] ; then
+        chmod a+x "$FULLNAME"
+    fi
+fi
+

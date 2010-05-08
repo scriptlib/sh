@@ -1,0 +1,2 @@
+#!/bin/sh
+WINEDLLOVERRIDES='quartz,devenum=n,b' cn_wine 'e:\apps\The KMPlayer\KMPlayer.exe' "$@"

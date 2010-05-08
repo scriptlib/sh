@@ -1,0 +1,20 @@
+#!/bin/sh
+###r-firefox v0.1
+###     - firefox langcher 
+###     - Written by geek, 2008-02-09
+###Usage:
+###     r-firefox [OPTIONS]
+###Example:
+###     r-firefox --ProfileManager
+
+firefox="iceweasel"
+for appdir in /myplace/lib/firefox /opt/firefox/firefox/usr/bin /usr/bin ; do
+    if [ -x "$appdir/firefox" ] ; then
+        firefox="$appdir/firefox"
+        break
+    fi
+done
+
+echo exec  "$firefox" "$@" >&2
+exec "$firefox" "$@"
+

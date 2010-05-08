@@ -1,0 +1,6 @@
+NAME=$1
+if [ -z "$NAME" ] ; then
+	echo "Usage:%0 [NAME]"
+	exit 0
+fi
+qemu-img create -f vmdk "$NAME" 2G Formating '$NAME', fmt=vmdk,size=2097152 kB

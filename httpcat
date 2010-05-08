@@ -1,0 +1,45 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="netcat"
+APPAUTHOR="duel"
+APPDATE="2007-03-28"
+APPVER="0.1"
+APPDESC="cat Url"
+APPUSAGE="(URL)"
+APPEXAMPLE="netcat \"www.google.com\""
+APPOPTION="v:verbose;u:update cache"
+
+source `APPLIB "AppUsage"` || exit -1
+source `APPLIB "CacheSystem"` || exit -1
+
+ARGS=$*
+if [ -z "$ARGS" ] ; then APPHELP ; exit 0 ; fi
+
+URL=${!#}
+
+#if ! APPOPT "u" "$@" >/dev/null ; then
+#    LoadCache "netcat" "$URL" &&  exit 0
+#fi
+
+CURL=`which curl`
+
+if [ -n "$CURL" ] ; then
+    function netcat_url {
+        curl -L "-#" -A "Mozilla/5.0" --referer "$1" "$1"
+    }
+else
+    function netcat_url {
+        UHOST=`url_domain "$1"`
+        UPATH=`url_dirname "$1"`/`url_basename "$1"`
+        UPORT=`url_port "$1"`
+        httpget "$UHOST" "$UPATH" "$UPORT"
+    }
+fi
+
+
+VERBOSE=`APPOPT "v" "$@"`
+[ -n "$VERBOSE" ] && echo "Waiting for $URL" >&2
+
+netcat_url "$URL" #| SaveCache "netcat" "$URL"
+
+

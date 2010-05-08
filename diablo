@@ -1,0 +1,14 @@
+#!/bin/bash
+d2dir=`find /windows -type d -name "diablo2"`
+if [ ! -d "$d2dir" ] ; then
+    echo "Can't found diablo2 directory under /windows" >&2
+    exit 1
+fi
+echo "$d2dir"
+cd "$d2dir"
+
+if [ "-off" == "$1" ] ; then
+    wine d2loader.exe
+else
+    wine d2loader.exe -direct -pdir N "$@"
+fi

@@ -1,0 +1,3 @@
+echo yum --disablerepo=* --enablerepo=iso,updates,extras $*
+yum --disablerepo=* --enablerepo=iso,updates,extras $*
+

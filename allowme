@@ -1,0 +1,33 @@
+#!/bin/bash
+###allowme v0.1
+###     - Recursively Change file owner to [me] if necessary
+###     - by xiaoranzzz,2008/02/17
+###Usage:
+###     allowme [file|directory]
+###
+scripthelp "$0" "$@" && exit 0
+
+function processInput() {
+    [ -z "$1" ] && return 0
+    if [ ! -e "$1" ] ; then
+        echo "Filt not exist: \"$1\"" >&2
+        return 1
+    else
+            sudo chown -vR "$USER" "$1"
+            sudo chmod -vR u+rw,g+rw,o-w "$1"
+        return 0
+    fi
+}
+if [ -z "$1" ] ; then
+    echo "Read from standard input..." >&2
+    while read -s fn ; do
+        processInput "$fn"
+    done
+else
+    while [ -n "$1" ] ; do
+        processInput "$1"
+        shift
+    done
+fi
+
+

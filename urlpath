@@ -1,0 +1,27 @@
+#!/bin/bash
+#TEMPLATE BEGIN
+APPNAME="urlpath"
+APPAUTHOR="duel"
+APPDATE="2007-03-26"
+APPVER="0.1"
+APPDESC="get path part of URL"
+APPUSAGE="(URL)"
+APPEXAMPLE="urlpath http://www.gogole.com/webhp\necho http://www.google.com/webhp | urlpath"
+
+source `APPLIB "AppUsage"` 
+
+ARGS=$*
+
+
+function GETPATH() {
+    local STR="[^\/]"
+    sed -e "s/^.*:\/\///" -e "s/\/\{2,\}/\//g" -e "s/^${STR}*//" -e "s/\/${STR}*$//" -e "s/^\///"
+}
+if [ -z "$ARGS" ] ; then
+    GETPATH
+else
+    for i in "$@" ; do
+        echo "$i" | GETPATH
+    done
+fi
+

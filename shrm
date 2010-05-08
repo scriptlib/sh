@@ -1,0 +1,24 @@
+#!/bin/bash
+APPNAME="scriptremove"
+APPAUTHOR="duel"
+APPDATE="2007-03-30"
+APPVER="0.1"
+APPDESC="remove script and its symbol link"
+APPUSAGE="(SCRIPTNAME)"
+APPEXAMPLE="scriptremove scriptremove"
+APPOPTION="" #"h:Display this text|E:Edit me"
+APPOPTSTR="" #"hE"
+
+source `APPLIB "Standard"` || exit -1
+source `APPLIB "ScriptDef"` || exit -1
+source `APPLIB "FileSystem"` || exit -1
+
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+SFILE=`LOCATESCRIPT "$1"`
+LFILE=`LOCATELINK "$1"`
+
+DELETEFILE "$SFILE" "$LFILE"
+
+
+

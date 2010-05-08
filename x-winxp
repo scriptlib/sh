@@ -1,0 +1,2 @@
+#!/bin/sh
+exec r-xinit /myplace/bin/v-winxp
