@@ -1,0 +1,134 @@
+#!/bin/sh
+if [ -r "backup_list.txt" ] ; then
+    . "./backup_list.txt"
+else
+    echo "ERROR:No backup_list.txt exist in current directory"
+    exit 1
+fi
+
+if [ -n "$DSTDIR" ] ; then
+    cd "$DSTDIR"
+    [ -r "backup_list.txt" ] &&  . "./backup_list.txt"
+fi
+
+
+if [ -z "$DATA" ] ; then
+    echo "NO \$DATA specified, define them in backup_list.txt please."
+    exit 2
+fi
+
+
+
+CMD_RSYN_DRY="rsync -vrxlptgoDE --delete --update --dry-run"
+CMD_RSYN_WET="rsync -vrxlptgoDE --delete --update"
+
+CMD_CP_DRY="echo cp -Tuvd --preserve=all"
+CMD_CP_WET="cp -Tuvd --preserve=all"
+
+CMD_MKDIR="mkdir -vp"
+CMD_CPDIR="cp -RlpTv"
+
+DEBUG=
+SYNCBACK=
+USAGE=
+OPTIONS=
+NOTDRY=
+
+_OPTIONS="$*"
+
+
+while [ -n "$1" ] ; do
+    case $1 in
+        -d|--debug)     DEBUG=1;;
+	-w|--notdry)	NOTDRY=1;;
+        -b|--syncback)  SYNCBACK=1;;
+        -h|--help)      USAGE=1;;
+        *)              BACKUPNAME="$1";;
+    esac
+    shift
+done
+
+if [ -n "$USAGE" ]  ; then
+cat<<USAGE_TEXT
+$0  v1.0
+    - Do increametal backups between directories, using rsync and hard-link
+Usage:
+    $0 [options...] [backup name...]
+Options:
+    -d,--debug      DEBUG mode
+    -w,--notdry     Run in reallity, not dry run
+    -h,--help       This text
+USAGE_TEXT
+
+    exit 0
+fi
+
+if [ -n "$DEBUG" ] ; then
+    CMD_DATA="echo $CMD_RSYN_WET"
+    CMD_LIGHT="echo $CMD_CP_WET"
+    CMD_CPDIR="echo $CMD_CPDIR"
+    CMD_MKDIR="echo $CMD_MKDIR"
+elif [ -n "$NOTDRY" ] ; then
+    CMD_DATA="$CMD_RSYN_WET"
+    CMD_LIGHT="$CMD_CP_WET"
+else
+    CMD_DATA="$CMD_RSYN_DRY"
+    CMD_LIGHT="$CMD_CP_DRY"
+    CMD_MKDIR="echo $CMD_MKDIR"
+    CMD_CPDIR="echo $CMD_CPDIR"
+fi
+
+[ -z "$BACKUPNAME" ] &&  BACKUPNAME=`date +"%Y-%m-%d_%H-%M-%S"`
+
+if [ -z "$SRCDIR" ] ; then
+    SRCDIR="./"
+fi
+
+function process {
+    echo 
+    echo "====================================================================================="
+    echo "R-BACKUP START:"`date +"%Y-%m-%d_%H-%M-%S"`
+    echo
+    [ -r "backup_last.log" ] &&  LASTDIR=`cat "backup_last.log"`
+    [ -n "$LASTDIR" ] && [ "$LASTDIR" != "$BACKUPNAME" ] && [ -d "$LASTDIR" ] &&  $CMD_CPDIR -- "$LASTDIR" "$BACKUPNAME"
+    [ -d "$BACKUPNAME" ] || $CMD_MKDIR -- "$BACKUPNAME"
+    if [ ! -n "$DEBUG" ] && [ ! -d "$BACKUPNAME" ] ; then
+        echo ERROR:Destination directory not exist: \"$BACKUPNAME\"
+        exit 2
+    fi
+    [ ! -n "$DEBUG" ] && echo "$BACKUPNAME">"backup_last.log"
+    for ITEM in $LIGHTDATA ; do
+        echo
+        echo
+        echo FROM \"$SRCDIR/$ITEM\" TO \"$BACKUPNAME/$ITEM\"
+        SUBDIR=`dirname $ITEM`
+        [ -n "$SUBDIR" ] && [ "$SUBDIR" != "." ] && [ ! -d "$BACKUPNAME/$SUBDIR" ] && $CMD_MKDIR -- "$BACKUPNAME/$SUBDIR"
+        $CMD_LIGHT  -- "$SRCDIR/$ITEM" "$BACKUPNAME/$ITEM" 
+    done
+    for ITEM in $DATA ; do
+        echo
+        echo 
+        echo FROM \"$SRCDIR/$ITEM\" TO \"$BACKUPNAME/$ITEM\"
+        SUBDIR=`dirname $ITEM`
+        [ -n "$SUBDIR" ] && [ "$SUBDIR" != "." ] && [ ! -d "$BACKUPNAME/$SUBDIR" ] && $CMD_MKDIR -- "$BACKUPNAME/$SUBDIR"
+        $CMD_DATA  $DATA_OPT $EXCLUDE -- "$SRCDIR/$ITEM" "$BACKUPNAME/$ITEM"
+    done
+    echo
+    echo
+    echo "R-BACKUP END:"`date +"%Y-%m-%d_%H-%M-%S"`
+    echo "====================================================================================="
+}
+
+
+if [ -n "$DEBUG" ] || [ -z "$NOTDRY" ] ; then
+    process 
+else
+    if [ "$EUID" != "0" ] ; then
+        echo "Super users required to execute."
+        exec sudo "$0" $_OPTIONS
+	exit 1
+    fi
+    process | tee -a "${BACKUPNAME}_r-backup.log"
+fi
+
+

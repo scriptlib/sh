@@ -1,0 +1,17 @@
+#!/bin/sh
+WINEPREFIX=~/.wine
+
+PREFIX=$1
+shift
+CMDS=$2
+shift
+
+[ -n "$PREFIX" ] && export WINEPREFIX="$PREFIX"
+
+echo WINEPREFIX="$PREFIX" >&2
+if [ -n "$CMDS" ] ; then
+    exec "$CMDS" $@
+else
+    exec winecfg
+fi    
+

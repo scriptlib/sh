@@ -61,13 +61,13 @@ READER=$2
 if [ -z "$READER" ] ; then
     READER=htmlview
     if ps aux | grep '\/firefox' >/dev/null ; then
-        READER='r-firefox -new-window'
+        READER='r-firefox -new-tab'
     elif ps aux | grep 'epiphany' >/dev/null ; then
         READER=epiphany
     elif which epiphany >> /dev/null ; then
         READER=epiphany
     elif which firefox >> /dev/null ; then 
-        READER='r-firefox -new-window'
+        READER='r-firefox -new-tab'
     elif which konqueror >> /dev/null ; then
         READER=konqueror
     else 

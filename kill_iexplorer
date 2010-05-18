@@ -1,0 +1,11 @@
+#!/bin/sh
+###kill_iexplorer v0.1
+###     - kill_iexplorer
+###     - Written by xiaoranzzz, 2010-05-10
+###Usage:
+###     kill_iexplorer
+###Option:
+###     -h Display help text
+###Example:
+###     kill_iexplorer
+pskill 'iexplorer.exe'

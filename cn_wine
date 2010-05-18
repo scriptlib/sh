@@ -18,11 +18,11 @@ REGEDIT4
 "Tms Rmn"="Times New Roman"
 EOF
 
-if [ -z "$NODEBUG" ] ; then
+if [ -n "$XRZ_WINEDEBUG" ] ; then
     export WINEDEBUG="+loaddll,$WINEDEBUG"
     exec wine "$@" 2>&1 | color_print_wine #| tee "$HOME/wine.log" | color_print_wine
 else
-    exec wine "$@" 2>/dev/null 1>/dev/null
+    exec wine "$@"
 fi
 
 #export LANG="zh_CN.UTF-8"
