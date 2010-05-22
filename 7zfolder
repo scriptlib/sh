@@ -11,18 +11,29 @@
 scripthelp "$0" "$@" && exit 0
 if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
 
+opt=
 cdir=`pwd`
 while [ -n "$1" ] ; do
-    folder=$1
-    if [ -d "$folder" ] ; then
-        echo "$folder [PROCESSING]"
-        fn=`basename "$folder"`
-        fn="$cdir/$fn.7z"
-        pushd "$folder" >/dev/null
-        7z a -mx=2 "$fn" .
-        popd >/dev/null
-    else
-        echo "$folder [SKIPPED]"
-    fi
+
+    case $1 in 
+    -*) 
+        opt="$opt $1";;
+    *) 
+        folder=$1
+        if [ -d "$folder" ] ; then
+            echo "$folder [PROCESSING]"
+            fn=`basename "$folder"`
+            fn="$cdir/$fn.7z"
+            pushd "$folder" >/dev/null
+            echo 7z a $opt "$fn" .
+            7z a $opt "$fn" .
+            opt=
+            popd >/dev/null
+        else
+            echo "$folder [SKIPPED]"
+        fi
+    ;;
+    esac
+
     shift
 done

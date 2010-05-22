@@ -1,2 +1,2 @@
 #!/bin/bash
-myiconv GB2312 UTF-8 "$@"
+myiconv GBK UTF-8 "$@"
