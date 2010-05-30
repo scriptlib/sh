@@ -9,7 +9,7 @@ APPEXAMPLE="scriptremove scriptremove"
 APPOPTION="" #"h:Display this text|E:Edit me"
 APPOPTSTR="" #"hE"
 
-source `APPLIB "Standard"` || exit -1
+source `APPLIB "AppUsage"` || exit -1
 source `APPLIB "ScriptDef"` || exit -1
 source `APPLIB "FileSystem"` || exit -1
 
