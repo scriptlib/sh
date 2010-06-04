@@ -1,0 +1,6 @@
+#!/bin/sh
+pdir=/myplace/lib/lrcShow-X
+cd "$pdir"
+./addons/mpDris/mpDris&
+./lrcShow-X.py
+

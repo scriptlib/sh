@@ -1,0 +1,9 @@
+#!/bin/sh
+pd=`dirname "$0"`
+if [ -f "tidy.xhtml" ] ; then
+    cf=tidy.xhtml
+else
+    cf="$pd/tidy.xhtml"
+fi
+
+tidy -config "$cf" "$@"
