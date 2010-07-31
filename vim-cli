@@ -1,2 +1,2 @@
 #!/bin/sh
-exec xterm -e vim "$@" 2>/dev/null
+exec x-terminal-emulator -e vim "$@" 2>/dev/null

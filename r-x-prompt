@@ -10,10 +10,25 @@
 ###     r-x-prompt
 scripthelp "$0" "$@" && exit 0
 
-title="${1:-Command Box}"
-text="${2:-Type in commands}"
+
+title="${1:-R-X-Prompt Box}"
+text="${2:-Input commands to execute:}"
 default="$3"
+zenity="zenity --width=300"
 
-cmd=`zenity --entry --text="$text" --entry-text="$default" --title="$title" --width="300"` 
+function process {
+    read cmd args
+    if [ -z "$cmd" ] ; then
+        exit 0;
+    fi
+    
+    full_path=`which "$cmd"`
+    if [ -z "$full_path" ] ; then
+        $zenity --title "$title" --error --text "Error!\n$cmd: Command not found!"
+        exit 1;
+    fi
+    exec "$full_path" $args
+}
 
-[ -n "$cmd" ] && exec $cmd
+
+$zenity --title="$title" --entry --text="$text" --entry-text="$default" | process

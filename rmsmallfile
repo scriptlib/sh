@@ -17,12 +17,12 @@ GRE="\033[92m"
 APPNAME="rmsmallfile"
 APPVER="0.1"
 APPDESC="rm files which size is less than then specified size."
-APPUSAGE="(filename pattern) (size)"
+APPUSAGE="(size) (options...)"
 EXAMPLE=""
 
 
-NAMEEXP=$1
-SIZE=$2
+SIZE=$1
+shift
 
 if [ -z "$SIZE" ] ; then
 	echo "$APPNAME V$APPVER"
@@ -50,9 +50,10 @@ function DeleteFile() {
     done
 }
 
+echo find . -type f -size -"$SIZE" "$@"
 TEMPLIST=`mktemp`
 
-find . -name "$NAMEEXP" -type f -size -"$SIZE" >"$TEMPLIST"
+find . -type f -size -"$SIZE" "$@">"$TEMPLIST"
 
 if cat "$TEMPLIST" | ListFile ; then
 

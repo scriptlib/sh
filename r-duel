@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -n "$1" ] ; then
+    gksu -D "$@" --su-mode -u duel -l $@&
+else
+    gksu -D "x-terminal-emulator" --su-mode -u duel -l 'x-terminal-emulator'&
+fi    
