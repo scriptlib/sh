@@ -1,0 +1,21 @@
+#!/bin/sh
+SDCARD=MILESTONE
+do_unmount=
+SUBDIR=
+
+while [ -n "$1" ] ; do
+    case "$1" in
+        -u|--unmount)
+            do_unmount=1;;
+        *)
+            SUBDIR="$1";;
+    esac
+    shift
+done
+
+if [ -n "$do_unmount" ] ; then
+    gnome-umount -vt -p "$SDCARD"
+else
+    gnome-mount -vt -p "$SDCARD"
+    exec mc "/media/$SDCARD/$SUBDIR"
+fi

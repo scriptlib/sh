@@ -57,7 +57,7 @@ buildScript() {
 if [ -n "$MODE_STDOUT" ] ; then
     buildScript
 else
-    buildScript | r-edit -c "file "$FULLNAME"" -
+    buildScript | editpipe "$FULLNAME"
     if [ -w "$FULLNAME" -a ! -x "$FULLNAME" ] ; then
         chmod a+x "$FULLNAME"
     fi

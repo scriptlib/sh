@@ -1,2 +1,2 @@
 #!/bin/sh
-exec r-firefox -P fun -no-remote
+exec r-firefox -P fun -no-remote "$@"

@@ -17,5 +17,5 @@ done
 
 rm -fv ~/.mozilla/firefox/profiles/*/compatibility.ini
 echo exec  "$firefox" "$@" >&2
-exec "$firefox" "$@"
+exec "$firefox" "$@" 2>/dev/null 1>/dev/null 
 

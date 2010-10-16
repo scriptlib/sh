@@ -27,7 +27,7 @@ function process {
         $zenity --title "$title" --error --text "Error!\n$cmd: Command not found!"
         exit 1;
     fi
-    exec "$full_path" $args
+    "$full_path" $args&
 }
 
 
