@@ -16,6 +16,7 @@ done
 if [ -n "$do_unmount" ] ; then
     gnome-umount -vt -p "$SDCARD"
 else
+    [ -r . ] || cd ~/
     gnome-mount -vt -p "$SDCARD"
     exec mc "/media/$SDCARD/$SUBDIR"
 fi

@@ -3,7 +3,7 @@ c_editor='vim'
 g_editor='gvim -f'
 
 if [ -n "$XAUTHORITY" -o -n "$DISPLAY" ] ; then
-    exec $g_editor "$@"
+    $g_editor "$@"
 else
     exec $c_editor "$@"
 fi
