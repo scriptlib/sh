@@ -61,5 +61,8 @@ else
     if [ -w "$FULLNAME" -a ! -x "$FULLNAME" ] ; then
         chmod a+x "$FULLNAME"
     fi
+    if [ -n "$XR_SHELL_BINARY_DIR" -a -f "$FULLNAME" ] ; then
+        ln -svf "$FULLNAME" "$XR_SHELL_BINARY_DIR/$NAME"
+    fi
 fi
 

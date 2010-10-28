@@ -1,6 +1,6 @@
 #!/bin/sh
 c_editor='vim'
-g_editor='gvim -f'
+g_editor='gvim -f -geometry 80x40'
 
 if [ -n "$XAUTHORITY" -o -n "$DISPLAY" ] ; then
     exec $g_editor "$@"

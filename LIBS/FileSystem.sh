@@ -10,11 +10,12 @@ if [ -z "$APPLIB_SOURCE_FileSystem" ] ; then
     {
         for FILENAME in "$@" ; do
             if [ -z "$FILENAME" ] ; then exit 0 ; fi
-            if [ ! -L "$FILENAME" ] &&  [ ! -f "$FILENAME" ] ; then
+            if [ -L "$FILENAME" ] ; then
+                rm -vi "$FILENAME"
+            elif [ ! -f "$FILENAME" ] ; then
                 APPWARN "$FILENAME not exists.\n"
                 exit -1
-            fi
-            if [ ! -w "$FILENAME" ] && [ ! $UID -eq 0 ] ; then
+            elif [ ! -O "$FILENAME" ] ; then
                 APPWARN "Permissions need to delete $FILENAME\n"
                 sudo rm -vi "$FILENAME"
             else

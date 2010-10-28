@@ -23,7 +23,7 @@ if [ -z "$APPLIB_SOURCE_ScriptDef" ] ; then
         fi
         if [ ! -f "$SFILE" ] ; then 
             echo "$1 not found." >&2
-            return -1 
+            return 1 
         else
             echo "$SFILE"
             return 0
@@ -36,7 +36,7 @@ if [ -z "$APPLIB_SOURCE_ScriptDef" ] ; then
             SFILE=`basename "$SFILE"`
             find "$SCRIPTBINDIR/" -lname "*/$SFILE" 2>/dev/null
         else
-            return -1
+            return 1
         fi
     }   
 fi

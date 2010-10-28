@@ -1,5 +1,17 @@
 #!/bin/sh
-ft=`xdg-mime query filetype "$@"`
-echo $ft
-xdg-mime query default "$ft"
+if [ -z "$1" ] ; then
+    cat "$0";
+    exit 0
+fi
+
+while [ -n "$1" ] ; do
+    ft="$1"
+    if [ -e "$1" ] ; then
+        ft=`xdg-mime query filetype "$1"`
+    fi
+    echo "$ft"
+    xdg-mime query default "$ft"
+    shift
+done
+
 
