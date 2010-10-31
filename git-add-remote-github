@@ -1,0 +1,4 @@
+#!/bin/sh
+echo git remote add github git@github.com:$*.git
+exec git remote add github git@github.com:$*.git
+

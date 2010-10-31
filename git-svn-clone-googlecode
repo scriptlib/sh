@@ -1,0 +1,29 @@
+#!/bin/sh
+
+githost='github'
+giturl='git@github.com:eotect'
+
+gn="$2"
+n="$3"
+
+if [ -z "$3" ] ; then
+    echo "Usage:$0 username google_project_name git_project_name [google_sub_project]" >&2
+    exit 1
+fi
+if [ -n "$4" ] ; then 
+    u="https://$gn.googlecode.com/svn/$4"
+else
+    u="https://$gn.googlecode.com/svn"
+fi
+
+echo git svn clone -A $1.txt -s "$u" "$n"
+git svn clone -A $1.txt -s "$u" "$n"
+echo cd "$n"
+cd "$n"
+echo git config user.name "$1"
+git config user.name "$1"
+echo git config user.email "$1@gmail.com"
+git config user.email "$1@gmail.com"
+echo git remote add "$githost" "$giturl/$n.git"
+git remote add "$githost" "$giturl/$n.git"
+
