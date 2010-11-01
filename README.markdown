@@ -8,3 +8,13 @@ xiaoranzzz, 2006-2010
 ** 2010/10/31 copy from github to https://xrzshellscript.googlecode.com/svn
 ** 2010/10/31 sync back to github
 
+FreeBasic
+---------
+
+* project host
+
+** https://zfreebasic.googlecode.com/svn/trunk
+
+** git@github.com:eotect/freebasic.git
+
+

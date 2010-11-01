@@ -3,12 +3,15 @@
 githost='github'
 giturl='git@github.com:eotect'
 
+
+if [ -z "$2" ] ; then
+    echo "Usage:$0 username google_project_name [git_project_name] [google_sub_project]" >&2
+    exit 1
+fi
 gn="$2"
 n="$3"
-
-if [ -z "$3" ] ; then
-    echo "Usage:$0 username google_project_name git_project_name [google_sub_project]" >&2
-    exit 1
+if [ -z "$n" ] ; then
+    n=$2
 fi
 if [ -n "$4" ] ; then 
     u="https://$gn.googlecode.com/svn/$4"

@@ -1,0 +1,20 @@
+#!/bin/sh
+###git-clone-github v0.1
+###     - git-clone-github
+###     - Written by xiaoranzzz, 2010-10-31
+###Usage:
+###     git-clone-github
+###Option:
+###     -h Display help text
+###Example:
+###     git-clone-github
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+github="git@github.com:";
+if [ -n "$3" ] ; then
+    exec git clone "$github$1/$2.git" "$3"
+elif [ -n "$2" ] ; then
+    exec git clone "$github$1.git" "$2"
+else
+    exec git clone "$github$1.git"
+fi

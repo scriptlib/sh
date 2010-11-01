@@ -1,0 +1,20 @@
+#!/bin/sh
+###git-clone-gitorious v0.1
+###     - git-clone-gitorious
+###     - Written by xiaoranzzz, 2010-10-31
+###Usage:
+###     git-clone-gitorious
+###Option:
+###     -h Display help text
+###Example:
+###     git-clone-gitorious
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+gitorious="git@gitorious.org:";
+if [ -n "$3" ] ; then
+    exec git clone "$gitorious$1/$2.git" "$3"
+elif [ -n "$2" ] ; then
+    exec git clone "$gitorious$1.git" "$2"
+else
+    exec git clone "$gitorious$1.git"
+fi
