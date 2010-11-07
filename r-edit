@@ -2,11 +2,13 @@
 c_editor='vim'
 g_editor='gvim -f -geometry 80x40'
 
-if [ "$1"=="-b" ] ; then
+echo $@
+if [ -n "$1" -a  "$1" == "-b" ] ; then
     background=1
     shift
 fi
 
+echo background:$background
 if [ -n "$XAUTHORITY" -o -n "$DISPLAY" ] ; then
     if [ -n "$background" ] ; then
         $g_editor "$@" &

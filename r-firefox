@@ -15,7 +15,9 @@ for appdir in /myplace/lib/firefox /opt/firefox/firefox/usr/bin /usr/bin ; do
     fi
 done
 
+echo
 rm -fv ~/.mozilla/firefox/profiles/*/compatibility.ini
 echo exec  "$firefox" "$@" >&2
+echo
 exec "$firefox" "$@" 2>/dev/null 1>/dev/null 
 

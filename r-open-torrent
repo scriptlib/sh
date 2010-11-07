@@ -11,7 +11,7 @@
 scripthelp "$0" "$@" && exit 0
 if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
 
-btdir=~/bittorrent
+btdir=~/bt
 [ -d "$btdir" ] || mkdir -p "$btdir"
 backupd="$btdir/torrents/backup"
 [ -d "$backupd" ] || mkdir -p "$backupd"

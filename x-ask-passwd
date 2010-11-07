@@ -1,0 +1,18 @@
+#!/bin/sh
+###x-ask-passwd v0.1
+###     - x-ask-passwd
+###     - Written by xiaoranzzz, 2010-11-05
+###Usage:
+###     x-ask-passwd
+###Option:
+###     -h Display help text
+###Example:
+###     x-ask-passwd
+if [ -n "$2" ] ; then
+    exec zenity --entry --text="$1" --hide-text --title="$2"
+elif [ -n "$1" ] ; then
+    exec zenity --entry --text="$1" --hide-text --title="$1"
+else
+    echo 'Usage:$0 <message> [title]'
+fi
+

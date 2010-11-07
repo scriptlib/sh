@@ -1,0 +1,67 @@
+#!/bin/sh
+###git-create-repo v.
+###     - git-create-repo
+###     - Written by afun,--
+###Usage:
+###     git-create-repo <dst_repo> [src_dir] [user] [user.email]
+###Option:
+###     -h Display help text
+###Example:
+###     git-create-repo
+scripthelp "$0" "$@" && exit
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit; fi
+
+dst=$1
+src=$2
+user=$3
+email=$4
+
+[ -z "$src" ] && src=.
+
+hostname=$HOSTNAME
+[ -z "$hostname" ] && hostname="localhost"
+[ -z "$user" ] && user=$USER
+[ -z "$email" ] && email="$user@$HOSTNAME"
+
+function system {
+    echo "$@"
+    echo ------------------------------------------
+    "$@"
+    echo
+}
+
+if [ ! -d "$src" ] ; then
+    echo "fatal: $src not exists!";
+    exit 1;
+fi
+
+pushd "$src"
+if [ ! -d ".git" ] ; then
+    system git init . 
+    system git config user.name "$user"
+    system git config user.email "$email"
+    system git add .
+    system git commit -am 'initial commit'
+fi
+
+if [ -d "$dst" ] ; then
+    system rm -rI "$dst"
+fi
+
+if [ -d "$dst" ] ; then
+    echo "fatal: $dst isn\'t empty."
+    exit 1
+fi
+
+system git clone --bare --verbose . "$dst"
+system git remote add origin "$dst"
+system git config branch.master.remote origin
+system git config branch.master.merge refs/heads/master
+system git fetch origin
+system git status
+system git branch -av
+system git log
+popd
+
+
+

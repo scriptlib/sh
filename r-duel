@@ -1,5 +1,5 @@
 #!/bin/sh
-options="--su-mode -u duel"
+options="--su-mode -u afun"
 if [ -n "$1" ] ; then
     gksu -D "$@" $options $@&
 else
