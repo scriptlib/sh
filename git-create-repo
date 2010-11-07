@@ -3,13 +3,13 @@
 ###     - git-create-repo
 ###     - Written by afun,--
 ###Usage:
-###     git-create-repo <dst_repo> [src_dir] [user] [user.email]
+###     git-create-repo <dst_repo> <src_dir> [user] [user.email]
 ###Option:
 ###     -h Display help text
 ###Example:
 ###     git-create-repo
 scripthelp "$0" "$@" && exit
-if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit; fi
+if [ -z "$2" ] ; then scripthelp "$0" "--help" ; exit; fi
 
 dst=$1
 src=$2

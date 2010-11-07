@@ -1,0 +1,49 @@
+#!/bin/sh
+###tar7z v0.1
+###     - Creating, Extracting, Testing tar.7z archive
+###     - Written by xiaoranzzz, 2010-11-07
+###Usage:
+###     tar7z [a/p/ap/x/l] <archive_name> [OPTIONS ...]
+###Option:
+###     -h Display help text
+###Example:
+###     tar7z
+
+APPUSAGE='Usage: tar7z [a/p/ap/x/l] <archive_name> [OPTIONS ...]'
+
+if [ -z "$2" ] ; then
+    echo "$APPUSAGE"
+    exit 0
+fi
+ACTION=$1
+shift
+TARGET=$1
+shift
+
+
+Z_CMD="7z"
+
+Z_A_ARGS="a -mx9 -si"
+Z_AP_ARGS="$Z_A_ARGS -p"
+Z_X_ARGS="e -so"
+Z_L_ARGS="e -so"
+
+TAR_CMD="tar"
+TAR_A_ARGS="-cvf -"
+TAR_AP_ARGS="$TAR_A_ARGS"
+TAR_X_ARGS="-xvf -"
+TAR_L_ARGS="-tvf -"
+
+
+EXT=".tar.7z"
+
+if [ "$ACTION" == "a" ] ; then
+    $TAR_CMD $TAR_A_ARGS "$@" | ${Z_CMD} ${Z_A_ARGS} "$TARGET"
+elif [ "$ACTION" == "ap" -o "$ACTION" == "p" ] ; then
+    $TAR_CMD $TAR_AP_ARGS "$@" | ${Z_CMD} ${Z_AP_ARGS} "$TARGET"
+elif [ "$ACTION" == "x" ] ; then
+    ${Z_CMD} ${Z_X_ARGS} "$TARGET" | $TAR_CMD $TAR_X_ARGS "$@" 
+elif [ "$ACTION" == "l" ] ; then
+    ${Z_CMD} ${Z_L_ARGS} "$TARGET" | $TAR_CMD $TAR_L_ARGS "$@" 
+fi
+
