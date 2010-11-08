@@ -4,11 +4,44 @@
 # Can set up "git track" so it feels built-in:
 # git config --global --add alias.track '!git-track'
 #
-branch=$(git branch 2>/dev/null | grep ^\*)
-[ x$1 != x ] && tracking=$1 || tracking=${branch/* /}
- 
-git config branch.$tracking.remote origin
-git config branch.$tracking.merge refs/heads/$tracking
-echo "tracking origin/$tracking"
+#Usage: git-track <remote name> [branch name]
+
+#branch=$(git branch 2>/dev/null | grep ^\*)
+
+
+if [ -n "$2" ] ; then
+    remote=$1
+    tracking=$2
+elif [ -n "$1" ] ; then
+    remote=`expr -- "$1" : '\(.\+\)[/\.].\+'`
+    if [ -z "$remote" ] ; then
+        remote=origin
+        tracking=$1
+    else
+        tracking=`expr -- "$1" : '.\+[/\.]\(.+\)'`
+        [ -z "$tracking" ] && tracking=master
+    fi
+else
+    APPNAME=`basename $0`
+    echo "Usage:"
+    echo "      $APPNAME <remote name>.<branch name>"
+    echo "      $APPNAME <remote name>/<branch name>"
+    echo "      $APPNAME <remote name> [branch name]"
+    echo "      $APPNAME <branch name>"
+    exit 0
+fi
+
+
+function run {
+    echo "[config] $3 = $4"
+    "$@"
+}
+
+run git config branch.$tracking.remote $remote
+if run git config branch.$tracking.merge refs/heads/$tracking ; then
+    echo "ok, tracking $remote/$tracking"
+else
+    echo "fatal, maybe there isn\'t a git repositoty"
+fi    
 
 
