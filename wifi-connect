@@ -1,0 +1,11 @@
+#!/bin/sh
+###wifi-connect v0.1
+###     - wifi-connect
+###     - Written by root, 2010-11-08
+###Usage:
+###     wifi-connect
+###Option:
+###     -h Display help text
+###Example:
+###     wifi-connect
+cnetworkmanager -C NETGEAR --wpa-pass=akr3vkeh
