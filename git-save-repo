@@ -1,0 +1,63 @@
+#!/bin/sh
+###git-save-repo v.
+###     - git-save-repo
+###     - Written by afun,--
+###Usage:
+###     git-save-repo <target> [source] [tracking_name] [tracking_branch]
+###Option:
+###     -h Display help text
+###Example:
+###     git-save-repo abc.git local master
+scripthelp "$0" "$@" && exit
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit; fi
+
+dst=$1
+src=$2
+remote=$3
+tracking=$4
+
+[ -z "$src" ] && src=.
+
+
+function system {
+    #echo :"$@" 
+    "$@"
+}
+
+if [ ! -d "$src" ] ; then
+    echo "Fatal: $src not exists!";
+    exit 1;
+fi
+echo "Source: $src"
+pushd "$src" >/dev/null 
+if [ ! -d ".git" ] ; then
+    echo "Initial git repositoy in $src"
+    system git init . 
+fi
+
+if [ -d "$dst" ] ; then
+    echo "Warning: target exist: $dst"
+    system rm -rI "$dst"
+fi
+
+if [ -d "$dst" ] ; then
+    echo "Fatal: $dst isn't empty."
+    exit 1
+fi
+
+system git clone --bare --verbose . "$dst"
+if [ -n "$remote" ] ; then
+    [ -z "$tracking" ] && tracking=master
+    echo "Add saved repository as remote [$remote]"
+    system git remote add "$remote" "$dst"
+    echo "Set branch tracking for $remote/$tracking"
+    system git config branch.master.remote "$remote"
+    system git config branch.master.merge "refs/heads/$tracking"
+    echo "Fetching $remote ..."
+    system git fetch "$remote"
+    system git branch -rv
+fi
+popd >/dev/null
+
+
+
