@@ -1,13 +1,13 @@
 #!/bin/sh
-###___APPNAME___ v0.1
-###     - ___APPNAME___
-###     - Written by ___AUTHOR___, ___DATE___
+###___NAME___ v0.1
+###     - ___NAME___
+###     - Written by ___AUTHOR___ <___EMAIL___>, ___DATE___
 ###Usage:
-###     ___APPNAME___
+###     ___NAME___
 ###Option:
 ###     -h Display help text
 ###Example:
-###     ___APPNAME___
+###     ___NAME___ -h
 
 function _need_help {
     while [ -n "$1" ] ; do
