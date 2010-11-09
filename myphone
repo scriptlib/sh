@@ -14,11 +14,15 @@ while [ -n "$1" ] ; do
 done
 
 if [ -n "$do_unmount" ] ; then
-    gnome-umount -vt -p "$SDCARD"
-    umount -v "/media/$SDCARD"
+    echo "Unmounting $SDCARD..."
+    if pumount "/dev/disk/by-label/$SDCARD" ; then
+        echo OK
+    fi
+#    gnome-umount -vt -p "$SDCARD"
+#    umount -v "/media/$SDCARD"
 else
     [ -r . ] || cd ~/
-    gnome-mount -vt -p "$SDCARD"
-    mount -v "/media/$SDCARD"
+    echo "Mounting $SDCARD"
+    if pmount -A -e -u 002 "/dev/disk/by-label/$SDCARD" "$SDCARD" ; then echo OK ; fi
     exec mc "/media/$SDCARD/$SUBDIR"
 fi

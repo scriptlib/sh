@@ -14,6 +14,6 @@ if [ -n "$XAUTHORITY" -o -n "$DISPLAY" ] ; then
         exec $g_editor "$@"
     fi        
 else
-   echo exec $c_editor "$@"
+   exec $c_editor "$@"
 fi
 

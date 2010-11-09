@@ -6,20 +6,21 @@
 #
 #Usage: git-track <remote name> [branch name]
 
-#branch=$(git branch 2>/dev/null | grep ^\*)
+branch=$(git branch 2>/dev/null | grep ^\*)
+branch=${branch/* /}
 
 
 if [ -n "$2" ] ; then
     remote=$1
     tracking=$2
 elif [ -n "$1" ] ; then
-    remote=`expr -- "$1" : '\(.\+\)[/\.].\+'`
+    remote=`expr -- "$1" : '\(.\+\)[/\.].*'`
     if [ -z "$remote" ] ; then
         remote=origin
         tracking=$1
     else
-        tracking=`expr -- "$1" : '.\+[/\.]\(.+\)'`
-        [ -z "$tracking" ] && tracking=master
+        tracking=`expr -- "$1" : '.\+[/\.]\(.\+\)'`
+        [ -z "$tracking" ] && tracking=$branch
     fi
 else
     APPNAME=`basename $0`
@@ -37,9 +38,9 @@ function run {
     "$@"
 }
 
-run git config branch.$tracking.remote $remote
-if run git config branch.$tracking.merge refs/heads/$tracking ; then
-    echo "ok, tracking $remote/$tracking"
+run git config branch.$branch.remote $remote
+if run git config branch.$branch.merge refs/heads/$tracking ; then
+    echo "ok, branch $branch will track $remote/$tracking"
 else
     echo "fatal, maybe there isn\'t a git repositoty"
 fi    
