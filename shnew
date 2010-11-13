@@ -43,7 +43,7 @@ buildScript() {
         echo -e "#!/bin/sh\n"
     else
         {
-            local DATE=`date +"%F %H:%M`
+            local DATE=`date +"%F %H:%M"`
             while read -s LINE ; do
                 LINE=${LINE//___APPNAME___/$BASENAME}
                 LINE=${LINE//___DATE___/$DATE}

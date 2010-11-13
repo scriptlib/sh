@@ -8,4 +8,4 @@
 ###     -h Display help text
 ###Example:
 ###     thunder
-cn_wine 'D:\APPS\INTERNET\thunder\Thunder.exe'
+cn_wine 'c:\program files\thunder network\thunder\Thunder.exe'

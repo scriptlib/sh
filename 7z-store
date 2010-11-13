@@ -1,0 +1,11 @@
+#!/bin/sh
+###7z-store v0.1
+###     - 7z-store
+###     - Written by xiaoranzzz, 2010-11-11 23:20
+###Usage:
+###     7z-store
+###Option:
+###     -h Display help text
+###Example:
+###     7z-store
+exec 7z -mx0 "$@"

@@ -8,15 +8,15 @@ export LANGUAGE="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 export LANG="zh_CN.UTF-8"
 
-wine regedit - 2>/dev/null <<EOF
-REGEDIT4
-
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
-"MS Shell Dlg"="unifont"
-"MS Shell Dlg 2"="unifont"
-"Tahoma"="unifont"
-"Tms Rmn"="Times New Roman"
-EOF
+#wine regedit - 2>/dev/null <<EOF
+#REGEDIT4
+#
+#[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
+#"MS Shell Dlg"="unifont"
+#"MS Shell Dlg 2"="unifont"
+#"Tahoma"="unifont"
+#"Tms Rmn"="Times New Roman"
+#EOF
 
 if [ -n "$XRZ_WINEDEBUG" ] ; then
     export WINEDEBUG="+loaddll,$WINEDEBUG"
@@ -31,4 +31,4 @@ fi
 #LANG="zh_CN.UTF-8"
 #export LANG
 #exec wine "$@"
-#LANG="zh_CN.GBK" wine "$@"
+#LANG="zh_CN.UTF-8" wine "$@"

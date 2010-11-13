@@ -7,6 +7,10 @@ if [ -n "$1" -a  "$1" = "-b" ] ; then
     shift
 fi
 
+if [ -n "$REDITOR" ] ; then
+    exec "$REDITOR" "$@"
+fi
+
 if [ -n "$XAUTHORITY" -o -n "$DISPLAY" ] ; then
     if [ -n "$background" ] ; then
         $g_editor "$@" &
