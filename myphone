@@ -24,5 +24,5 @@ else
     [ -r . ] || cd ~/
     echo "Mounting $SDCARD"
     if pmount -A -e -u 002 "/dev/disk/by-label/$SDCARD" "$SDCARD" ; then echo OK ; fi
-    exec mc "/media/$SDCARD/$SUBDIR"
+    exec mc "/media/$SDCARD/$SUBDIR" ~/public
 fi
