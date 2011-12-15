@@ -19,6 +19,6 @@ fi
 [ -n "$1" ] && display=$1
 geometry=800x600
 #geometry=1024x600
-echo vncserver $display -clean -depth 16 -alwaysshared -geometry $geometry
-exec vncserver $display -clean -depth 16 -alwaysshared -geometry $geometry
+echo vncserver $display -clean -depth 24 -geometry $geometry
+exec vncserver $display -clean -depth 24 -geometry $geometry
 

@@ -16,8 +16,11 @@ for appdir in /myplace/lib/firefox /opt/firefox/firefox/usr/bin /usr/bin ; do
 done
 
 echo
-rm -fv ~/.mozilla/firefox/profiles/*/compatibility.ini
-echo exec  "$firefox" "$@" >&2
-echo
-exec "$firefox" "$@" 2>/dev/null 1>/dev/null 
+rm -f ~/.mozilla/firefox/profiles/*/compatibility.ini
+if [ -n "$XRZ_DEBUG" ] ; then 
+	echo exec  "$firefox" "$@" >&2
+	echo
+fi
+exec "$firefox" "$@" 
+#2>/dev/null 1>/dev/null 
 

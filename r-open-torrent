@@ -40,7 +40,7 @@ while [ -n "$1" ] ; do
     if [ -f "$1" ] ; then
         fn=`basename "$1" .torrent`
         for dst in $backupd $autoloadd ; do
-            cp -v -- "$1" "$dst/$prefix-$fn.torrent"
+            cp -v -- "$1" "$dst/$prefix_$fn.torrent"
         done
         msgbox "$1\n------>\n$backupd\n$autoloadd"
     else

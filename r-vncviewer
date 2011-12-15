@@ -19,5 +19,6 @@ fi
 [ -n "$1" ] && display=$1 && shift
 
 #echo vncviewer -shared -quality 9 192.168.1.25$display "$@"
+exec vncviewer -encodings "raw copyrect tight hextile zlib corre rre" -shared -quality 9 192.168.1.25$display "$@"
 
-x-ask-passwd "vncserver 192.168.1.25$display\nasking for password:" "r-vncviewer" | vncpasswd -f | vncviewer -shared -quality 9 -passwd - 192.168.1.25$display&
+#x-ask-passwd "vncserver 192.168.1.25$display\nasking for password:" "r-vncviewer" | vncpasswd -f | vncviewer -shared -quality 9 -passwd - 192.168.1.25$display&

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec r-firefox --no-remote -P 'afun' "$@"
