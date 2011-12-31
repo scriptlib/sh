@@ -8,7 +8,7 @@
 ###APPEXAMPLE:	cat urllist | linepipe wget
 ###APPOPTION:	
 ###APPOPTSTR:	
-exec xargs -L 1 -d \\n "$@"
+exec xargs -L1 -d \\n "$@"
 
 plhelp "$0" "$@" && exit 0
 
