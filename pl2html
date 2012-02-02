@@ -1,0 +1,2 @@
+#!/bin/sh
+exec perltidy -html -ntoc -nnn
