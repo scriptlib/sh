@@ -2,7 +2,7 @@
 
 pushd "$1"
 [ -d "SELECTED" ] || mkdir "SELECTED"
-fehdir . -A "mv -v -- %f SELECTED/"
+fehdir . -A "mv -v -- \"%f\" SELECTED/"
 #rm *
 #mv SELECTED/* .
 #rmdir "SELECTED"

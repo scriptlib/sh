@@ -17,7 +17,7 @@ if ! which feh > /dev/null ; then
 fi
 #exec feh -g 1024x768 --scale-down  --sort name -r "$@"
 #exec feh -g 1024x768 --verbose -r "$@"
-exec feh --scale-down --auto-zoom -g 800x600 -r "$@"
+exec feh --verbose -D-1 --scale-down --auto-zoom -g 800x600 -r "$@"
 
 
 
