@@ -1,0 +1,34 @@
+#!/bin/bash
+APPNAME="un7zfolder"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-01-13"
+APPVER="0.1"
+APPDESC="un7z a 7z file to a folder,\nwhich's name based on the 7z filename,and under current directory"
+APPUSAGE="(7z filename)"
+APPEXAMPLE="un7zfolder foo.7z"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ;  fi
+
+
+
+for ZIPFILE in "$@" ; do
+    if [ ! -f "$ZIPFILE" ] ; then
+        echo -e $RED"File not exists,or permission denied.$NOR"
+        continue
+    fi
+    FDNAME=`basefname "$ZIPFILE"`
+    mkdir "$FDNAME"
+    if [ ! -d "$FDNAME" ] ; then
+        echo -e $RED"Permission denied while trying to write $FDNAME.$NOR"
+        continue
+    fi
+    echo -n "$ZIPFILE -> $FDNAME ..."
+    FULLZIP=`fullname "$ZIPFILE"`
+    FULLDIR=`fullname "$FDNAME"`
+    if 7z x "$ZIPFILE" -y -o"$FDNAME" ; then 
+        echo -e "\r$ZIPFILE -> $FDNAME [Done]"
+    else
+        echo -e "\r$ZIPFILE -> $FDNAME [Failed]"
+    fi
+done
