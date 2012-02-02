@@ -1,0 +1,25 @@
+#!/bin/sh
+###omm_dir2page v0.1
+###     - omm_dir2page
+###     - Written by xiaoranzzz, 2012-01-29 21:40
+###Usage:
+###     omm_dir2page
+###Option:
+###     -h Display help text
+###Example:
+###     omm_dir2page
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+while [ -n "$1" ] ; do
+	dir="$1"
+	shift
+	if [ ! -d "$dir" ] ; then
+		echo "$dir [Ignored, not a directory]"
+		continue
+	else
+		echo -n "Creating [$dir/content.txt] ..."
+		echo -e '[localexp:*]' >"$dir/content.txt"
+		echo -e '\t[OK]'
+	fi
+done
