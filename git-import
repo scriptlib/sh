@@ -1,0 +1,8 @@
+#!/bin/sh
+git add "$@"
+echo "Import $* ." >.templog
+echo "" >>.templog
+git --git-dir="$@" log -n 5 --oneline >>.templog
+echo "" >>.templog
+exec git commit -F .templog
+
