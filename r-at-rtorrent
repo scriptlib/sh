@@ -2,5 +2,5 @@
 cd ~/
 r-at -X -s 'x-terminal-emulator -e rtorrent' -t '03:00'
 #r-at -X -s 'x-terminal-emulator -e rtorrent' -t '14:00'
-r-at -X -s 'pskill -s INT rtorrent' -t '09:30'
+r-at -X -s 'pskill -s INT rtorrent' -t '13:00'
 #r-at -X -s 'pskill -s INT rtorrent' -t '16:00'

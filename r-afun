@@ -1,7 +1,11 @@
 #!/bin/sh
+xhost +si:localuser:afun
+xhost +local:afun
+cd /
 options="--su-mode -u afun"
+term="roxterm"
 if [ -n "$1" ] ; then
     gksu -D "$@" $options $@&
 else
-    gksu -D "x-terminal-emulator" $options 'x-terminal-emulator'&
+    gksu -D "$term" $options "$term"&
 fi    
