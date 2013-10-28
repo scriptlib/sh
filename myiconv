@@ -40,7 +40,7 @@ while [ -n "$FILE" ] ; do
     APPMSG "$FILE: $OLDCHARSET->$NEWCHARSET..."
     echo "$FILE:$OLDCHARSET->$NEWCHARSET" >> "$LOG"
     
-    if iconv -c --from=$OLDCHARSET --to=$NEWCHARSET "$FILE" -o "$TMPFILE" 2>>"$LOG"; then
+    if iconv -c -f $OLDCHARSET -t $NEWCHARSET "$FILE" 1>"$TMPFILE" 2>>"$LOG"; then
         APPMSG "\t\t[Done]\n"
         cat "$TMPFILE">"$FILE"
     else
