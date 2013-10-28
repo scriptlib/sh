@@ -1,0 +1,6 @@
+#!/bin/sh
+
+filetype=$1
+shift
+
+exec find "$@" -exec file --mime-type "{}" \; | grep "$filetype" | sed -u -e 's/: [^:\s]\+$//'

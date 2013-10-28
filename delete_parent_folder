@@ -1,0 +1,33 @@
+#!/bin/sh
+###delete_parent_folder v0.1
+###     - delete_parent_folder
+###     - Written by xiaoranzzz, 2013-10-20 00:23
+###Usage:
+###     delete_parent_folder
+###Option:
+###     -h Display help text
+###Example:
+###     delete_parent_folder
+
+declare -a LINES
+declare -i Count=0
+declare -i Index=0
+while read -s LINE ; do
+    LINES[$Count]="$LINE"
+    (( Count++ ))
+done
+while (( Index < Count )) ; do
+    ARGS="${LINES[$Index]}"
+    (( Index++ ))
+	D=`dirname "$ARGS"`
+	if [ "$D" == "." ] ; then
+		continue;
+	fi
+	if [ "$D" == "./" ] ; then
+		continue;
+	fi
+	if [ -d "$D" ] ; then
+		echo "Deleteing $D ..."
+		rm -r "$D"
+	fi
+done
