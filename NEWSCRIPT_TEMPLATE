@@ -1,0 +1,30 @@
+#!/bin/sh
+###___NAME___ v0.1
+###     - ___NAME___
+###     - Written by ___AUTHOR___ <___EMAIL___>, ___DATE___
+###Usage:
+###     ___NAME___
+###Option:
+###     -h Display help text
+###Example:
+###     ___NAME___ -h
+
+function _need_help {
+    while [ -n "$1" ] ; do
+        for h in "-h" "-H" "--help" "--HELP" ; do [ "$1" == "$h" ] && return 0 ; done
+        shift
+    done
+    return 1
+}
+function _format_help {
+    while read -s line ; do
+        if [ "${line:0:1}" == "#" ] ; then [ "${line:0:3}" == "###" ] && echo "${line:3}" ; else break ; fi
+    done
+}
+function _help_me {
+    _format_help <"$1" ; exit 0
+}
+_need_help "$@" && _help_me "$0"
+[ -z "$1" ] && _help_me "$0"
+
+

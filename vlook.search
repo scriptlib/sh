@@ -1,0 +1,23 @@
+#!/bin/sh
+###weipai.search v0.1
+###     - weipai.search
+###     - Written by xiaoranzzz, 2015-01-28 23:17
+###Usage:
+###     weipai.search
+###Option:
+###     -h Display help text
+###Example:
+###     weipai.search
+
+name=$1
+declare -i pages=$2
+[ -z "$2" ] && pages=1
+
+declare -i idx=0
+while [ $idx -lt $pages ] ; do
+	(( idx++ ))
+	echo google --web "$name+site:vlook.cn" $idx >&2
+	google --web "$name+site:vlook.cn" $idx
+done | sort -u | uniq
+
+

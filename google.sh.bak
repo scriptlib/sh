@@ -1,0 +1,41 @@
+#!/bin/bash
+APPNAME="google"
+APPAUTHOR="xiaoranzzz"
+APPDATE="2007-09-03"
+APPVER="0.1"
+APPDESC="The google search engine"
+APPUSAGE="google (keywords...) [pages]"
+APPEXAMPLE="google bash {1..20}"
+
+source `APPLIB "AppUsage"` || exit -1
+if [ -z "$*" ] ; then APPHELP ; exit 0 ; fi
+
+BASEURL="http://www.google.com.hk/search?q=KEYWORD&hl=en&safe=off&rlz=1B3GGGL_enCN238CN238&start=START&sa=N"
+
+declare -a PAGES=("$@")
+OKEYWORD=${PAGES[0]}
+KEYWORD=`escape ${OKEYWORD/\ /+}`
+
+BASEURL=${BASEURL/KEYWORD/$KEYWORD}
+
+[ -z "${PAGES[1]}" ] && PAGES[1]=1
+
+declare -i INDEX=1
+declare -i COUNT="${#PAGES[@]}"
+declare -i START=0
+while((INDEX<COUNT)) ; do
+    START=(${PAGES[$INDEX]}*10-10)
+    URL=${BASEURL/START/$START}
+    echo "Google for \"$OKEYWORD\",Requesting page NO.${PAGES[$INDEX]} ..." >&2
+    netcat -v "$URL" | htmlprop "href" | grep -v "google.com\|\?q=cache:\|\?q=$KEYWORD&" | grep -i "^http:"
+    #echo google "$KEYWORD" "$START" ":$URL"
+    #echo "$INDEX:${PAGES[$INDEX]}"
+    ((INDEX++))
+done
+
+
+
+ 
+
+
+

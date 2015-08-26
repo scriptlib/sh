@@ -1,0 +1,4 @@
+#!/bin/sh
+for fn in "$@" ; do
+	np.bat `cygpath -w "$fn"`
+done

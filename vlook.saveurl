@@ -1,0 +1,15 @@
+#!/bin/sh
+###weipai.search.save v0.1
+###     - weipai.search.save
+###     - Written by xiaoranzzz, 2015-02-02 23:16
+###Usage:
+###     weipai.search.save
+###Option:
+###     -h Display help text
+###Example:
+###     weipai.search.save
+#scripthelp "$0" "$@" && exit 0
+#if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+
+
+	sed -e 's/\t.\+$//' | xargs -L1 -d \\n -I{} -- urlrule_action --no-history "{}" 0 DATABASE
