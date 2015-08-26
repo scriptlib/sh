@@ -3,7 +3,7 @@ xhost +si:localuser:afun
 xhost +local:afun
 cd /
 options="--su-mode -u afun"
-term="roxterm"
+term="x-terminal-emulator"
 if [ -n "$1" ] ; then
     gksu -D "$@" $options $@&
 else

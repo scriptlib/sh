@@ -40,7 +40,7 @@ function  google() {
 #BAIDU image
 function baidu() {
     local BBASEURL="http://image.baidu.com/i?z=3&cl=2&ct=201326592&sn=&lm=-1&cm=1&sc=0&bu=&rn=21&tn=baiduimage&word=###KEYWORD###&pn=###START###"
-    local BKEYWORD=`echo $1 | iconv -f UTF8 -t GB2312`
+    local BKEYWORD=`echo $1 | iconv -f UTF-8 -t GB2312`
     local BSTART=$((($2-1)*2020))
     local BAIDUURL=`echo "$BBASEURL" | sed "s/###KEYWORD###/$BKEYWORD/g"|sed "s/###START###/$BSTART/g"`
     Download "$BAIDUURL" | grep -i "image.baidu.com[^ ]*"

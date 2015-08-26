@@ -50,10 +50,10 @@ function DeleteFile() {
     done
 }
 
-echo find . -type f -size -"$SIZE" "$@"
+echo find -L . -type f -size -"$SIZE" "$@"
 TEMPLIST=`mktemp`
 
-find . -type f -size -"$SIZE" "$@">"$TEMPLIST"
+find -L . -type f -size -"$SIZE" "$@">"$TEMPLIST"
 
 if cat "$TEMPLIST" | ListFile ; then
 

@@ -11,9 +11,9 @@
 scripthelp "$0" "$@" && exit 0
 if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
 
-btdir=~/bittorrent
+btdir=~/bt
 [ -d "$btdir" ] || mkdir -p "$btdir"
-backupd="$btdir/torrents/backup"
+backupd="$btdir/torrents/backups"
 [ -d "$backupd" ] || mkdir -p "$backupd"
 autoloadd="$btdir/rtorrent/autoload"
 [ -d "$autoloadd" ] || mkdir -p "$autoloadd"
@@ -22,7 +22,7 @@ if ps -A | grep -q '\<deluge\>' ; then
     deluge "$@"
 fi
 
-prefix=`date "+%y%m%d%H%M%S"`;
+prefix=`date "+%Y%m%d"`;
 prefix="$prefix";
 
 zenity="zenity --title rtorrent-autoload --timeout=5"

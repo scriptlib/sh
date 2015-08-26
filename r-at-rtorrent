@@ -1,6 +1,8 @@
 #!/bin/sh
 cd ~/
-r-at -X -s 'x-terminal-emulator -e rtorrent' -t '03:00'
-#r-at -X -s 'x-terminal-emulator -e rtorrent' -t '14:00'
-r-at -X -s 'pskill -s INT rtorrent' -t '13:00'
-#r-at -X -s 'pskill -s INT rtorrent' -t '16:00'
+b_t="03:00"
+e_t="10:00"
+[ -n "$1" ] && b_t="$1" 
+[ -n "$2" ] && e_t="$2"
+r-at -X -s 'x-terminal-emulator -e rtorrent' -t "$b_t"
+r-at -X -s 'pskill -s INT rtorrent' -t "$e_t"
