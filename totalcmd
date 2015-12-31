@@ -14,6 +14,15 @@
 #/myplace/wine/bin/set-appdefault.pl "TotalCmd.exe" browseui,ole32,oleaut32,rpcrt4,shlwapi,msvcrt=b | regedit -
 
 #sleep 1
-DLLOVERRIDES='rpcrt4=b' cn_wine 'R:\Program\Fileman\TotalCmd\TotalCmd.exe'
+#DLLOVERRIDES='rpcrt4=b' cn_wine 'R:\Program\Fileman\TotalCmd\TotalCmd.exe'
 #sleep 1
 #echo -E "$resume" | regedit -
+
+fsysapp=`cygpath -u "$FS_SYSTEM_APP"`
+app="$fsysapp/fileman/totalcmd/totalcmd.exe"
+
+if [ "$OSTYPE" == "cygwin" ] ; then
+	exec "$app" "$@" &
+else
+	exec cn_wine "$app" "$@"
+fi
