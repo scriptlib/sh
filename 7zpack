@@ -1,0 +1,40 @@
+#!/bin/sh
+###7zpack v0.1
+###     - 7zpack
+###Usage:
+###     7zpack
+###Option:
+###     -h Display help text
+###Example:
+###     7zpack
+scripthelp "$0" "$@" && exit 0
+if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
+dat=`date +"%Y%m%d"`
+opt="-scsUTF-8 -mx=0"
+del=
+while [ -n "$1" ] ; do
+
+    case $1 in 
+	-d)
+		del=1;;
+    -*) 
+        opt="$opt $1";;
+    *) 
+        folder=$1
+        if [ -d "$folder" ] ; then
+            echo "$folder [PROCESSING]"
+            fn=`basename "$folder"`
+            fn="${fn}_packed_${dat}.7z"
+            echo 7z a $opt "$fn" "$folder/"
+            7z a $opt "$fn" "$folder/"
+			if [ -n "$del" ] ; then
+				rm -frv -- "$folder"
+			fi
+        else
+            echo "$folder [SKIPPED]"
+        fi
+    ;;
+    esac
+
+    shift
+done
