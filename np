@@ -1,4 +1,5 @@
 #!/bin/sh
 for fn in "$@" ; do
-	np.bat `cygpath -w "$fn"`
+	fw=`cygpath -w "$fn"`
+	notepad.exe "$fw"&
 done

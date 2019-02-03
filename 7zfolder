@@ -11,7 +11,7 @@
 scripthelp "$0" "$@" && exit 0
 if [ -z "$1" ] ; then scripthelp "$0" "--help" ; exit 0 ; fi
 
-opt=
+opt="-r -scsUTF-8 -mx=0"
 cdir=`pwd`
 while [ -n "$1" ] ; do
 
@@ -27,7 +27,6 @@ while [ -n "$1" ] ; do
             pushd "$folder" >/dev/null
             echo 7z a $opt "$fn" .
             7z a $opt "$fn" .
-            opt=
             popd >/dev/null
         else
             echo "$folder [SKIPPED]"

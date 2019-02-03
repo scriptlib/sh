@@ -18,9 +18,19 @@
 #sleep 1
 #echo -E "$resume" | regedit -
 
-fsysapp=`cygpath -u "$FS_SYSTEM_APP"`
-app="$fsysapp/fileman/totalcmd/totalcmd.exe"
-
+arch=32
+if [ "AMD64" = "$PROCESSOR_ARCHITEW6432" ] ; then arch=64 ; fi
+if [ "AMD64" = "$PROCESSOR_ARCHITECTURE" ] ; then arch=64 ; fi
+if [ "$arch" = "64" ] ; then 
+appdir=`cygpath -u "$FS_SYSTEM_APP"`
+appname="totalcmd64.exe"
+else
+appdir=`cygpath -u "$FS_SYSTEM"`
+appdir="$appdir/app32"
+appname="totalcmd.exe"
+fi
+app="$appdir/fileman/totalcmd/$appname"
+echo $app "$@"
 if [ "$OSTYPE" == "cygwin" ] ; then
 	exec "$app" "$@" &
 else
